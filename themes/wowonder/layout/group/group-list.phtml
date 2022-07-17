@@ -1,0 +1,24 @@
+<?php 
+	$group_privacy = $wo['lang']['public'];
+	if ($wo['group']['privacy'] == 2) {
+		$group_privacy = $wo['lang']['private'];
+	}
+?>
+<div class="col-md-3 col-sm-6">
+	<div class="wow_content wow_my_groups">
+		<div class="avatar">
+			<a href="<?php echo $wo['group']['url'];?>" data-ajax="?link1=timeline&u=<?php echo $wo['group']['group_name'];?>">
+				<img src="<?php echo $wo['group']['avatar'];?>" alt="<?php echo $wo['group']['group_name']; ?> Profile Picture" />
+			</a>
+		</div>
+		<div class="wow_my_groups_info">
+			<h3 class="page_title"><a href="<?php echo $wo['group']['url'];?>" data-ajax="?link1=timeline&u=<?php echo $wo['group']['group_name'];?>"><?php echo $wo['group']['group_title']; ?></a></h3>
+			<p><?php echo Wo_CountGroupMembers($wo['group']['id']);?> <?php echo $wo['lang']['members']; ?></p>
+			<?php if( isset( $wo['group']['Wo_GroupSug'] ) ){ ?>
+				<?php echo Wo_GetJoinButton($wo['group']['id']);?>
+			<?php }else{ ?>
+				<a href="<?php echo Wo_SeoLink('index.php?link1=group-setting&group=' .  $wo['group']['group_name']); ?>" data-ajax="?link1=group-setting&group=<?php echo $wo['group']['group_name'];?>" class="btn btn-default btn-mat"><?php echo $wo['lang']['edit']; ?></a>
+			<?php } ?>
+		</div>
+	</div>
+</div>

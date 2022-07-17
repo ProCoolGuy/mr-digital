@@ -1,0 +1,38 @@
+<?php if (Wo_FriendPrivacy($wo['user_profile']['id'],$wo['user_profile']['friend_privacy'])): ?>
+<ul class="page-margin wow_content negg_padd list-unstyled event-options-list" id="sidebar-following-list-container">
+	<div class="wo_page_hdng" style="margin-bottom: 5px;">
+		<div class="wo_page_hdng_innr">
+			<span><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="currentColor" d="M15,14C12.33,14 7,15.33 7,18V20H23V18C23,15.33 17.67,14 15,14M6,10V7H4V10H1V12H4V15H6V12H9V10M15,12A4,4 0 0,0 19,8A4,4 0 0,0 15,4A4,4 0 0,0 11,8A4,4 0 0,0 15,12Z"></path></svg></span> <a href="<?php echo Wo_SeoLink('index.php?link1=timeline&u=' . $wo['user_profile']['username'] . '&type=following');?>" data-ajax="?link1=timeline&u=<?php echo $wo['user_profile']['username']?>&type=following" class="pointer"><?php echo $wo['lang']['following'];?></a>&nbsp;<div style="font-weight: normal">(<?php echo number_format($wo['user_profile']['details']['following_count']);?>)</div>
+		</div>
+	</div>
+	<li>
+		<div class="sidebar-following-users-container">
+            <?php
+            foreach (Wo_GetFollowing($wo['user_profile']['user_id'], 'profile', 9 , 0, array('in' => 'profile_sidebar', 'following_data' => $wo['user_profile']['following_data'])) as $wo['UsersList']) {
+               $wo['UsersList']['user_name'] = mb_substr($wo['UsersList']['name'],0,10, "utf-8");
+               echo Wo_LoadPage('sidebar/profile-sidebar-user-list');
+            } 
+            ?>
+		</div>
+	</li>
+	<li><div class="clear"></div></li>
+</ul>
+<ul class="page-margin wow_content negg_padd list-unstyled event-options-list" id="sidebar-followers-list-container">
+	<div class="wo_page_hdng" style="margin-bottom: 5px;">
+		<div class="wo_page_hdng_innr">
+			<span><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="currentColor" d="M16 17V19H2V17S2 13 9 13 16 17 16 17M12.5 7.5A3.5 3.5 0 1 0 9 11A3.5 3.5 0 0 0 12.5 7.5M15.94 13A5.32 5.32 0 0 1 18 17V19H22V17S22 13.37 15.94 13M15 4A3.39 3.39 0 0 0 13.07 4.59A5 5 0 0 1 13.07 10.41A3.39 3.39 0 0 0 15 11A3.5 3.5 0 0 0 15 4Z"></path></svg></span> <a href="<?php echo Wo_SeoLink('index.php?link1=timeline&u=' . $wo['user_profile']['username'] . '&type=followers');?>" data-ajax="?link1=timeline&u=<?php echo $wo['user_profile']['username']?>&type=followers"><?php echo $wo['lang']['followers'];?></a>&nbsp;<div style="font-weight: normal">(<?php echo number_format($wo['user_profile']['details']['followers_count']);?>)</div>
+		</div>
+	</div>
+	<li>
+		<div class="sidebar-followers-users-container">
+            <?php 
+            foreach (Wo_GetFollowers($wo['user_profile']['user_id'],'profile',9 , 0, array('in' => 'profile_sidebar', 'followers_data' => $wo['user_profile']['followers_data'])) as $wo['UsersList']) {
+               $wo['UsersList']['user_name'] = mb_substr($wo['UsersList']['name'],0,10, "utf-8");
+               echo Wo_LoadPage('sidebar/profile-sidebar-user-list');
+             } 
+             ?>
+		</div>
+	</li>
+	<li><div class="clear"></div></li>
+</ul>
+<?php endif; ?>

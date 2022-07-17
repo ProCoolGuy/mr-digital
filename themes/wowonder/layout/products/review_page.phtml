@@ -1,0 +1,17 @@
+<div class="page-margin">
+	<div class="row">
+		<div class="col-md-2 leftcol"><?php echo Wo_LoadPage("sidebar/left-sidebar"); ?></div>
+		<div class="col-md-10 middlecol">
+			<div class="reviews_html">
+				<?php echo $wo['reviews_html']; ?>
+			</div>
+			<?php if (count($wo['reviews']) == 20){ ?>
+			<div class="reviews_posts_load">
+				<div class="reviews_load-more">
+                    <button class="btn btn-default text-center pointer" onclick="Wo_LoadReviews();"><?php echo $wo['lang']['load_more']; ?></button>
+                </div>
+			</div>
+			<?php } ?>
+		</div>
+	</div>
+</div>

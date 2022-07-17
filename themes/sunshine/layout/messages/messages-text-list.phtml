@@ -1,0 +1,206 @@
+<?php $reactions = Wo_GetPostReactions($wo['message']['id'],'message'); ?>
+<div class="message-contnaier <?php echo ($wo['message']['onwer'] == 0) ? 'incoming pull-left' : 'outgoing pull-right';?> <?php echo(!empty($reactions) ? 'margin-active' : '') ?>" id="messageId_<?php echo $wo['message']['id']; ?>">
+	<div class="cont_innr">
+	<?php if ($wo['message']['onwer'] == 0): ?>
+		<div class="message-user-image pull-left">
+			<img src="<?php echo $wo['message']['messageUser']['avatar']?>" alt="User image">
+		</div>
+	<?php else: ?>
+		<div class="message-user-image pull-right">
+			<img src="<?php echo $wo['user']['avatar']?>" alt="User image">
+		</div>
+	<?php endif; ?>
+<div class="messages-wrapper messages-text message-model <?php echo ($wo['message']['onwer'] == 0) ? 'pull-left' : 'pull-right';?>" data-message-id="<?php echo $wo['message']['id'] ?>" onclick="Wo_ShowMessageOptions(<?php echo $wo['message']['id'] ?>);">
+   <div class="clear"></div>
+   <div class="message <?php if (!empty($wo['message']['product_id'])) {$wo['product'] = Wo_GetProduct($wo['message']['product_id']);if (!empty($wo['product'])) {?>wo_msg_prod_prnt<?php } } ?>" <?php if ($wo['message']['onwer'] == 1) { ?> style="background-color: <?php echo(!empty($wo['message']['color']) ? $wo['message']['color'] : ''); ?>"<?php } ?> data-toggle="tooltip" title="<?php echo Wo_Time_Elapsed_String($wo['message']['time']);?>" data-placement="<?php echo ($wo['message']['onwer'] == 0) ? 'bottom': 'bottom';?>">
+      <div class="message-text" id="message_text_reply_<?php echo $wo['message']['id'] ?>" dir="auto" <?php if ($wo['message']['onwer'] == 1) { ?> style="background-color: <?php echo(!empty($wo['message']['color']) ? $wo['message']['color'] : ''); ?>"<?php } ?>><?php echo $wo['message']['text'] ?><?php if (!empty($wo['message']['reply_id']) && !empty($wo['message']['reply'])) { ?>
+	  <div class="wo_reply_msg_bg">
+        <p class="message-text" dir="auto"><?php echo $wo['message']['reply']['text'] ?></p>
+        <div class="message-media">
+        <div class="clear"></div>
+        <?php
+          if (isset($wo['message']['reply']['media']) && !empty($wo['message']['reply']['media'])) {
+            $media = array(
+              'type' => 'message',
+              'storyId' => $wo['message']['reply']['id'],
+              'filename' => $wo['message']['reply']['media'],
+              'name' => $wo['message']['reply']['mediaFileName']
+            );
+            echo Wo_DisplaySharedFile($media, 'message');
+          }
+        ?>
+        <?php if (!empty($wo['message']['reply']['stickers'])): ?>
+        <?php if (strpos('.mp4', $wo['message']['reply']['stickers'])) { ?>
+          <video autoplay loop><source src="<?php echo $wo['message']['reply']['stickers']; ?>" type="video/mp4"></video>
+        <?php } else { ?>
+          <img src="<?php echo $wo['message']['reply']['stickers']; ?>" alt="GIF">
+        <?php } ?>
+        <?php endif; ?>
+
+        <?php if (!empty($wo['message']['reply']['product_id'])) { 
+          $wo['product'] = Wo_GetProduct($wo['message']['reply']['product_id']);
+          if (!empty($wo['product'])) {
+        ?>
+          <div class="wo_market">
+            <div class="market_bottom">
+              <div class="products">
+                <div class="product" id="product-<?php echo $wo['product']['id']?>" data-id="<?php echo $wo['product']['id']?>">
+                  <div class="product_info">
+                    <div class="product-image">
+                      <a href="<?php echo $wo['product']['url']?>"><img src="<?php echo $wo['product']['images'][0]['image_org'];?>"></a>
+                    </div>
+                    <div class="produc_info">
+                      <div class="product-title">
+                        <a href="<?php echo $wo['product']['url']?>" title="<?php echo $wo['product']['name']?>"><?php echo $wo['product']['name']?></a>
+                      </div>
+                      <div class="product-by">
+                        <?php
+                          $product_by_ = $wo['product']['category'];
+                          $product_by_ = str_replace('{product_category_name}', $wo['products_categories'][$wo['product']['category']], $product_by_);
+                        ?>
+                        <a href="<?php echo Wo_SeoLink('index.php?link1=products&c_id=' . $wo['product']['category']);?>"><?php echo $wo['products_categories'][$wo['product']['category']];?></a>
+                      </div>
+                      <div class="product-price">
+                        <?php echo (!empty($wo['currencies'][$wo['product']['currency']]['symbol'])) ? $wo['currencies'][$wo['product']['currency']]['symbol'] : $wo['config']['classified_currency_s'];?><?php echo $wo['product']['price']?>
+                      </div>
+                    </div>
+                    <div class="clear"></div>
+                  </div>
+                  <div class="clear"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        <?php } } ?>
+      </div>
+	  </div>
+      <?php } ?></div>
+      <div class="message-media" id="message_media_reply_<?php echo $wo['message']['id'] ?>">
+         <div class="clear"></div>
+          <?php
+          if (isset($wo['message']['media']) && !empty($wo['message']['media'])) {
+              $media = array(
+                  'type' => 'message',
+                  'storyId' => $wo['message']['id'],
+                  'filename' => $wo['message']['media'],
+                  'name' => $wo['message']['mediaFileName']
+              );
+              echo Wo_DisplaySharedFile($media, 'message');
+          }
+          ?>
+          <?php if (!empty($wo['message']['stickers'])): ?>
+            <?php if (strpos('.mp4', $wo['message']['stickers'])) { ?>
+            <video autoplay loop><source src="<?php echo $wo['message']['stickers']; ?>" type="video/mp4"></video>
+            <?php } else { ?>
+            <img src="<?php echo $wo['message']['stickers']; ?>" alt="GIF">
+            <?php } ?>
+          <?php endif; ?>
+
+          <?php if (!empty($wo['message']['product_id'])) { 
+            $wo['product'] = Wo_GetProduct($wo['message']['product_id']);
+            if (!empty($wo['product'])) {
+         ?>
+         <div class="wo_market">
+            <div class="market_bottom">
+               <div class="products">
+                  <div class="product col-proxs-12 col-xs-12 col-sm-12 col-md-12" id="product-<?php echo $wo['product']['id']?>" data-id="<?php echo $wo['product']['id']?>">
+
+                     <div class="product_info">
+                        <div class="product-image">
+                           <a href="<?php echo $wo['product']['url']?>"><img src="<?php echo $wo['product']['images'][0]['image_org'];?>"></a>
+                        </div>
+                        <div class="produc_info">
+                           <div class="product-title">
+                              <a href="<?php echo $wo['product']['url']?>" title="<?php echo $wo['product']['name']?>"><?php echo $wo['product']['name']?></a>
+                           </div>
+                           <div class="product-by">
+                               <?php
+                               $product_by_ = $wo['product']['category'];
+                               $product_by_ = str_replace('{product_category_name}', $wo['products_categories'][$wo['product']['category']], $product_by_);
+                               ?>
+                              <a href="<?php echo Wo_SeoLink('index.php?link1=products&c_id=' . $wo['product']['category']);?>"><?php echo $wo['products_categories'][$wo['product']['category']];?></a>
+                           </div>
+                           <div class="product-price">
+                              <?php echo (!empty($wo['currencies'][$wo['product']['currency']]['symbol'])) ? $wo['currencies'][$wo['product']['currency']]['symbol'] : $wo['config']['classified_currency_s'];?><?php echo $wo['product']['price']?>
+                           </div>
+                        </div>
+                        <div class="clear"></div>
+                     </div>
+                     <div class="clear"></div>
+                  </div>
+               </div>
+            </div>
+         </div>
+         <?php } } ?>
+         <?php if (!empty($wo['message']['story'])) {
+          if (!empty($wo['message']['story']['thumbnail'])) {
+            $wo['message']['story']['thumbnail'] = Wo_GetMedia($wo['message']['story']['thumbnail']);
+          }
+          else{
+            $u = Wo_UserData($wo['message']['story']['user_id']);
+            if (!empty($u)) {
+              $wo['message']['story']['thumbnail'] = $u['avatar'];
+            }
+          }
+
+          ?>
+			<div class="wo_chat_story">
+				<div class="wo_chat_story_innr" onclick="Get_CurrentStory(<?php echo $wo['message']['story']['id']?>,'user')">
+					<img src="<?php echo $wo['message']['story']['thumbnail'];?>">
+					<p><?php echo $wo['lang']['view_story'];?></p>
+				</div>
+			</div>
+         <?php } ?>
+      </div>
+	  
+		<div class="deleteMessage <?php echo ($wo['message']['onwer'] == 0) ? 'right': '';?>" style="<?php echo ($wo['message']['onwer'] == 0) ? 'right:-25px;': 'left: -25px;';?>" onclick="Wo_ReplyMessage(<?php echo $wo['message']['id'] ?>);">
+				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" class="feather"><path fill="currentColor" d="M10,9V5L3,12L10,19V14.9C15,14.9 18.5,16.5 21,20C20,15 17,10 10,9Z" /></svg>
+			</div>
+			<?php if ($wo['message']['onwer'] == 0) { ?>
+			<div class="deleteMessage messages-reactions <?php echo ($wo['message']['onwer'] == 0) ? 'right': '';?>" style="<?php echo ($wo['message']['onwer'] == 0) ? 'right:-50px;': 'left: -50px;';?>" data-message-id="<?php echo $wo['message']['id'] ?>">
+				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" class="feather"><path fill="currentColor" d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M7,9.5C7,8.7 7.7,8 8.5,8C9.3,8 10,8.7 10,9.5C10,10.3 9.3,11 8.5,11C7.7,11 7,10.3 7,9.5M12,17.23C10.25,17.23 8.71,16.5 7.81,15.42L9.23,14C9.68,14.72 10.75,15.23 12,15.23C13.25,15.23 14.32,14.72 14.77,14L16.19,15.42C15.29,16.5 13.75,17.23 12,17.23M15.5,11C14.7,11 14,10.3 14,9.5C14,8.7 14.7,8 15.5,8C16.3,8 17,8.7 17,9.5C17,10.3 16.3,11 15.5,11Z" /></svg>
+			</div>
+			<?php } ?>
+			<div class="deleteMessage <?php echo ($wo['message']['onwer'] == 0) ? 'right': '';?>" style="<?php echo ($wo['message']['onwer'] == 0) ? '': 'left: -50px;';?>" onclick="Wo_DeleteMessage(<?php echo $wo['message']['id'] ?>);">
+				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" class="feather"><path fill="currentColor" d="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z" /></svg>
+				<!-- <div class="time ajax-time text-right <?php echo($wo['message']['messageUser']['user_id'] == $wo['user']['user_id'] ? 'pull-right' : 'pull-left') ?>" title="<?php echo date('c',$wo['message']['time']); ?>"><?php echo Wo_Time_Elapsed_String($wo['message']['time']);?></div> -->
+			</div>
+			
+		
+      
+	  
+	  <div class="like-stat stat-item post-like-status" style="<?php if ($wo['message']['onwer'] == 0) {?> float:right;margin: -11px -7px -5px 0;<?php }else{ ?> margin: -15px 0 -6px;<?php }?>">
+		  <span class="like-emo post-reactions-icons-m-<?php echo $wo['message']['id']; ?>">
+		  <?php echo $reactions;?>
+		  </span>
+		</div>
+	  
+   </div>
+   
+
+</div>
+</div>
+
+    <ul class="reactions-box reactions-box-container-<?php echo $wo['message']['id']; ?>" data-id="<?php echo $wo['message']['id']; ?>"  style="<?php if ($wo['message']['onwer'] == 0) {?> left: 10px; right: unset;<?php }else{ ?> right: 10px; left: unset;<?php }?>">
+      <?php if (!empty($wo['reactions_types'])) {
+          foreach ($wo['reactions_types'] as $key => $value) {
+            if ($value['status'] == 1) {
+           ?>
+        <li  style="<?php if ($wo['message']['onwer'] == 0) {?> left: 10px; <?php }else{ ?> right: 10px; <?php }?>"class="reaction reaction-<?php echo $value['id'];?> animated_2" data-reaction="<?php echo $value['name'];?>" data-reaction-id="<?php echo $value['id'];?>" data-reaction-lang="<?php echo $value['name'];?>" data-post-id="<?php echo $wo['message']['id']; ?>" onclick="Wo_RegisterMessageReaction(this,'<?php echo($value['sunshine_small_icon']) ?>');">
+          <img class="" src="<?php echo $value['sunshine_icon'];?>" alt="<?php echo $value['name'];?>">
+        </li>
+      <?php } } } ?>
+    </ul>
+
+<?php if($wo['message']['messageUser']['user_id'] == $wo['user']['user_id']) { ?>
+  <div class="message-seen message-details"></div>
+<?php } ?>
+<div class="message-typing message-details"></div>
+
+</div>
+<div class="clear"></div>
+<script type="text/javascript">
+  $(function () {
+$('[data-toggle="tooltip"]').tooltip();
+});
+</script>

@@ -1,0 +1,116 @@
+<div class="wow_content wow_sett_content">
+	<div class="wo_page_hdng pag_neg_padd">
+		<div class="wo_page_hdng_innr">
+			<span><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="currentColor" d="M22.7,19L13.6,9.9C14.5,7.6 14,4.9 12.1,3C10.1,1 7.1,0.6 4.7,1.7L9,6L6,9L1.6,4.7C0.4,7.1 0.9,10.1 2.9,12.1C4.8,14 7.5,14.5 9.8,13.6L18.9,22.7C19.3,23.1 19.9,23.1 20.3,22.7L22.6,20.4C23.1,20 23.1,19.3 22.7,19Z"></path></svg></span> <?php echo $wo['lang']['general_setting'];?>
+		</div>
+	</div>
+	<form class="setting-general-form form-horizontal" method="post">
+		<div class="setting-general-alert"></div>
+		<div class="row">
+			<div class="col-md-7">
+				<div class="wow_form_fields">
+					<label for="group_title"><?php echo $wo['lang']['group_name']; ?></label>
+					<input name="group_title" id="group_title" type="text" value="<?php echo $wo['setting']['group_title']?>" autocomplete="off">
+				</div>
+			</div>
+			<div class="col-md-5">
+				<div class="wow_form_fields">
+					<label for="group_category"><?php echo $wo['lang']['category'] ?></label>
+					<select id="group_category" name="group_category" onchange="GetGroupSubCategory(this)">
+						<?php 
+							foreach ($wo['group_categories'] as $categorie_id => $category) {
+							$selected_contry = ($categorie_id == $wo['setting']['category_id']) ? ' selected' : '' ;
+						?>
+						<option value="<?php echo $categorie_id;?>" <?php echo $selected_contry;?> ><?php echo $category;?></option>
+						<?php } ?>
+					</select>
+				</div>
+			</div>
+			<div class="col-md-5">
+				<div class="wow_form_fields">
+					<label for="group_sub_category"><?php echo $wo['lang']['sub_category'] ?></label>
+					<select id="group_sub_category" name="group_sub_category">
+						<?php
+						if (!empty($wo['group_sub_categories'][array_keys($wo['group_categories'])[0]])) {
+						foreach ($wo['group_sub_categories'][array_keys($wo['group_categories'])[0]] as $id => $sub_category) { 
+							$sub_selected = ($sub_category['id'] == $wo['setting']['sub_category']) ? ' selected' : '' ;
+							?>
+							<option value="<?php echo $sub_category['id']?>" <?php echo $sub_selected; ?>><?php echo $sub_category['lang']; ?></option>
+						<?php } } ?>
+					</select>
+				</div>
+			</div>
+		</div>
+		<div class="wow_form_fields">
+			<label for="group_name"><?php echo $wo['lang']['group'];?> URL</label>
+			<div class="input-group">
+				<span class="input-group-addon"><?php echo $wo['config']['site_url'];?>/</span>
+				<input id="group_name" name="group_name" type="text" value="<?php echo $wo['setting']['group_name']?>" onkeyup="Wo_CheckGroupname(this.value, <?php echo $wo['setting']['id'];?>);" autocomplete="off">
+			</div>
+			<span class="help-block checking"></span>
+		</div>
+		<div class="wow_form_fields">
+			<label for="about"><?php echo $wo['lang']['description'];?></label>
+			<?php 
+				$text = br2nl($wo['setting']['about']);
+			?>  
+			<textarea id="about" name="about" rows="4"><?php echo $text;?></textarea>
+		</div>
+		<?php $fields = Wo_GetCustomFields('group'); 
+		if (!empty($fields)) {
+			foreach ($fields as $key => $wo['field']) {
+				echo Wo_LoadPage('group-setting/fields');
+			}
+		}
+		?>
+		<div class="text-center">
+			<button class="btn btn-main btn-mat btn-mat-raised add_wow_loader" type="submit"><?php echo $wo['lang']['save']; ?></button>
+		</div>
+		<input type="hidden" name="group_id" value="<?php echo $wo['setting']['id'];?>">
+		<input type="hidden" name="hash_id" value="<?php echo Wo_CreateSession();?>">
+	</form>
+</div>
+
+<script type="text/javascript">
+	<?php 
+$js_array = json_encode($wo['group_sub_categories']);
+echo "var sub_categories_array = ". $js_array . ";\n";
+?>
+	function GetGroupSubCategory(self) {
+		id = $(self).val();
+		var text = "";
+		if (typeof(sub_categories_array[id]) == 'undefined') {
+		    $('#group_sub_category').html('');
+		}
+		else{
+		   	sub_categories_array[id].forEach(function(entry) {
+				text = text + "<option value='"+entry.id+"'>"+entry.lang+"</option>";
+			});
+		    $('#group_sub_category').html(text);
+		}
+	}
+$(function() {
+  $('form.setting-general-form').ajaxForm({
+    url: Wo_Ajax_Requests_File() + '?f=groups&s=update_general_settings',
+    beforeSend: function() {
+      $('.setting-general-form').find('.add_wow_loader').addClass('btn-loading');
+    },
+    success: function(data) {
+      scrollToTop();
+      if (data.status == 200) {
+        $('.setting-general-alert').html('<div class="alert alert-success">' + data.message + '</div>');
+        $('.alert-success').fadeIn('fast', function() {
+           $(this).delay(2500).slideUp(500, function() {
+              $(this).remove();
+            });
+        });
+      } else {
+          var errors = data.errors.join("<br>");
+          $('.setting-general-alert').html('<div class="alert alert-danger">' + errors + '</div>');
+          $('.alert-danger').fadeIn(300);
+      }
+      $('.setting-general-form').find('.add_wow_loader').removeClass('btn-loading');
+    }
+  });
+});
+</script>

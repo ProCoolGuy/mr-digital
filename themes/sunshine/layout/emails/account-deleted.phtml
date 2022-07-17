@@ -1,0 +1,9 @@
+<?php 
+$data = $db->where('name','account_deleted')->getOne(T_HTML_EMAILS);
+$html = $data->value;
+$replaces = array('USERNAME' => $wo['user']['username'],
+                 'SITE_URL' => $wo['config']['site_url'],
+                 'SITE_NAME' => $wo['config']['siteName']);
+$html = Wo_ReplaceText($html,$replaces);
+echo $html;
+ ?>

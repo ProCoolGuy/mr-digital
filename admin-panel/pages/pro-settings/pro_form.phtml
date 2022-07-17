@@ -1,0 +1,125 @@
+<label for="status">Status</label>
+<div class="form-group">
+    <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="status" id="status-enabled" value="1" <?php echo ($wo['pro']['status'] == 1) ? 'checked': '';?>>
+        <label class="form-check-label" for="status-enabled">Enabled</label>
+    </div>
+    <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="status" id="status-disabled" value="0" <?php echo ($wo['pro']['status'] == 0) ? 'checked': '';?>>
+        <label class="form-check-label" for="status-disabled" class="m-l-20">Disabled</label>
+    </div>
+</div>
+
+
+<div class="form-group form-float">
+    <div class="form-line focused">
+        <label class="form-label">Name</label>
+        <input type="text" name="name" class="form-control" value="<?php echo $wo['lang'][$wo['pro']['type']];?>">
+    </div>
+</div>
+<div class="form-group form-float">
+    <div class="form-line focused">
+        <label class="form-label">Price</label>
+        <input type="number" name="price" class="form-control" value="<?php echo $wo['pro']['price'];?>">
+    </div>
+</div>
+<label for="featured_member">Featured member</label>
+<div class="form-group">
+    <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="featured_member" id="featured_member-enabled" value="1" <?php echo ($wo['pro']['featured_member'] == 1) ? 'checked': '';?>>
+        <label class="form-check-label" for="featured_member-enabled">Enabled</label>
+    </div>
+    <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="featured_member" id="featured_member-disabled" value="0" <?php echo ($wo['pro']['featured_member'] == 0) ? 'checked': '';?>>
+        <label class="form-check-label" for="featured_member-disabled" class="m-l-20">Disabled</label>
+    </div>
+</div>
+<label for="profile_visitors">See profile visitors</label>
+<div class="form-group">
+    <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="profile_visitors" id="profile_visitors-enabled" value="1" <?php echo ($wo['pro']['profile_visitors'] == 1) ? 'checked': '';?>>
+        <label class="form-check-label" for="profile_visitors-enabled">Enabled</label>
+    </div>
+    <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="profile_visitors" id="profile_visitors-disabled" value="0" <?php echo ($wo['pro']['profile_visitors'] == 0) ? 'checked': '';?>>
+        <label class="form-check-label" for="profile_visitors-disabled" class="m-l-20">Disabled</label>
+    </div>
+</div>
+<label for="last_seen">Show / Hide last seen</label>
+<div class="form-group">
+    <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="last_seen" id="last_seen-enabled" value="1" <?php echo ($wo['pro']['last_seen'] == 1) ? 'checked': '';?>>
+        <label class="form-check-label" for="last_seen-enabled">Enabled</label>
+    </div>
+    <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="last_seen" id="last_seen-disabled" value="0" <?php echo ($wo['pro']['last_seen'] == 0) ? 'checked': '';?>>
+        <label class="form-check-label" for="last_seen-disabled" class="m-l-20">Disabled</label>
+    </div>
+</div>
+<label for="verified_badge">Verified badge</label>
+<div class="form-group">
+    <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="verified_badge" id="verified_badge-enabled" value="1" <?php echo ($wo['pro']['verified_badge'] == 1) ? 'checked': '';?>>
+        <label class="form-check-label" for="verified_badge-enabled">Enabled</label>
+    </div>
+    <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="verified_badge" id="verified_badge-disabled" value="0" <?php echo ($wo['pro']['verified_badge'] == 0) ? 'checked': '';?>>
+        <label class="form-check-label" for="verified_badge-disabled" class="m-l-20">Disabled</label>
+    </div>
+</div>
+<div class="form-group form-float">
+    <div class="form-line focused">
+        <label class="form-label">Pages promotion</label>
+        <input type="number" name="pages_promotion" class="form-control" value="<?php echo $wo['pro']['pages_promotion'];?>">
+    </div>
+</div>
+<div class="form-group form-float">
+    <div class="form-line focused">
+        <label class="form-label">Posts promotion</label>
+        <input type="number" name="posts_promotion" class="form-control" value="<?php echo $wo['pro']['posts_promotion'];?>">
+    </div>
+</div>
+<div class="form-group form-float">
+    <div class="form-line focused">
+        <label class="form-label">Discount (<?php echo $wo['pro']['discount'];?>%)</label>
+        <input type="number" name="discount" class="form-control" value="<?php echo $wo['pro']['discount'];?>">
+    </div>
+</div>
+<div class="form-group form-float">
+    <div class="form-line focused">
+        <label class="form-label">Time (day)</label>
+        <select class="form-control show-tick" id="time" name="time">
+            <option value="week" <?php echo ($wo['pro']['time'] == 'week') ? 'selected': '';?> >Week</option>
+            <option value="month" <?php echo ($wo['pro']['time'] == 'month') ? 'selected': '';?> >Month</option>
+            <option value="year" <?php echo ($wo['pro']['time'] == 'year') ? 'selected': '';?> >Year</option>
+            <option value="unlimited" <?php echo ($wo['pro']['time'] == 'unlimited') ? 'selected': '';?> >Unlimited</option>
+        </select>
+    </div>
+</div>
+<div class="form-group form-float">
+    <div class="form-line focused">
+        <label class="form-label">Icon</label>
+        <input type="file" name="icon" class="form-control">
+    </div>
+    <br>
+    <small>The icon size (width = 32px and height: 32px and .png)</small>
+</div>
+<div class="form-group form-float">
+    <div class="form-line focused">
+        <label class="form-label">Night Icon</label>
+        <input type="file" name="night_icon" class="form-control">
+    </div>
+    <br>
+    <small>The icon size (width = 32px and height: 32px and .png)</small>
+</div>
+<?php if (!empty($wo['pro']['image']) || !empty($wo['pro']['night_image'])) { ?>
+<label for="icon_to_use">Icon to use</label>
+<div class="form-group">
+    <input type="radio" name="icon_to_use" id="icon_to_use-enabled" value="1">
+    <label for="icon_to_use-enabled">Default</label>
+    <input type="radio" name="icon_to_use" id="icon_to_use-disabled" value="0" checked>
+    <label for="icon_to_use-disabled" class="m-l-20">My Icon</label>
+</div>
+<?php } ?>
+
+<input type="hidden" name="type" value="<?php echo $wo['pro']['type'];?>">

@@ -1,0 +1,22 @@
+<?php if ($wo['story']['postType'] == 'ad'): ?>
+  <?php echo Wo_LoadPage('story/includes/advertisement'); ?>
+<?php else: ?>
+	<?php if ($wo['story']['postType'] == 'job' && !empty($wo['story']['job_id'])) {
+		echo Wo_LoadPage('story/includes/job');
+	 }else if (!empty($wo['story']['fund_raise_id']) || !empty($wo['story']['fund_id'])){
+	 	if (!empty($wo['story']['fund_raise_id'])) {
+	 		$wo['story']['fund'] = GetFundByRaiseId($wo['story']['fund_raise_id'],$wo['story']['user_id']);
+	 		$wo['story']['fund']['fund']['title'] = stripslashes($wo['story']['fund']['fund']['title']);
+	 	}
+	 	if (!empty($wo['story']['fund_id'])) {
+	 		$wo['story']['fund_data'] = GetFundingById($wo['story']['fund_id']);
+	 		$wo['story']['fund_data']['title'] = stripslashes($wo['story']['fund_data']['title']);
+	 	}
+	 	echo Wo_LoadPage('story/includes/post-layout');
+	}else if (!empty($wo['story']['product_id']) && !empty($wo['story']['product']) && !empty($wo['story']['product']['images']) && $wo['page']  == 'story') {
+		 echo Wo_LoadPage('story/includes/product_full');
+	 }else if (is_array($wo['story'])) {
+	 	echo Wo_LoadPage('story/includes/post-layout');
+	 }
+		?>
+<?php endif; ?>

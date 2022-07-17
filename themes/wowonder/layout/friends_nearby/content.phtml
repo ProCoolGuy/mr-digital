@@ -1,0 +1,286 @@
+<div class="page-margin">
+	<div class="wow_main_float_head findfrnd">
+		<div class="container">
+			<h1><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="currentColor" d="M15.5,12C18,12 20,14 20,16.5C20,17.38 19.75,18.21 19.31,18.9L22.39,22L21,23.39L17.88,20.32C17.19,20.75 16.37,21 15.5,21C13,21 11,19 11,16.5C11,14 13,12 15.5,12M15.5,14A2.5,2.5 0 0,0 13,16.5A2.5,2.5 0 0,0 15.5,19A2.5,2.5 0 0,0 18,16.5A2.5,2.5 0 0,0 15.5,14M10,4A4,4 0 0,1 14,8C14,8.91 13.69,9.75 13.18,10.43C12.32,10.75 11.55,11.26 10.91,11.9L10,12A4,4 0 0,1 6,8A4,4 0 0,1 10,4M2,20V18C2,15.88 5.31,14.14 9.5,14C9.18,14.78 9,15.62 9,16.5C9,17.79 9.38,19 10,20H2Z"></path></svg> <?php echo $wo['lang']['find_friends']; ?></h1>
+			<form action="#">
+				<div class="search-blog">
+					<div class="wow_form_fields">
+						<input type="text" placeholder="<?php echo $wo['lang']['search_for_users']; ?>" id="nearby-username" onkeydown="Wo_LoadNearByUsers(this);">
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+	
+	<div class="wow_main_blogs_bg"></div>
+	
+	<?php if (Wo_IsAdmin() && strpos($wo['config']['site_url'], 'https') === false): ?>
+		<div class="text-center">
+			<div class="alert alert-warning">
+				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-alert-triangle"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12" y2="17"></line></svg> SSL is required to able to use this feature. (Just admin can see this warning)
+			</div>
+		</div>
+	<?php endif; ?>
+	
+	<div class="wow_content">
+		<div id="map" class="wow_frnd_map"></div>
+		<hr>
+		<div class="row">
+			<div class="col-md-6 wow_frnd_field">
+				<h4><?php echo $wo['lang']['gender'];?></h4>
+				<div class="nearby-users-gender-cont">
+					<ul class="friends_nearby_status_ul">
+						<li class="active" data-gender="all"><?php echo $wo['lang']['all'];?></li>
+						<?php foreach ($wo['genders'] as $key => $gender) { ?>
+							<?php if ($key == 'male') { ?>
+								<li data-gender="<?php echo($key) ?>"><?php echo $gender;?></li>
+							<?php }elseif ($key == 'female') { ?>
+								<li data-gender="<?php echo($key) ?>"><?php echo $gender;?></li>
+							<?php }else{ ?>
+								<li data-gender="<?php echo($key) ?>"><?php echo $gender;?></li>
+							<?php } ?>
+						<?php } ?>
+					</ul>
+				</div>
+			</div>
+			<div class="col-md-6 wow_frnd_field">
+				<h4><?php echo $wo['lang']['status']; ?></h4>
+				<div class="nearby-users-gender-collapse nearby-users-status-collapse">
+					<ul class="friends_nearby_status_ul">
+						<li class="active" data-nearby-user-status="2"><?php echo $wo['lang']['all'];?></li>
+						<li data-nearby-user-status="1"><?php echo $wo['lang']['online'];?></li>
+						<li data-nearby-user-status="0"><?php echo $wo['lang']['offline'];?></li>
+					</ul>
+				</div>
+			</div>
+			<div class="col-md-6 wow_frnd_field">
+				<h4><?php echo $wo['lang']['location_dist'];?></h4>
+				<div class="select-nearby-users-distance">
+					<form>
+						<input type="range" class="cusrange" id="nearby-users-distance" name="amountRange" onchange="Wo_LoadNearByUsers();" value="0" min="1" max="1000" oninput="this.form.amountInput.value=this.value">
+						<input type="number" name="amountInput" min="1" max="1000" value="1" oninput="this.form.amountRange.value=this.value" readonly id="cusrange-reader"/>
+					</form>
+				</div>
+			</div>
+			<div class="col-md-6 wow_frnd_field">
+				<div id="search-nearby-users">
+					<h4><?php echo $wo['lang']['relationship']; ?></h4>
+					<div class="nearby-users-gender-collapse nearby-users-relationship-collapse">
+						<ul>
+							<li class="active" data-relation-ship="5"><?php echo $wo['lang']['all'];?></li>
+							<?php foreach ($wo['relationship'] as $relationship_ids => $relationship): ?>
+								<li class="" data-relation-ship="<?php echo $relationship_ids; ?>"><?php echo $relationship;?></li>
+							<?php endforeach; ?>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<div class="page-margin">
+		<div class="row wow_frnd_usr" id="nearby_users_list">
+			<?php
+				$nearby_users = Wo_GetNearbyUsers(array('country' => $wo['user']['country_id']));
+				if (count($nearby_users) > 0) {
+					foreach ($nearby_users as $wo['UsersList']) {
+						echo Wo_LoadPage('friends_nearby/includes/user-list');
+					}
+				}
+				else{
+					echo '<div class="empty_state"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M16,13C15.71,13 15.38,13 15.03,13.05C16.19,13.89 17,15 17,16.5V19H23V16.5C23,14.17 18.33,13 16,13M8,13C5.67,13 1,14.17 1,16.5V19H15V16.5C15,14.17 10.33,13 8,13M8,11A3,3 0 0,0 11,8A3,3 0 0,0 8,5A3,3 0 0,0 5,8A3,3 0 0,0 8,11M16,11A3,3 0 0,0 19,8A3,3 0 0,0 16,5A3,3 0 0,0 13,8A3,3 0 0,0 16,11Z" /></svg>' . $wo['lang']['no_users_found'] . '</div>';
+				}
+			?>
+		</div>
+		<div class="clear"></div>
+	</div>
+	<div class="posts_load">
+		<?php if (count($nearby_users) >= 1): ?>
+			<div class="load-more">
+				<div class="btn btn-default text-center pointer" id="load_more_nearby_users" onclick="Wo_LoadMoreNearByUsers();"><?php echo $wo['lang']['load_more'] ?></div>
+			</div>
+		<?php endif ?>
+	</div>
+	<?php //echo Wo_LoadPage('footer/content'); ?>
+</div>
+<div class="modal fade" id="show_user_location_map" role="dialog">
+   <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+         <div class="modal-body">
+         	<?php if ($wo['config']['google_map'] == 1) { ?>
+            <iframe src="" frameborder="0" width="100%" style="height: calc(100vh - 300px);"></iframe>
+            <?php } ?>
+				<?php if ($wo['config']['yandex_map'] == 1) { ?>
+					<div id="show_user_location__map" <?php echo($wo['config']['yandex_map'] == 1 ? 'style="width: 100%; height: 300px; padding: 0; margin: 0;"' : '') ?>></div>
+				<?php } ?>
+         </div>
+         <div class="modal-footer">
+         <button type="button" class="btn btn-default" data-dismiss="modal" onclick="javascript:$('#show_user_location_map').modal('hide');">
+         <?php echo $wo['lang']['close']; ?>
+         </button>
+         </div>
+      </div>
+   </div>
+</div>
+<script>
+	jQuery(document).ready(function($) {
+		$('.wow_main_blogs_bg').css('height', ($('.wow_main_float_head').height()) + 'px');
+
+		/*Map*/
+		var planes = [];
+		var markersArray = [];
+		<?php foreach ($nearby_users as $user) : ?>
+		planes.push(['<?php echo $user['user_data']['name']?>',<?php echo $user['user_data']['lat']?>, <?php echo $user['user_data']['lng']?>]);
+		<?php endforeach; ?>
+		var map = L.map('map').setView([<?php echo $wo['user']['lat']?>, <?php echo $wo['user']['lng']?>], 7);
+
+		L.tileLayer(
+			'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+				attribution: '',
+				maxZoom: 18,
+			}).addTo(map);
+
+		for (var i = 0; i < planes.length; i++) {
+			marker = new L.marker([planes[i][1],planes[i][2]])
+			.bindPopup(planes[i][0])
+			.addTo(map);
+			markersArray.push(marker);
+		};
+	});
+
+	function Wo_ShowUserLocationMap(user_geoData = false) {
+		if (!user_geoData) {return false;}
+		<?php if ($wo['config']['google_map'] == 1) { ?>
+		var google_map_api = 'https://www.google.com/maps/embed/v1/place?key=<?php echo $wo['config']['google_map_api']; ?>&q=' + user_geoData;
+		$("#show_user_location_map").modal().find('iframe').attr('src', google_map_api);
+		<?php } ?>
+		<?php if ($wo['config']['yandex_map'] == 1) { ?>
+			$('#show_user_location__map').html('');
+			$("#show_user_location_map").modal();
+			let geo = user_geoData.split(",");
+			var userMap = new ymaps.Map('show_user_location__map', {
+		        center: [geo[0],geo[1]],
+		        zoom: 9
+		    });
+		    userMap.geoObjects.add(new ymaps.Placemark([geo[0],geo[1]], {
+	            balloonContent: ''
+	        }));
+	    <?php } ?>
+
+	}
+	function Wo_LoadNearByUsers(self = false){
+		var relship  = $(".nearby-users-relationship-collapse").find('.active').attr('data-relation-ship');
+		var status   = $(".nearby-users-status-collapse").find('.active').attr('data-nearby-user-status');
+		var gender   = $(".nearby-users-gender-cont").find('.active').attr('data-gender');
+		var name     = $("#nearby-username").val();
+		var distance = $("#nearby-users-distance").val();
+		if (!gender && !name && !distance && !relship && !status) { return false;}
+		if (self) {
+			Wo_progressIconLoader($(self));
+		}
+		else{
+			Wo_StartBar();
+		}
+		
+		$.ajax({
+			url: Wo_Ajax_Requests_File(),
+			type: 'GET',
+			dataType: 'json',
+			data: {
+				f:'nearby_users',
+				s:'load',
+				gender:gender,
+				name:name,
+				distance:distance,
+				status:status,
+				relship:relship
+			},
+		})
+		.done(function(data) {
+
+	        if (data['status'] == 200){
+	        	$("#nearby_users_list").html(data.html);
+	        	$("[data-toggle]").tooltip();
+	        	$("#load_more_nearby_users").html('<i class="fa fa-arrow-down progress-icon" data-icon="arrow-down"></i> <?php echo $wo['lang']['load_more']; ?>');
+	        } 
+
+	        else{
+	        	scrollToTop();
+	        	$("#nearby_users_list").html('<h5 class="search-filter-center-text"> <?php echo $wo['lang']['no_users_found']; ?></h5>');
+	        } 
+	        if (self) {
+				Wo_progressIconLoader($(self));
+			}
+			else{
+				Wo_FinishBar();
+			}
+		})
+		.fail(function() {
+			console.log("error");
+		})
+		
+		
+		
+	}
+	function Wo_LoadMoreNearByUsers(){
+		var relship  = $(".nearby-users-relationship-collapse").find('.active').attr('data-relation-ship');
+		var status   = $(".nearby-users-status-collapse").find('.active').attr('data-nearby-user-status');
+		var after_id = ($(".nearby_user_wrapper_prnt").length > 0) ? $(".nearby_user_wrapper_prnt").last().attr('id') : 0;
+		var gender   = $(".nearby-users-gender-cont").find('.active').attr('data-gender');
+		var name     = $("#nearby-username").val();
+		var distance = $("#nearby-users-distance").val();
+		if (!after_id && !gender && !name && !distance && !status && !relship) { return false;}
+		Wo_progressIconLoader($('#load_more_nearby_users'));
+		$.ajax({
+			url: Wo_Ajax_Requests_File(),
+			type: 'GET',
+			dataType: 'json',
+			data: {
+				f:'nearby_users',
+				s:'load',
+				offset:after_id,
+				gender:gender,
+				name:name,
+				distance:distance,
+				relship:relship,
+				status:status
+
+			},
+		})
+		.done(function(data) {
+
+	        if (data['status'] == 200){
+	        	$("#nearby_users_list").append(data.html);
+	        	$("[data-toggle]").tooltip();
+	        	$("#load_more_nearby_users").html('<?php echo $wo['lang']['load_more']; ?>');
+	        } 
+
+	        else{
+	        	$("#load_more_nearby_users").html('<?php echo $wo['lang']['no_result']; ?>');
+	        } 
+		})
+		.fail(function() {
+			console.log("error");
+		})
+		
+	}
+
+	jQuery(document).ready(function($) {
+		$("[data-gender]").click(function(event) {
+			$(".nearby-users-gender-cont").find('.active').removeClass('active');
+			$(this).addClass('active');
+			Wo_LoadNearByUsers();
+		});
+		$("[data-relation-ship]").click(function(event) {
+			$(".nearby-users-relationship-collapse").find('.active').removeClass('active');
+			$(this).addClass('active');
+			Wo_LoadNearByUsers();
+			
+		});
+		$("[data-nearby-user-status]").click(function(event) {
+			$(".nearby-users-status-collapse").find('.active').removeClass('active');
+			$(this).addClass('active');
+			Wo_LoadNearByUsers();
+		});
+	});
+</script>

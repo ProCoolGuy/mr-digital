@@ -1,0 +1,88 @@
+<div class="message-contnaier {{#if onwer}} outgoing pull-right {{else}} incoming pull-left {{/if}} {{#if have_reaction}} margin-active {{/if}}"
+    id="messageId_{{chatMsgId}}">
+    {{#if onwer}}
+    {{else}}
+    <div class="message-user-image pull-left">
+        <img src={{avatar}} alt="User image">
+    </div>
+    {{/if}}
+    <div class="messages-wrapper messages-text message-model {{#if onwer}} pull-right {{else}} pull-left {{/if}}"
+        data-message-id="{{chatMsgId}}" onclick="Wo_ShowMessageOptions({{chatMsgId}})">
+        <div class="clear"></div>
+        <div class="message" {{#if onwer}} style="background-color: {{backgroundColor}}" {{/if}} data-toggle="tooltip" title="{{ElapsedTime}}" data-placement="{{#if onwer}}bottom{{else}}bottom{{/if}}">
+            {{#if chatTxt}}
+            <p class="message-text" id="message_text_reply_{{chatMsgId}}" dir="auto" {{#if onwer}} style="background-color: {{backgroundColor}} {{/if}}">
+                {{#if hasHTML}}
+                    {{{chatTxt}}}
+                {{else}}
+                    {{{chatTxt}}}
+                {{/if}}
+            </p>
+            {{/if}}
+            <div class="message-media" id="message_media_reply_{{chatMsgId}}">
+                <div class="clear"></div>
+                {{{mediaHTML}}}
+                {{!--  <a href={{media_link}}>{{{media_data}}}</a>--}}
+            </div>
+            {{#if have_story}}
+				<div class="wo_chat_story">
+					<div class="wo_chat_story_innr" onclick="Get_CurrentStory('{{story_id}}','user')">
+						<img src="{{story_thumbnail}}">
+						<p><?php echo $wo['lang']['view_story'];?></p>
+					</div>
+				</div>
+             {{/if}}
+            
+            <div class="deleteMessage {{#unless onwer}} right {{/unless}}" style="{{#if onwer}}left: -25px;{{else}}right:-25px;{{/if}}" onclick="Wo_ReplyMessage('{{chatMsgId}}');">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" class="feather"><path fill="currentColor" d="M10,9V5L3,12L10,19V14.9C15,14.9 18.5,16.5 21,20C20,15 17,10 10,9Z" /></svg>
+              </div>
+              {{#unless onwer}}
+              <div class="deleteMessage messages-reactions {{#unless onwer}} right {{/unless}}" style="{{#if onwer}}left: -50px;{{else}}right:-50px;{{/if}}" data-message-id="{{chatMsgId}}">
+				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" class="feather"><path fill="currentColor" d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M7,9.5C7,8.7 7.7,8 8.5,8C9.3,8 10,8.7 10,9.5C10,10.3 9.3,11 8.5,11C7.7,11 7,10.3 7,9.5M12,17.23C10.25,17.23 8.71,16.5 7.81,15.42L9.23,14C9.68,14.72 10.75,15.23 12,15.23C13.25,15.23 14.32,14.72 14.77,14L16.19,15.42C15.29,16.5 13.75,17.23 12,17.23M15.5,11C14.7,11 14,10.3 14,9.5C14,8.7 14.7,8 15.5,8C16.3,8 17,8.7 17,9.5C17,10.3 16.3,11 15.5,11Z" /></svg>
+				</div>
+      {{/unless}}
+			<div class="deleteMessage {{#unless onwer}} right {{/unless}}" onclick="Wo_DeleteMessage({{chatMsgId}})" style="{{#if onwer}}left: -50px;{{else}}{{/if}}">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" class="feather"><path fill="currentColor" d="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z" /></svg>
+                <!-- <div class="time ajax-time text-right  {{#if onwer}} pull-right {{else}} pull-left {{/if}}" title="{{msgTime}}">
+                    {{ElapsedTime}}
+                </div> -->
+            </div>
+              {{#if have_reply}}
+			  <div class="wo_reply_msg_bg">
+            <p class="message-text" dir="auto">{{{reply_text}}}</p>
+            {{#if mediaReplyHTML}}
+            <div class="message-media">
+            <div class="clear"></div>
+            {{{mediaReplyHTML}}}
+         </div>
+         {{/if}}
+			</div>
+         {{/if}}
+		 <div class="like-stat stat-item post-like-status" style="{{#if onwer}}float:left;margin: 0 0 -20px -10px;{{else}}float:right;margin: 0 -18px -20px 0;{{/if}}">
+      <span class="like-emo post-reactions-icons-m-{{chatMsgId}}">
+      {{{reactions_info_html}}}
+      </span>
+    </div>
+        </div>
+
+        
+    </div>
+
+    
+    <ul class="reactions-box reactions-box-container-{{chatMsgId}}" data-id="{{chatMsgId}}"  style="{{#if onwer}}right: 10px; left: unset;{{else}}left: 10px; right: unset;{{/if}}">
+      {{{reactions_html}}}
+    </ul>
+
+    <div class="message-typing message-details"></div>
+    {{#if onwer}}
+    <div class="message-seen message-details"></div>
+    {{/if}}
+
+</div>
+
+<div></div>
+<script type="text/javascript">
+//   $(function () {
+// $('[data-toggle="tooltip"]').tooltip();
+// });
+</script>

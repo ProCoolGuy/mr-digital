@@ -1,0 +1,320 @@
+<div class="container-fluid">
+    <div>
+        <h3>Groups Fields</h3>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="#">Home</a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a href="#">Custom Fields</a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">Groups Fields</li>
+            </ol>
+        </nav>
+    </div>
+    <div class="row">
+        <div class="col-lg-12 col-md-12">
+            <div class="card">
+                <div class="card-body">
+					<a href="javascript:void(0)" class="btn btn-warning waves-effect waves-light m-t-20 pull-right" onclick="ShowAddModal()">Create New Custom Field</a>
+                  <h6 class="card-title">Groups Fields</h6>
+                  
+                  <div class="clearfix"></div>
+                  <br>
+                   <div class="table-responsive1">
+                        <table class="table table-bordered table-striped table-hover">
+                            <thead>
+                                <tr>
+                                  <th><input type="checkbox" id="check-all" class="filled-in check-all" ><label for="check-all"></label></th>
+                                   <th>ID</th>
+					               <th>Field name</th>
+					               <th>Type</th>
+					               <th>Length</th>
+					               <th>Placement</th>
+					               <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php 
+				                foreach (Wo_GetCustomFields('group') as $wo['field']) {
+				                    echo Wo_LoadAdminPage('groups-fields/list');
+				                }
+				                ?>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="clearfix"></div>
+                        <div class="row">
+                            <div class="col-lg-3 col-md-3">
+                                <span>&nbsp;</span>
+                                <button type="button" class="btn btn-info waves-effect delete-selected d-block" disabled>Delete Selected<span></span></button>
+                            </div>
+                        </div>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+    </div>
+    <!-- #END# Vertical Layout -->
+<div class="modal fade" id="AddCustomModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content modal_content_back">
+      <div class="modal-header">
+        <h5 class="modal-title" id="editcategoryModalLabel">Add New Field</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="add_custom_field_form_alert"></div>
+        <div class="alert alert-info">Use {{LANG lang_variable}} to translate the field data. e.g: {{LANG first_name}}</div><br>
+        <form class="add_custom_field_form" method="POST" id="modal-body-langs">
+          <label for="type">Field Type</label>
+          <select class="form-control show-tick chosen-select" id="type" name="type">
+            <option value="textbox">Textbox</option>
+            <option value="textarea">Textarea</option>
+            <option value="selectbox">Select box</option>
+          </select>
+          <div class="clearfix"></div>
+          <br>
+          <div class="form-group form-float">
+              <div class="form-line">
+                <label class="form-label">Field Name</label>
+                  <input type="text" id="name" name="name" class="form-control">
+              </div>
+          </div>
+         
+          <div class="form-group form-float">
+              <div class="form-line">
+                <label class="form-label">Field Length</label>
+                  <input type="text" id="length" name="length" class="form-control" value="32">
+                  <small class="admin-info">Default value is 32, and max value is 1000</small>
+              </div>
+          </div>
+           <div class="form-group form-float">
+              <div class="form-line">
+                <label class="form-label">Field Description</label>
+                  <textarea name="description" id="description" class="form-control" cols="30" rows="3"></textarea>
+                  <small class="admin-info">The description will show under the field</small>
+              </div>
+          </div>
+          <label for="required">Required Field</label>
+          <select class="form-control show-tick chosen-select" id="required" name="required">
+            <option value="on">Required</option>
+            <option value="off">Not Required</option>
+          </select>
+          <small class="admin-info">Is this field required?</small>
+          <div class="clearfix"></div>
+          <br>
+          <div class="form-group form-float options" style="display:none">
+              <div class="form-line">
+                <label class="form-label">Select Field Options</label>
+                  <textarea name="options" id="options" class="form-control" cols="30" rows="3"></textarea>
+              </div>
+              <small class="admin-info">One option per line.</small>
+          </div>
+          <input type="hidden" name="hash_id" value="<?php echo Wo_CreateSession();?>">
+          <input type="hidden" name="placement" id="placement" value="group">
+          <div class="modal-footer">
+        
+        <button type="button" class="btn btn-primary modal_close_btn" data-dismiss="modal">CLOSE</button>
+        <button type="submit" class="btn btn-success" id="add_custom_field_button">CREATE</button>
+      </div>
+        </form>
+        
+      </div>
+      
+    </div>
+  </div>
+</div>
+
+
+<div class="modal fade" id="EditCustomModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content modal_content_back">
+      <div class="modal-header">
+        <h5 class="modal-title" id="editcategoryModalLabel">Edit Field</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="edit_custom_field_form_alert"></div>
+        <div class="help-block">Use {{LANG lang_variable}} to translate the field data. e.g: {{LANG first_name}}</div><br>
+        <form class="edit_custom_field_form" method="POST" id="modal-body-langs">
+          <div class="edit_custom_field_data"></div>
+
+          <input type="hidden" name="hash_id" value="<?php echo Wo_CreateSession();?>">
+          <input type="hidden" name="placement" id="placement" value="group">
+          <div class="modal-footer">
+        
+        <button type="button" class="btn btn-primary modal_close_btn" data-dismiss="modal">CLOSE</button>
+        <button type="submit" class="btn btn-success" id="edit_custom_field_button">SAVE CHANGES</button>
+      </div>
+        </form>
+        
+      </div>
+      
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="DeleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModal1Label" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModal1Label">Delete field?</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to delete this field?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="SelectedDeleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModal1Label" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModal1Label">Delete field?</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Are you sure that you want to remove the selected field?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="DeleteSelected()" data-dismiss="modal">Submit</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+var add_custom_field_form = $('form.add_custom_field_form');
+
+add_custom_field_form.ajaxForm({
+    url: Wo_Ajax_Requests_File() + '?f=admin_setting&s=add_custom_field_form',
+    beforeSend: function() {
+        $('#add_custom_field_button').text("Please wait..");
+    },
+    success: function(data) {
+        if (data.status == 200) {
+            $('#add_custom_field_button').text('SAVE CHANGES');
+            $('.add_custom_field_form_alert').html('<div class="alert alert-success"><i class="fa fa-check"></i> Custom Field successfully added</div>');
+            setTimeout(function () {
+                $('.add_custom_field_form_alert').empty();
+            }, 2000);
+            window.location.reload();
+        }
+        else{
+          $('.add_custom_field_form_alert').html('<div class="alert alert-danger"><i class="fa fa-check"></i> '+data.message+'</div>');
+            setTimeout(function () {
+                $('.add_custom_field_form_alert').empty();
+            }, 2000);
+        }
+    }
+});
+
+var edit_custom_field_form = $('form.edit_custom_field_form');
+
+edit_custom_field_form.ajaxForm({
+    url: Wo_Ajax_Requests_File() + '?f=admin_setting&s=edit_custom_field_form',
+    beforeSend: function() {
+        $('#edit_custom_field_button').text("Please wait..");
+    },
+    success: function(data) {
+        if (data.status == 200) {
+            $('#edit_custom_field_button').text('SAVE CHANGES');
+            $('.edit_custom_field_form_alert').html('<div class="alert alert-success"><i class="fa fa-check"></i> Custom Field successfully edited</div>');
+            setTimeout(function () {
+                $('.edit_custom_field_form_alert').empty();
+            }, 2000);
+            window.location.reload();
+        }
+        else{
+          $('.edit_custom_field_form_alert').html('<div class="alert alert-danger"><i class="fa fa-check"></i> '+data.message+'</div>');
+            setTimeout(function () {
+                $('.edit_custom_field_form_alert').empty();
+            }, 2000);
+        }
+    }
+});
+
+
+$(function() {
+  $('.chosen-select').on('change', function(evt, params) {
+       var selectedValue = $(this).val();
+       if (selectedValue == 'selectbox') {
+          $('.options').fadeIn(200);
+       } else {
+          $('.options').fadeOut(200);
+       }
+   });
+});
+function ShowAddModal() {
+  $('#AddCustomModal').modal('show');
+}
+function ShowEditModal(self,id) {
+  $(self).text("Please wait..");
+  $.post(Wo_Ajax_Requests_File() + '?f=admin_setting&s=get_custom_field_info', {id: id,type: 'group'}, function(data, textStatus, xhr) {
+    if (data.status == 200) {
+      $('.edit_custom_field_data').html(data.html);
+      $('#EditCustomModal').modal('show');
+    }
+    $(self).text("EDIT");
+  });
+  
+}
+
+
+
+function Wo_DeleteField(id,type = 'show') {
+  if (id == '') {
+    return false;
+  }
+  if (type == 'hide') {
+      $('#DeleteModal').find('.btn-primary').attr('onclick', "Wo_DeleteField('"+id+"')");
+      $('#DeleteModal').modal('show');
+      return false;
+    }
+  $('#' + id).fadeOut(300, function () {
+    $(this).remove();
+  });
+  $.get(Wo_Ajax_Requests_File(), {f: 'admin_setting', s:'delete_custom_field', id:id, type:'group'});
+}
+$('.check-all').on('click', function(event) {
+    $('input:checkbox').not(this).prop('checked', this.checked);
+});
+$('.delete-checkbox, .check-all').change(function(event) {
+    $('.delete-selected').attr('disabled', false);
+    $('.delete-selected').find('span').text(' (' + $('.delete-checkbox:checked').length + ')');
+});
+
+$('.delete-selected').on('click', function(event) {
+    event.preventDefault();
+    $('#SelectedDeleteModal').modal('show');
+});
+function DeleteSelected() {
+    data = new Array();
+    $('td input:checked').parents('tr').each(function () {
+        data.push($(this).attr('data_selected'));
+    });
+    $('.delete-selected').attr('disabled', true);
+    $('.delete-selected').text('Please wait..');
+    $.post(Wo_Ajax_Requests_File()+"?f=admin_setting&s=remove_multi_custom_field&type=group", {ids: data}, function () {
+        $.each( data, function( index, value ){
+            $('#' + value).remove();
+        });
+        $('.delete-selected').text('Delete Selected');
+    });
+}
+</script>

@@ -1,0 +1,161 @@
+<div class="page-margin">
+	<div class="row">
+		<div class="col-md-2 leftcol"><?php echo Wo_LoadPage("sidebar/left-sidebar"); ?></div>
+		<div class="col-md-7 middlecol">
+			<div class="page-margin wow_content mt-0">
+				<div class="wo_page_hdng pag_neg_padd pag_alone">
+					<div class="wo_page_hdng_innr">
+						<span><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="currentColor" d="M19,3H18V1H16V3H8V1H6V3H5A2,2 0 0,0 3,5V19A2,2 0 0,0 5,21H10V19H5V8H19V9H21V5A2,2 0 0,0 19,3M21.7,13.35L20.7,14.35L18.65,12.35L19.65,11.35C19.85,11.14 20.19,11.13 20.42,11.35L21.7,12.63C21.89,12.83 21.89,13.15 21.7,13.35M12,18.94L18.07,12.88L20.12,14.88L14.06,21H12V18.94Z"></path></svg></span> <?php echo $wo['lang']['edit_event'];?>
+					</div>
+				</div>
+			</div>
+			
+			<div class="page-margin wow_content wow_sett_content">
+				<form class="form form-horizontal" method="post" id="update-event">
+					<div class="wow_form_fields">
+						<label for="event-name"><?php echo $wo['lang']['name']; ?></label>
+						<input id="event-name" name="event-name" type="text" value="<?php echo $wo['event']['name']; ?>">
+					</div>
+					<div class="wow_form_fields">
+						<label for="event-locat"><?php echo $wo['lang']['location']; ?></label>
+						<input id="event-locat" name="event-locat" type="text" value="<?php echo $wo['event']['location']; ?>">
+					</div>
+					<?php if ($wo['config']['google_map'] == 1 || $wo['config']['yandex_map'] == 1) { ?>
+						<div id="review-location">
+							<div id="place" <?php echo($wo['config']['yandex_map'] == 1 ? 'class="yandex_ads_map"' : '') ?>>
+								<?php if ($wo['config']['google_map'] == 1) { ?>
+								<iframe width="100%" frameborder="0" style="border:0;margin-top: 10px;" src="https://www.google.com/maps/embed/v1/place?key=<?php echo $wo['config']['google_map_api']; ?>&q=<?php echo $wo['event']['location']; ?>&language=en"></iframe>
+								<?php } ?>
+								<?php if ($wo['config']['yandex_map'] == 1) { ?>
+									<script type="text/javascript">
+		        			<?php if (!empty($wo['event']['location'])) { ?>
+		        				setTimeout(function () {
+		        					var myMap;
+							        ymaps.geocode("<?php echo($wo['event']['location']); ?>").then(function (res) {
+							            myMap = new ymaps.Map('place', {
+							                center: res.geoObjects.get(0).geometry.getCoordinates(),
+							                zoom : 10
+							            });
+							            myMap.geoObjects.add(new ymaps.Placemark(res.geoObjects.get(0).geometry.getCoordinates(), {
+									            balloonContent: ''
+									        }));
+							        });
+		        				},1000);
+					        <?php } ?>
+		        		</script>
+								<?php } ?>
+							</div>
+						</div>
+					<?php } ?>
+					<div class="wow_form_fields">
+						<label for="event-start"><?php echo $wo['lang']['event_start']; ?></label>
+						<div class="row">
+							<div class="col-md-6">
+								<input type="text" class="date" id="event-start" name="event-start-date" value="<?php echo $wo['event']['start_edit_date']; ?>">
+							</div>
+							<div class="col-md-6">
+								<input type="text" id="event-start-time" class="time1" name="event-start-time" value="<?php echo $wo['event']['start_time']; ?>">
+							</div>
+						</div>
+					</div>
+					<div class="wow_form_fields">
+						<label for="event-end-date"><?php echo $wo['lang']['event_end']; ?></label>
+						<div class="row">
+							<div class="col-md-6">
+								<input type="text" class="date1" name="event-end-date" id="event-end-date" value="<?php echo $wo['event']['end_edit_date']; ?>">
+							</div>
+							<div class="col-md-6">
+								<input type="text" id="event-end-time" class="time1" name="event-end-time" value="<?php echo $wo['event']['end_time']; ?>">
+							</div>
+						</div>
+					</div>
+					<div class="wow_form_fields">
+						<label for="event-description"><?php echo $wo['lang']['description']; ?></label>
+						<?php $text = br2nl($wo['event']['description']); ?> 
+						<textarea name="event-description" id="event-description" rows="5"><?php echo $text; ?></textarea>
+					</div>
+					<div class="wow_form_fields">
+						<label><?php echo $wo['lang']['image']; ?></label>
+						<div class="wow_fcov_image">
+							<div id="wow_fcov_img_holder">
+								<img src="<?php echo $wo['event']['cover']; ?>" alt="<?php echo $wo['event']['name']; ?>">
+							</div>
+							<div class="upload_ad_image" onclick="document.getElementById('event-cover').click(); return false">
+								<div class="upload_ad_image_content">
+									<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="currentColor" d="M8.5,13.5L11,16.5L14.5,12L19,18H5M21,19V5C21,3.89 20.1,3 19,3H5A2,2 0 0,0 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19Z"></path></svg> <?php echo $wo['lang']['choose_image'] ?>
+								</div>
+							</div>
+						</div>
+					</div>
+  
+					<div class="setting-general-alert setting-update-alert" id="event-alert"></div>
+					
+					<div class="text-center">
+						<a class="btn btn-mat" href="<?php echo Wo_SeoLink('index.php?link1=my-events'); ?>" data-ajax="?link1=my-events">
+							<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="currentColor" d="M20,11V13H8L13.5,18.5L12.08,19.92L4.16,12L12.08,4.08L13.5,5.5L8,11H20Z"></path></svg> <?php echo $wo['lang']['go_back'];?>
+						</a>
+						<button class="btn btn-main btn-mat btn-mat-raised add_wow_loader" type="submit"><?php echo $wo['lang']['save']; ?></button>
+					</div>
+					<input type="hidden" name="hash_id" value="<?php echo Wo_CreateSession();?>">
+					<input type="file" name="event-cover" class="hidden" id="event-cover" accept="image/*">
+				</form>
+			</div>
+		</div>
+		<!-- .col-md-8 -->
+		<?php echo Wo_LoadPage('sidebar/content');?>
+	</div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/jquery-ui-timepicker-addon@1.6.3/dist/jquery-ui-timepicker-addon.min.js"></script>
+<script>
+  jQuery(document).ready(function($) {
+  	$( ".date" ).datepicker({ dateFormat: 'yy-mm-dd', minDate: 'today'});
+      $( ".date1" ).datepicker({ dateFormat: 'yy-mm-dd', minDate: '+1day'});
+      $( ".time1" ).timepicker();
+      <?php if ($wo['config']['google_map'] == 1) { ?>
+      $("#event-locat").change(function(event) {
+        if ($(this).val().length >= 3) {
+          $("#review-location #place").html('<iframe width="100%" frameborder="0" style="border:0;margin-top: 10px;" src="https://www.google.com/maps/embed/v1/place?key=<?php echo $wo['config']['google_map_api']; ?>&q=' + $("#event-locat").val() + '&language=en"></iframe>')
+        }else{
+          $("#review-location #place").html('<iframe width="100%" frameborder="0" style="border:0;margin-top: 10px;" src="https://www.google.com/maps/embed/v1/place?key=<?php echo $wo['config']['google_map_api']; ?>&q=us&language=en"></iframe>')
+        }
+      });
+      <?php } ?>
+		 <?php if ($wo['config']['yandex_map'] == 1) { ?>
+		 	$(document).on('change', '#event-locat', function(event) {
+		 		$("#review-location #place").html('');
+		   	var myMap;
+		    ymaps.geocode($(this).val()).then(function (res) {
+		        myMap = new ymaps.Map('place', {
+		            center: res.geoObjects.get(0).geometry.getCoordinates(),
+		            zoom : 10
+		        });
+		        myMap.geoObjects.add(new ymaps.Placemark(res.geoObjects.get(0).geometry.getCoordinates(), {
+		            balloonContent: ''
+		        }));
+		    });
+		 	});
+
+		 <?php } ?>
+
+      $("#event-cover").change(function(event) {
+        $("#wow_fcov_img_holder").html("<img src='" + window.URL.createObjectURL(this.files[0]) + "' alt='Picture'>")
+      });
+
+      $('#update-event').ajaxForm({
+            url: Wo_Ajax_Requests_File() + '?f=update-event&eid=<?php echo $wo['event']['id']; ?>',
+            beforeSend: function() {
+              $('.wo_settings_page').find('.add_wow_loader').addClass('btn-loading');
+            },
+            success: function(data) {
+              if (data['status'] == 200) {
+                $("#event-alert").html('<div class="alert alert-success">'+ data['message'] +'</div>');
+                window.location = data['url'];
+              } else if (data['message']) {
+                $("#event-alert").html('<div class="alert alert-danger">' + data['message'] + '</div>');
+              } 
+              $('.wo_settings_page').find('.add_wow_loader').removeClass('btn-loading');
+            }
+      });
+  });
+</script>

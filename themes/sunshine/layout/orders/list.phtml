@@ -1,0 +1,15 @@
+<div class="col-lg-6 col-md-6" data-orders-id="<?php echo $wo['order']->id; ?>">
+	<div class="my_purchased">
+		<div class="id">#<?php echo $wo['order']->hash_id; ?></div>
+		<a href="<?php echo Wo_SeoLink('index.php?link1=order&id='.$wo['order']->hash_id); ?>" class="title"><?php echo(!empty($wo['product']) && !empty($wo['product']->name) ? $wo['product']->name : '') ?></a>
+		<div class="price">
+			<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="currentColor" d="M5,6H23V18H5V6M14,9A3,3 0 0,1 17,12A3,3 0 0,1 14,15A3,3 0 0,1 11,12A3,3 0 0,1 14,9M9,8A2,2 0 0,1 7,10V14A2,2 0 0,1 9,16H19A2,2 0 0,1 21,14V10A2,2 0 0,1 19,8H9M1,10H3V20H19V22H1V10Z"></path></svg> <?php echo $wo['lang']['price']; ?>: <?php echo $wo['config']['currency_symbol_array'][$wo['config']['currency']].$wo['price']; ?>
+		</div>
+		<div class="price">
+			<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="currentColor" d="M11,13.5V21.5H3V13.5H11M12,2L17.5,11H6.5L12,2M17.5,13C20,13 22,15 22,17.5C22,20 20,22 17.5,22C15,22 13,20 13,17.5C13,15 15,13 17.5,13Z"></path></svg> <?php echo $wo['lang']['qty']; ?>: <?php echo $wo['items_count']; ?>
+		</div>
+		<div class="foot">
+			<a class="btn btn-main btn-sm" href="<?php echo Wo_SeoLink('index.php?link1=order&id='.$wo['order']->hash_id); ?>"> <?php echo $wo['lang']['details'] ?></a>
+		</div>
+	</div>
+</div>

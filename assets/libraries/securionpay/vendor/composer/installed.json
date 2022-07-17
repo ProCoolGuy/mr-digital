@@ -1,0 +1,41 @@
+[
+    {
+        "name": "securionpay/securionpay-php",
+        "version": "v2.2.0",
+        "version_normalized": "2.2.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/securionpay/securionpay-php.git",
+            "reference": "663e407852727153634b93c459bf1c6a228d6d55"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/securionpay/securionpay-php/zipball/663e407852727153634b93c459bf1c6a228d6d55",
+            "reference": "663e407852727153634b93c459bf1c6a228d6d55",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.4.0"
+        },
+        "time": "2016-11-02T13:15:42+00:00",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "SecurionPay\\": "lib/SecurionPay/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "SecurionPay",
+                "homepage": "https://securionpay.com/"
+            }
+        ],
+        "description": "SecurionPay PHP Library",
+        "homepage": "https://securionpay.com/"
+    }
+]

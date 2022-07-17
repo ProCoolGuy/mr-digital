@@ -1,0 +1,44 @@
+<div class="sidebar-conatnier">
+	<div class="col-md-3 sidebar rightcol">
+		<ul class="list-group" id="sidebar-user-list-container">
+			<li class="list-group-item text-muted sidebar-title-back" contenteditable="false"><?php echo $wo['lang']['people_you_may_want_to_meet'];?></li>
+			<div class="sidebar-users-may-know-container">
+				<?php 
+					foreach (Wo_GetAllUsers(5, 'sidebar') as $wo['UsersList']) {
+					$wo['UsersList']['user_name'] = substr($wo['UsersList']['name'],0,10);
+						echo Wo_LoadPage('sidebar/sidebar-user-list');
+					} 
+				?>
+			</div>
+			<div class="clear"></div>
+		</ul>
+		<ul class="list-group trending" >
+			<li class="list-group-item sidebar-title-back" contenteditable="false"><?php echo $wo['lang']['trending'];?></li>
+        <?php 
+        $hashtags = Wa_GetTrendingHashs('popular');
+        if (count($hashtags) > 0) {
+          foreach ($hashtags as $wo['hashtag']) { 
+        ?>
+			<li class="list-group-item wow_htag" dir="auto">
+					<a href="<?php echo $wo['hashtag']['url'];?>" data-ajax="?link1=hashtag&hash=<?php echo $wo['hashtag']['tag'];?>">
+						<span class="htag_top"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M16,6L18.29,8.29L13.41,13.17L9.41,9.17L2,16.59L3.41,18L9.41,12L13.41,16L19.71,9.71L22,12V6H16Z" /></svg> #<?php echo $wo['hashtag']['tag'];?></span>
+						<span class="htag_bottom"><?php echo $wo['hashtag']['trend_use_num']; ?> <?php echo $wo['lang']['posts'];?></span>
+					</a>
+				</li>
+        <?php
+          } 
+        }
+        ?>
+      <div class="clear"></div>
+    </ul>
+      <?php 
+      $sidebar_ad = Wo_GetAd('sidebar', false);
+      if (!empty($sidebar_ad)) {?>
+      <ul class="list-group sidebar-ad">
+         <?php echo $sidebar_ad; ?>
+      </ul>
+     <?php } ?>
+     <?php echo Wo_LoadPage('footer/sidebar-footer')?>
+  </div>
+
+</div>

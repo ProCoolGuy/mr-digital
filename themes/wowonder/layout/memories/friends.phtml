@@ -1,0 +1,14 @@
+<div class="wow_side_loggd_usr">
+	<div class="wow_side_loggd_usr_cvr">
+		<img src="<?php echo $wo['friend']['cover']?>" alt="<?php echo $wo['friend']['name'];?>">
+	</div>
+	<div class="wow_side_loggd_usr_hdr">
+		<div class="avatar">
+			<img alt="<?php echo $wo['friend']['name'];?>" src="<?php echo $wo['friend']['avatar']?>">
+		</div>
+		<div class="title">
+			<a href="<?php echo $wo['friend']['url'];?>" data-ajax="?link1=timeline&amp;u=<?php echo $wo['friend']['username']?>"><?php echo $wo['friend']['name'];?></a>
+		</div>
+	</div>
+	<div class="text-center"><?php echo Wo_GetMessageButton($wo['friend']['user_id']);?></div>
+</div>

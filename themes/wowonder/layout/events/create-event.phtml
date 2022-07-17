@@ -1,0 +1,139 @@
+<div class="page-margin">
+	<div class="row">
+		<div class="col-md-2 leftcol"><?php echo Wo_LoadPage("sidebar/left-sidebar"); ?></div>
+		<div class="col-md-7 middlecol">
+			<div class="page-margin wow_content mt-0">
+				<div class="wo_page_hdng pag_neg_padd pag_alone">
+					<div class="wo_page_hdng_innr">
+						<span><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="currentColor" d="M19 19V8H5V19H19M16 1H18V3H19C20.11 3 21 3.9 21 5V19C21 20.11 20.11 21 19 21H5C3.89 21 3 20.1 3 19V5C3 3.89 3.89 3 5 3H6V1H8V3H16V1M11 9.5H13V12.5H16V14.5H13V17.5H11V14.5H8V12.5H11V9.5Z"></path></svg></span> <?php echo $wo['lang']['create_events'];?>
+					</div>
+				</div>
+			</div>
+
+			<div class="page-margin wow_content wow_sett_content">
+				<form class="form form-horizontal" method="post" id="insert-event">
+					<div class="wow_form_fields">
+						<label for="event-name"><?php echo $wo['lang']['name']; ?></label>
+						<input id="event-name" name="event-name" type="text">
+					</div>
+					<div class="wow_form_fields">
+						<label for="event-locat"><?php echo $wo['lang']['location']; ?></label>
+						<input id="event-locat" name="event-locat" type="text">
+					</div>
+					<?php if ($wo['config']['google_map'] == 1 || $wo['config']['yandex_map'] == 1) { ?>
+						<div id="review-location">
+							<div id="place" <?php echo($wo['config']['yandex_map'] == 1 ? 'class="yandex_ads_map"' : '') ?>></div>
+						</div>
+					<?php } ?>
+					<div class="wow_form_fields">
+						<label for="event-start"><?php echo $wo['lang']['event_start']; ?></label>
+						<div class="row">
+							<div class="col-md-6">
+								<input type="text" class="date" id="event-start" name="event-start-date">
+							</div>
+							<div class="col-md-6">
+								<input type="text" id="event-start-time" class="time1" name="event-start-time">
+							</div>
+						</div>
+					</div>
+					<div class="wow_form_fields">
+						<label for="event-end-date"><?php echo $wo['lang']['event_end']; ?></label>
+						<div class="row">
+							<div class="col-md-6">
+								<input type="text" class="date1" name="event-end-date" id="event-end-date">
+							</div>
+							<div class="col-md-6">
+								<input type="text" id="event-end-time" class="time1" name="event-end-time">
+							</div>
+						</div>
+					</div>
+					<div class="wow_form_fields">
+						<label for="event-description"><?php echo $wo['lang']['description']; ?></label>
+						<textarea name="event-description" id="event-description" rows="5"></textarea>
+					</div>
+					<div class="wow_form_fields">
+						<label><?php echo $wo['lang']['image']; ?></label>
+						<div class="wow_fcov_image">
+							<div id="wow_fcov_img_holder">
+								<img src="<?php echo $wo['config']['theme_url'];?>/img/ad_pattern.png">
+							</div>
+							<div class="upload_ad_image" onclick="document.getElementById('event-cover').click(); return false">
+								<div class="upload_ad_image_content">
+									<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="currentColor" d="M8.5,13.5L11,16.5L14.5,12L19,18H5M21,19V5C21,3.89 20.1,3 19,3H5A2,2 0 0,0 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19Z"></path></svg> <?php echo $wo['lang']['choose_image'] ?>
+								</div>
+							</div>
+						</div>
+					</div>
+					
+					<div class="setting-update-alert" id="event-alert"></div>
+					
+					<div class="text-center">
+						<a class="btn btn-mat" href="<?php echo Wo_SeoLink('index.php?link1=my-events'); ?>" data-ajax="?link1=my-events">
+							<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="currentColor" d="M20,11V13H8L13.5,18.5L12.08,19.92L4.16,12L12.08,4.08L13.5,5.5L8,11H20Z"></path></svg> <?php echo $wo['lang']['go_back'];?>
+						</a>
+						<button class="btn btn-main btn-mat btn-mat-raised add_wow_loader" type="submit"><?php echo $wo['lang']['publish']; ?></button>
+					</div>
+					<input type="hidden" name="hash_id" value="<?php echo Wo_CreateSession();?>">
+					<input type="file" name="event-cover" class="hidden" id="event-cover" accept="image/*">
+				</form>
+			</div>
+		</div>
+		<!-- .col-md-8 -->
+		<?php echo Wo_LoadPage('sidebar/content');?>
+	</div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/jquery-ui-timepicker-addon@1.6.3/dist/jquery-ui-timepicker-addon.min.js"></script>
+<script>
+	<?php if ($wo['config']['google_map'] == 1) { ?>
+      	$(document).on('change', '#event-locat', function(event) {
+	        if ($(this).val().length >= 3) {
+	          $("#review-location #place").html('<iframe width="100%" frameborder="0" style="border:0;margin-top: 10px;" src="https://www.google.com/maps/embed/v1/place?key=<?php echo $wo['config']['google_map_api']; ?>&q=' + $("#event-locat").val() + '&language=en"></iframe>')
+	        }else{
+	          $("#review-location #place").html('<iframe width="100%" frameborder="0" style="border:0;margin-top: 10px;" src="https://www.google.com/maps/embed/v1/place?key=<?php echo $wo['config']['google_map_api']; ?>&q=us&language=en"></iframe>')
+	        }
+      	});
+     <?php } ?>
+     <?php if ($wo['config']['yandex_map'] == 1) { ?>
+		 	$(document).on('change', '#event-locat', function(event) {
+		   	var myMap;
+		    ymaps.geocode($(this).val()).then(function (res) {
+		    	$("#review-location #place").html('');
+		        myMap = new ymaps.Map('place', {
+		            center: res.geoObjects.get(0).geometry.getCoordinates(),
+		            zoom : 10
+		        });
+		        myMap.geoObjects.add(new ymaps.Placemark(res.geoObjects.get(0).geometry.getCoordinates(), {
+		            balloonContent: ''
+		        }));
+		    });
+		 	});
+
+		 <?php } ?>
+  jQuery(document).ready(function($) {
+      $( ".date" ).datepicker({ dateFormat: 'yy-mm-dd', minDate: 'today'});
+      $( ".date1" ).datepicker({ dateFormat: 'yy-mm-dd', minDate: '+1day'});
+      $( ".time1" ).timepicker();
+
+      $("#event-cover").change(function(event) {
+        $("#wow_fcov_img_holder").html("<img src='" + window.URL.createObjectURL(this.files[0]) + "' alt='Picture'>")
+      });
+
+      $('#insert-event').ajaxForm({
+            url: Wo_Ajax_Requests_File() + '?f=insert-event',
+            beforeSend: function() {
+              $('.wo_settings_page').find('.add_wow_loader').addClass('btn-loading');
+            },
+            success: function(data) {
+              if (data['status'] == 200) {
+                $("#event-alert").html('<div class="alert alert-success">'+ data['message'] +'</div>');
+                window.location = data['url'];
+              }
+              else if (data['message']) {
+                $("#event-alert").html('<div class="alert alert-danger">' + data['message'] + '</div>');
+              } 
+              $('.wo_settings_page').find('.add_wow_loader').removeClass('btn-loading');
+            }
+      });
+  });
+</script>

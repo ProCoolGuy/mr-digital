@@ -1,0 +1,89 @@
+<div class="page-margin">
+	<div class="row">
+		<div class="col-md-2 leftcol"><?php echo Wo_LoadPage("sidebar/left-sidebar"); ?></div>
+		<div class="col-md-7 profile-lists middlecol">
+			<div class="page-margin wow_content mt-0">
+				<div class="wo_page_hdng pag_neg_padd pag_alone">
+					<div class="wo_page_hdng_innr big_size">
+						<span><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="currentColor" d="M21,9A1,1 0 0,1 22,10A1,1 0 0,1 21,11H16.53L16.4,12.21L14.2,17.15C14,17.65 13.47,18 12.86,18H8.5C7.7,18 7,17.27 7,16.5V10C7,9.61 7.16,9.26 7.43,9L11.63,4.1L12.4,4.84C12.6,5.03 12.72,5.29 12.72,5.58L12.69,5.8L11,9H21M2,18V10H5V18H2Z"></path></svg></span> <?php echo $wo['lang']['pokes']; ?>
+					</div>
+				</div>
+			</div>
+			<div class="wo_my_pages">
+				<div id="poke_content">
+					<?php
+                        $pokes = $wo['poke'];
+						if (count($pokes) > 0) {
+                            ?>
+                            <?php
+							foreach ($pokes as $key => $wo['poke']) {
+								echo "<div class='wo_pokes_cont'>" . Wo_LoadPage('poke/poke-list') . "</div>";
+                            }
+                            ?>
+                            <?php
+						} else {
+							echo '<div class="empty_state"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M21,9A1,1 0 0,1 22,10A1,1 0 0,1 21,11H16.53L16.4,12.21L14.2,17.15C14,17.65 13.47,18 12.86,18H8.5C7.7,18 7,17.27 7,16.5V10C7,9.61 7.16,9.26 7.43,9L11.63,4.1L12.4,4.84C12.6,5.03 12.72,5.29 12.72,5.58L12.69,5.8L11,9H21M2,18V10H5V18H2Z" /></svg>' . $wo['lang']['no_pokes_found'] . '</div>';
+						}
+					?>
+				    <div class="clear"></div>
+				</div>
+                <div class="clear"></div>
+                <?php  if (count($pokes) > 8): ?>
+                <div class="load-more">
+                    <button class="btn btn-default text-center pointer load-more-pokes">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    <?php echo $wo['lang']['load_more'] ?>
+                    </button>
+                </div>
+                <?php endif ?>
+			</div>
+		</div>
+		<?php echo Wo_LoadPage('sidebar/content');?>
+	</div>
+</div>
+<script>
+    function Wo_RegisterPokeBack(received_user_id ,self,  send_user_id, poke_id){
+        if (!received_user_id || !self || !send_user_id || !poke_id ) {
+            return false;
+        }
+        $(self).attr('disabled',true);
+        $(self).find('.button-text').html("<?php echo $wo['lang']['txt_poked'];?>");
+
+        $.ajax({
+            url: Wo_Ajax_Requests_File(),
+            type: 'GET',
+            dataType: 'json',
+            data: {f: 'poke',received_user_id:received_user_id,send_user_id:send_user_id,poke_id:poke_id},
+        })
+        .done(function(data) {
+            if (node_socket_flow == "1") {
+                socket.emit("user_notification", { to_id: received_user_id, user_id: _getCookie("user_id")});
+            }
+            if (data.status == 200) {
+                $(self).parent('div').parent('.poke_info').parent('.wo_poke_users').parent('.wo_pokes_cont').remove();
+                Wo_Delay(function(){
+                    $('#pokeuser_' + received_user_id).remove();
+                },2000);
+            }else{
+                $(self).attr('disabled',false);
+                $(self).find('.button-text').html("<?php echo $wo['lang']['poke_back'];?>");
+            }
+        })
+        .fail(function() {
+            $(self).attr('disabled',false);
+            $(self).find('.button-text').html("<?php echo $wo['lang']['poke_back'];?>");
+            console.log("error");
+        })
+    }
+    $(document).on('click', '.load-more-pokes', function(event) {
+        var id = $('.wo_poke_users').last().attr('id');
+        $.post(Wo_Ajax_Requests_File()+"?f=load_poke", {id: id}, function(data, textStatus, xhr) {
+            if (data.status == 200 && data.html != '') {
+                $('#poke_content').append(data.html);
+            }
+            else{
+                $('.load-more-pokes').remove();
+            }
+        });
+    });
+</script>

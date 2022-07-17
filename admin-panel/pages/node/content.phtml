@@ -1,0 +1,185 @@
+<div class="container-fluid">
+    <div>
+        <h3>NodeJs Settings</h3>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="#">Home</a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a href="#">Settings</a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">NodeJs Settings</li>
+            </ol>
+        </nav>
+    </div>
+    <!-- Vertical Layout -->
+    <div class="row">
+        <div class="col-lg-6 col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="card-title">NodeJs Configuration</h6>
+					
+                    <form class="email-settings" method="POST">
+                        <div class="float-left">
+                            <label for="node_socket_flow" class="main-label">NodeJS</label>
+                            <br><small class="admin-info">Get real time messaging, real time notifications and decrease server load by 80% less.</small>
+                        </div>
+                        <div class="form-group float-right switcher">
+                            <input type="hidden" name="node_socket_flow" value="0" />
+                            <input type="checkbox" name="node_socket_flow" id="chck-node_socket_flow" value="1" <?php echo ($wo['config']['node_socket_flow'] == 1) ? 'checked': '';?>>
+                            <label for="chck-node_socket_flow" class="check-trail"><span class="check-handler"></span></label>
+                        </div>
+                        <div class="clearfix"></div>
+                        <hr>
+
+                        <div class="float-left">
+                            <label for="nodejs_ssl" class="main-label">NodeJs SSL Connection</label>
+                            <br><small class="admin-info">Enable this feature if you are using your site under SSL.</small>
+                        </div>
+                        <div class="form-group float-right switcher">
+                            <input type="hidden" name="nodejs_ssl" value="0" />
+                            <input type="checkbox" name="nodejs_ssl" id="chck-nodejs_ssl" value="1" <?php echo ($wo['config']['nodejs_ssl'] == 1) ? 'checked': '';?>>
+                            <label for="chck-nodejs_ssl" class="check-trail"><span class="check-handler"></span></label>
+                        </div>
+                        <div class="clearfix"></div>
+                        <hr>
+
+                        <div class="float-left">
+                            <label for="nodejs_live_notification" class="main-label">Live Notification Bar</label>
+                            <br><small class="admin-info">Enable this feature and users will get fixed notifications on bottom left of the screen.</small>
+                        </div>
+                        <div class="form-group float-right switcher">
+                            <input type="hidden" name="nodejs_live_notification" value="0" />
+                            <input type="checkbox" name="nodejs_live_notification" id="chck-nodejs_live_notification" value="1" <?php echo ($wo['config']['nodejs_live_notification'] == 1) ? 'checked': '';?>>
+                            <label for="chck-nodejs_live_notification" class="check-trail"><span class="check-handler"></span></label>
+                        </div>
+                        <div class="clearfix"></div>
+                        <hr>
+                        <div class="form-group form-float">
+                            <div class="form-line">
+                                <label class="form-label">NodeJs HTTP Port</label>
+                                <input type="number" id="nodejs_port" name="nodejs_port" class="form-control" value="<?php echo $wo['config']['nodejs_port']?>">
+                            </div>
+                        </div>
+                        <div class="form-group form-float">
+                            <div class="form-line">
+                                <label class="form-label">NodeJs HTTPS (SSL) Port</label>
+                                <input type="number" id="nodejs_ssl_port" name="nodejs_ssl_port" class="form-control" value="<?php echo $wo['config']['nodejs_ssl_port']?>">
+                            </div>
+                        </div>
+                       
+                         <div class="form-group form-float">
+                            <div class="form-line">
+                                <label class="form-label">NodeJs SSL Certificate Key Path (.key)</label>
+                                <input type="text" id="nodejs_key_path" name="nodejs_key_path" class="form-control" value="<?php echo $wo['config']['nodejs_key_path']?>">
+                                <small class="admin-info">Only required If NodeJS SSL is enabled.</small>
+                            </div>
+                        </div>
+                         <div class="form-group form-float">
+                            <div class="form-line">
+                                <label class="form-label">NodeJs SSL Certificate Path (.crt)</label>
+                                <input type="text" id="nodejs_cert_path" name="nodejs_cert_path" class="form-control" value="<?php echo $wo['config']['nodejs_cert_path']?>">
+                                <small class="admin-info">Only required If NodeJS SSL is enabled.</small>
+                            </div>
+                        </div>
+                        <hr>
+
+                         <div class="float-left">
+                            <label for="redis" class="main-label">Redis Server</label>
+                            <br><small class="admin-info">Enable this feature to establish a faster socket connection.</small>
+                        </div>
+                        <div class="form-group float-right switcher">
+                            <input type="hidden" name="redis" value="0" />
+                            <input type="checkbox" name="redis" id="chck-redis" value="1" <?php echo ($wo['config']['redis'] == 'Y') ? 'checked': '';?>>
+                            <label for="chck-redis" class="check-trail"><span class="check-handler"></span></label>
+                        </div>
+                        <div class="clearfix"></div>
+                        <hr>
+                        <div class="form-group form-float">
+                            <div class="form-line">
+                                <label class="form-label">Redis Port</label>
+                                <input type="number" id="redis_port" name="redis_port" class="form-control" value="<?php echo $wo['config']['redis_port']?>">
+                                <small class="admin-info">Server Redis port, should not be same as nodejs port.</small>
+                            </div>
+                        </div>
+                        <div class="alert alert-info">If you disable NodeJs system, the default ajax system will be enabled for chat and notifications system.</div>
+                        <input type="hidden" name="hash_id" value="<?php echo Wo_CreateSession();?>">
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+    <!-- #END# Vertical Layout -->
+<script>
+$(function() {
+    $('.switcher input[type=checkbox]').click(function () {
+        setToTrue = 0;
+        if ($(this).is(":checked") === true) {
+            setToTrue = 1;
+        }
+        var configName = $(this).attr('name');
+        var hash_id = $('input[name=hash_id]').val();
+        var objData = {};
+        if (configName == 'redis') { 
+            setToTrue = 'N';
+            if ($(this).is(":checked") === true) {
+              setToTrue = 'Y';
+            }
+        }
+        objData[configName] = setToTrue;
+        objData['hash_id'] = hash_id;
+        $.post( Wo_Ajax_Requests_File() + '?f=admin_setting&s=update_general_setting', objData);
+    });
+
+    var setTimeOutColor = setTimeout(function (){});
+    $('select').on('change', function() {
+         clearTimeout(setTimeOutColor);
+        var thisElement = $(this);
+        var configName = thisElement.attr('name');
+        var hash_id = $('input[name=hash_id]').val();
+        var objData = {};
+        objData[configName] = this.value;
+        objData['hash_id'] = hash_id;
+        thisElement.addClass('warning');
+        $.post( Wo_Ajax_Requests_File() + '?f=admin_setting&s=update_general_setting', objData, function (data) {
+            if (data.status == 200) {
+                thisElement.removeClass('warning');
+                thisElement.addClass('success');
+            } else {
+                thisElement.addClass('error');
+            }
+            var setTimeOutColor = setTimeout(function () {
+                thisElement.removeClass('success');
+                thisElement.removeClass('warning');
+                thisElement.removeClass('error');
+            }, 2000);
+        });
+    });
+    $('input[type=text], input[type=number]').on('keyup', delay(function() {
+            clearTimeout(setTimeOutColor);
+            var thisElement = $(this);
+            var configName = thisElement.attr('name');
+            var hash_id = $('input[name=hash_id]').val();
+            var objData = {};
+            objData[configName] = this.value;
+            objData['hash_id'] = hash_id;
+            thisElement.addClass('warning');
+            $.post( Wo_Ajax_Requests_File() + '?f=admin_setting&s=update_general_setting', objData, function (data) {
+                if (data.status == 200) {
+                    thisElement.removeClass('warning');
+                    thisElement.addClass('success');
+                } else {
+                    thisElement.addClass('error');
+                }
+                var setTimeOutColor = setTimeout(function () {
+                    thisElement.removeClass('success');
+                    thisElement.removeClass('warning');
+                    thisElement.removeClass('error');
+                }, 2000);
+                //thisElement.focus();
+            });
+    }, 500));
+});
+</script>

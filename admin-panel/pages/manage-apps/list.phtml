@@ -1,0 +1,37 @@
+<tr class="setting-app" id="AppID_<?php echo $wo['app']['id']?>"  data_selected="<?php echo $wo['app']['id']?>">
+  <td><input type="checkbox" id="check-data-<?php echo $wo['app']['id']?>" class="delete-checkbox filled-in"><label for="check-data-<?php echo $wo['app']['id']?>"></label></td>
+   <td style="vertical-align: middle;text-align: center;"><?php echo $wo['app']['id']?></td>
+   <td style="text-align: center;">
+    <a href="<?php echo Wo_SeoLink('index.php?link1=app&app_id=' .  $wo['app']['id']);?>">
+			<div class="avatar">
+				<img src="<?php echo $wo['app']['app_avatar'];?>" alt="<?php echo $wo['app']['app_name']; ?>" style="border-radius: 5px;" />
+			</div>
+		</a>
+   </td>
+   <td style="vertical-align: middle;">
+    <?php echo $wo['app']['app_name']; ?>
+   </td>
+   <td style="vertical-align: middle;">
+      <a href="<?php echo $wo['app']['app_website_url']; ?>" target="_blank">
+        <?php echo $wo['app']['app_website_url']; ?>
+      </a>
+   </td>
+   <td style="vertical-align: middle;">
+    <?php echo $wo['app']['app_callback_url']; ?>
+   </td>
+   <td style="vertical-align: middle;    word-wrap: break-word;
+    word-break: break-word;
+    width: 190px;">
+    <?php echo $wo['app']['app_description']; ?>
+   </td>
+   <!-- <td style="vertical-align: middle;">
+    <?php echo $wo['app']['app_id']; ?>
+   </td>
+   <td style="vertical-align: middle;">
+    <?php echo $wo['app']['app_secret']; ?>
+   </td> -->
+   <td style="vertical-align: middle;">
+      <a target = "_blank" class="btn bg-info admn_table_btn" href="<?php echo Wo_SeoLink('../app/' . $wo['app']['id']) ?>">Edit</a>
+      <button type="button" class="delete-app btn bg-danger admn_table_btn" onclick="Wo_DeleteApp(<?php echo $wo['app']['id']?>,'hide')" id="<?php echo $wo['app']['id']?>">Delete</button>
+   </td>
+</tr>

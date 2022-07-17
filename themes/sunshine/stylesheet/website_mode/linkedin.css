@@ -1,0 +1,50 @@
+/*Open to Work Badge*/
+.wo_open_job_badge {height: 17px;border-radius: 3px;background-color: #2196f3;display: inline-block;color: #ffffff;text-align: center;line-height: 14px;padding: 0 3px;vertical-align: middle;}
+.sun_pic_info .info .title > .wo_open_job_badge {margin-top: -4px;}
+
+/*Open to Work Button*/
+.wo_job_open_gloss_btn .dropdown-menu {min-width: 200px;}
+.wo_job_open_gloss_btn .menu-item {display: block;font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;font-size: 13px;font-weight: 600;padding: 6.8px 16px;cursor: pointer;}
+.wo_job_open_gloss_btn .menu-item input {display: none;}
+
+/*Job blocks*/
+.wo_job_detail_block {margin-bottom: 20px;position: relative;}
+.wo_job_detail_block_title {display: flex;align-items: center;justify-content: space-between;padding: 15px 15px 10px;}
+.wo_job_detail_block_title > h3 {padding: 0 !important;}
+.wo_job_detail_block_title .btn {border: 0;width: 35px;height: 35px;line-height: 35px;padding: 0;border-radius: 50%;}
+.wo_job_detail_item {display: flex;font-family: 'Roboto', sans-serif;padding: 12px 15px;position: relative;z-index: 1;}
+.wo_job_detail_item svg {flex: 0 0 auto;width: 16px;height: 16px;margin-top: 2px;}
+.wo_job_detail_item h4 {margin: 0;font-size: 12px;text-transform: uppercase;letter-spacing: 0.4px;word-spacing: 1px;position: relative;display: inline;padding: 0 0 3px;}
+.wo_job_detail_item h4:after {content: '';width: 75%;height: 1.9px;position: absolute;bottom: 0;left: 0;background-color: currentColor;opacity: 0.5;}
+.wo_job_detail_item p {margin: 4px 0 0;}
+.wo_job_detail_block_svg {position: absolute;right: 0;bottom: 0;opacity: 0.2;pointer-events: none;}
+
+/*Experience*/
+.wo_job_experience {display: flex;font-family: 'Roboto', sans-serif;padding: 12px 15px 2px;}
+.wo_job_experience:last-child {border: 0;}
+.wo_job_experience .avatar {width: 50px;height: 50px;flex: 0 0 auto;}
+.wo_job_experience .avatar img {width: 100%;height: 100%;}
+.wo_job_experience .avatar.bg {text-align: center;line-height: 49px;background-color: rgb(0 0 0 / 8%);}
+.wo_job_experience_info .title {font-size: 15px;line-height: 20px;margin: 0;}
+.wo_job_experience_info .sub-title {margin: 0 0 2px;}
+.wo_job_experience_info hr {margin: 11px 0 !important;}
+.wo_job_experience_info .bold {font-weight: 500 !important;}
+.wo_job_experience_info .btn {line-height: 28px;font-size: 13px;letter-spacing: 0.3px;margin-top: 6px;padding: 0px 10px;}
+
+/*certificate*/
+.wo_job_certificate .wo_job_experience_info .title {font-size: 18px;margin: 0 0 3px;}
+
+/*skills*/
+.wo_job_detail_skill {padding: 15px;margin: 0;}
+.wo_job_detail_skill .btn-default {padding: 6px 15px;border-radius: 2em;font-family: 'Roboto', sans-serif;}
+
+/*Language Result*/
+.languages_result.dropdown-menu {transform: scale(1);left: 15px !important;right: 15px !important;overflow-y: auto;max-height: 300px;top: auto;bottom: 32px;display: block;}
+.languages_result.dropdown-menu:empty {display: none;}
+.languages_result.dropdown-menu p {padding: 6px 15px;margin: 0;cursor: pointer;}
+
+/*Search*/
+.wo_job_search .market_categories ul input {display: none;}
+.wo_job_search .market_categories ul input:checked+label a:before {border-color: #5AC489;}
+.wo_job_search .market_categories ul input:checked+label a:after {background-color: #5AC489;border-radius: 50%;background-image: url("data:image/svg+xml,%3Csvg width='19' height='19' viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M5.414 11L4 12.414l5.414 5.414L20.828 6.414 19.414 5l-10 10z' fill='%23fff' fill-rule='nonzero'/%3E%3C/svg%3E");background-repeat: no-repeat;    background-position: 1px 2px;}
+.wo_job_search .market_categories ul label {margin: 0;display: block;cursor: pointer;}

@@ -1,0 +1,10 @@
+.login {flex-direction: row-reverse;}
+.login_left_combo, .login form, .login input, .login select, .login textarea {text-align: right;direction: rtl;}
+.spinner{margin-right: 0;margin-left: 15px;}
+.terms{padding-left: 0;}
+.terms label{padding-right: 30px;}
+.terms label::before{left: auto;right: 0;}
+
+@media (max-width:930px) {
+.login {flex-direction: column;}
+}

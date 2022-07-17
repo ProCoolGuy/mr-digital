@@ -1,0 +1,97 @@
+<div class="wo_settings_page wow_content">
+	<div class="row">
+		<div class="col-md-4 text-center">
+			<h4><?php echo $wo['lang']['available_links']; ?></h4>
+			<span id="available_links"><?php echo $wo['available_links']; ?></span>
+		</div>
+		<div class="col-md-4 text-center">
+			<h4><?php echo $wo['lang']['generated_links']; ?></h4>
+			<span id="generated_links"><?php echo $wo['generated_links']; ?></span>
+		</div>
+		<div class="col-md-4 text-center">
+			<h4><?php echo $wo['lang']['used_links']; ?></h4>
+			<span id="used_links"><?php echo $wo['used_links']; ?></span>
+		</div>
+	</div>
+	<br>
+	<div class="text-center">
+		<button type="button" class="btn btn-main btn-mat btn-mat-raised add_wow_loader" onclick="GenerateLink()"><?php echo $wo['lang']['generate_link']; ?></button>
+	</div>
+
+	<form method="post" class="form-horizontal setting-profile-form" enctype="multipart/form-data">
+		<div class="setting-profile-alert setting-update-alert"></div>
+		
+		<div class="row">
+
+			<div class="ads-cont-wrapper">
+				<?php 
+				$wo['trans'] = Wo_GetMyInvitaionCodes($wo['setting']['user_id']);
+				?>
+				<?php if (count($wo['trans']) > 0): ?>
+					<table class="table table-responsive wow_wallet_trans">
+						<thead>
+							<tr>
+								<th><?php echo $wo['lang']['url']; ?></th>
+								<th><?php echo $wo['lang']['invited_user']; ?></th>
+								<th><?php echo $wo['lang']['date']; ?></th>
+							</tr>
+						</thead>
+						<tbody id="user-ads">
+							<?php foreach ($wo['trans'] as $key => $transaction): ?>
+								<tr data-ad-id="<?php echo $transaction['id']; ?>">
+									<td><span><div class="text-center"><button type="button" class="btn btn-main btn-mat btn-mat-raised copy-invitation-url" data-link="<?php echo $wo['config']['site_url'] . '/register?invite='. $transaction['code']; ?>"><?php echo $wo['lang']['copy']; ?></button></div></span></td>
+									<td><span>
+										<?php if (!empty($transaction['user_name'])) { ?>
+											<a href="<?php echo($transaction['user_url']) ?>"><?php echo $transaction['user_name']; ?></a>
+										<?php } ?>
+									</span></td>
+									<td><span><?php echo date($wo['config']['date_style'], $transaction['time']); ?></span></td>
+
+								</tr>
+							<?php endforeach; ?>
+						</tbody>
+					</table>
+				<?php endif; ?>
+			</div>
+		</div>
+		<input type="hidden" name="user_id" id="user-id" value="<?php echo $wo['setting']['user_id'];?>">
+		<input type="hidden" name="hash_id" value="<?php echo Wo_CreateSession();?>">
+   </form>
+</div>
+<script type="text/javascript">
+$(document).on('click', '.copy-invitation-url', function(event) {
+ event.preventDefault();
+   var $temp = $("<input>");
+   $("body").append($temp);
+   $temp.val($(this).attr('data-link')).select();
+   document.execCommand("copy");
+   $temp.remove();
+   self = this;
+   $(this).text("<?php echo $wo['lang']['copied']; ?>");
+   setTimeout(function () {
+   	$(self).text("<?php echo $wo['lang']['copy']; ?>");
+   },500);
+});
+function GenerateLink() {
+	$('.add_wow_loader').text("<?php echo $wo['lang']['please_wait']; ?>");
+	$('.add_wow_loader').attr('disable', 'true');
+	$.post(Wo_Ajax_Requests_File() + '?f=invitation_links&s=create', {user_id: '<?php echo $wo['setting']['user_id'];?>'}, function(data, textStatus, xhr) {
+		if (data.status == 200) {
+			$('.setting-profile-alert').html('<div class="alert alert-success">' + data.message + '</div>');
+			setTimeout(function () {
+				$('.setting-profile-alert').html('');
+				location.reload();
+			},2000);
+		}
+		else{
+			$('.setting-profile-alert').html('<div class="alert alert-danger">' + data.message + '</div>');
+			setTimeout(function () {
+				$('.setting-profile-alert').html('');
+			},2000);
+		}
+		$('.add_wow_loader').removeAttr('disable');
+		$('.add_wow_loader').text("<?php echo $wo['lang']['generate_link']; ?>");
+
+	});
+}
+</script>

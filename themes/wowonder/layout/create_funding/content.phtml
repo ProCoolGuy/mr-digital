@@ -1,0 +1,103 @@
+<div class="page-margin">
+	<div class="row">
+		<div class="col-md-2 leftcol"><?php echo Wo_LoadPage("sidebar/left-sidebar"); ?></div>
+		<div class="col-md-10 singlecol">
+			<div class="page-margin wow_content mt-0">
+				<div class="wo_page_hdng pag_neg_padd pag_alone">
+					<div class="wo_page_hdng_innr">
+						<span><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="currentColor" d="M18 11H6A2 2 0 0 0 4 13V21A2 2 0 0 0 6 23H18A2 2 0 0 0 20 21V13A2 2 0 0 0 18 11M18 17H6V14H18M17 5V10H15.5V6.5H9.88L12.3 8.93L11.24 10L7 5.75L11.24 1.5L12.3 2.57L9.88 5Z"></path></svg></span> <?php echo $wo['lang']['create_new_funding'];?>
+					</div>
+				</div>
+			</div>
+
+			<div class="page-margin wow_content wow_sett_content">
+				<form class="form form-horizontal create-article-form" method="post" id="insert-funding" action="#">
+					<div class="wow_form_fields">
+						<label for="title"><?php echo $wo['lang']['title']; ?></label>
+						<input id="title" name="title" type="text">
+					</div>
+					<div class="wow_form_fields">
+						<label for="amount"><?php echo $wo['lang']['fund_amount']; ?></label>
+						<input id="amount" name="amount" type="text" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
+					</div>
+					<div class="wow_form_fields">
+						<label for="description"><?php echo $wo['lang']['description']; ?></label>
+						<textarea name="description" id="description" type="text" rows="5"></textarea>
+					</div>
+					<div class="wow_form_fields">
+						<label><?php echo $wo['lang']['image'];?></label>
+						<div class="wow_fcov_image" data-block="thumdrop-zone">
+							<div id="wow_fcov_img_holder">
+								<img src="<?php echo $wo['config']['theme_url'];?>/img/ad_pattern.png">
+							</div>
+							<div class="upload_ad_image" onclick="document.getElementById('thumbnail').click(); return false">
+								<div class="upload_ad_image_content">
+									<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="currentColor" d="M8.5,13.5L11,16.5L14.5,12L19,18H5M21,19V5C21,3.89 20.1,3 19,3H5A2,2 0 0,0 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19Z"></path></svg> <?php echo $wo['lang']['drop_img_here'] ?> <?php echo $wo['lang']['or']; ?> <?php echo $wo['lang']['browse_to_upload']; ?>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="setting-update-alert" id="funding-alert"></div>
+					
+					<div class="text-center">
+						<a class="btn btn-mat" data-ajax="?link1=my_funding" href="<?php echo Wo_SeoLink('index.php?link1=my_funding');?>">
+							<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="currentColor" d="M20,11V13H8L13.5,18.5L12.08,19.92L4.16,12L12.08,4.08L13.5,5.5L8,11H20Z"></path></svg> <?php echo $wo['lang']['go_back'];?>
+						</a>
+						<button class="btn btn-main btn-mat btn-mat-raised add_wow_loader" type="submit"><?php echo $wo['lang']['publish']; ?></button>
+					</div>
+					<input type="file" class="hidden" id="thumbnail" name="image" accept="image/*">
+					<input type="hidden" name="hash_id" value="<?php echo Wo_CreateSession();?>">
+				</form>
+			</div>
+		</div>
+	</div>
+	<!-- .row -->
+</div>
+<script>
+jQuery(document).ready(function($) {
+    var thumb_drop_block = $("[data-block='thumdrop-zone']");
+    if (typeof(window.FileReader) == 'undefined') {
+      thumb_drop_block.find('.thumbnail-rendderer div').text('Drag drop is not supported in your browser!');
+    }
+    else{
+      thumb_drop_block[0].ondragover = function() {
+          thumb_drop_block.addClass('hover');
+          return false;
+      };
+          
+      thumb_drop_block[0].ondragleave = function() {
+          thumb_drop_block.removeClass('hover');
+          return false;
+      };
+
+      thumb_drop_block[0].ondrop = function(event) {
+          event.preventDefault();
+          thumb_drop_block.removeClass('hover');
+          var file = event.dataTransfer.files;
+          $("#thumbnail").prop('files', file);
+          $("#wow_fcov_img_holder").html("<img src='" + window.URL.createObjectURL(event.dataTransfer.files[0]) + "' alt='Picture'>")
+      };
+    }
+
+    $("#thumbnail").change(function(event) {
+      $("#wow_fcov_img_holder").html("<img src='" + window.URL.createObjectURL(this.files[0]) + "' alt='Picture'>")
+    });
+
+
+    $('#insert-funding').ajaxForm({
+      url: Wo_Ajax_Requests_File() + '?f=funding&s=insert_funding',
+      beforeSend: function() {
+        $('.wo_settings_page').find('.add_wow_loader').addClass('btn-loading');
+      },
+      success: function(data) {
+        if (data['status'] == 200) {
+          $("#funding-alert").html('<div class="alert alert-success">'+ data['message'] +'</div>');
+          window.location = data.url;
+        } else if (data['message']) {
+          $("#funding-alert").html('<div class="alert alert-danger">' + data['message'] + '</div>');
+        } 
+        $('.wo_settings_page').find('.add_wow_loader').removeClass('btn-loading');
+      }});
+ });
+</script> 

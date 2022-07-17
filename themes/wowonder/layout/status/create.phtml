@@ -1,0 +1,158 @@
+<div class="page-margin">
+	<div class="row">
+		<div class="col-md-2 leftcol"><?php echo Wo_LoadPage("sidebar/left-sidebar"); ?></div>
+		<div class="col-md-7 middlecol">
+			<div class="page-margin wow_content mt-0">
+				<div class="wo_page_hdng pag_neg_padd pag_alone">
+					<div class="wo_page_hdng_innr">
+						<span><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="currentColor" d="M11,19A6,6 0 0,0 17,13H19A8,8 0 0,1 11,21A8,8 0 0,1 3,13A8,8 0 0,1 11,5V7A6,6 0 0,0 5,13A6,6 0 0,0 11,19M19,5H22V7H19V10H17V7H14V5H17V2H19V5Z"></path></svg></span> <?php echo $wo['lang']['create_new_status'];?>
+					</div>
+				</div>
+			</div>
+
+            <div class="page-margin wow_content wow_sett_content">
+				<form class="create-user-story form-horizontal" method="post">
+					<div class="publisher-hidden-option">
+						<div id="progress">
+							<span id="percent">0%</span>
+							<div class="progress">
+								<div id="bar" class="progress-bar progress-bar-striped active"></div> 
+							</div>
+							<div class="clear"></div>
+						</div>
+					</div>
+					<div class="wow_form_fields">
+						<label for="whats_going"><?php echo $wo['lang']['whats_going']; ?></label>
+						<textarea name="description" id="whats_going" rows="3" class="form-control input-md"></textarea>
+					</div>
+					<div class="wow_form_fields">
+						<label><?php echo $wo['lang']['media'];?></label>
+						<div class="wow_fcov_image wow_stroy_media">
+							<div id="wow_fcov_img_holder">
+								<img src="<?php echo $wo['config']['theme_url'];?>/img/ad_pattern.png">
+							</div>
+							<div class="upload_ad_image" onclick="document.getElementById('user-storymedia').click(); return false">
+								<div class="upload_ad_image_content">
+									<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="currentColor" d="M8.5,13.5L11,16.5L14.5,12L19,18H5M21,19V5C21,3.89 20.1,3 19,3H5A2,2 0 0,0 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19Z"></path></svg> <?php echo $wo['lang']['select']; ?> <?php echo $wo['lang']['photos']; ?> &amp; <?php echo $wo['lang']['videos']; ?>
+								</div>
+							</div>
+							<span class="wow_stroy_media_count hidden" id="user-story-total">
+								<input type="text" class="form-control input-md bg_read_input" readonly>
+							</span>
+						</div>
+					</div>
+					<div class="wow_form_fields" id="custom_thumbnail" style="display: none;">
+						<label><?php echo $wo['lang']['custom_thumbnail'];?></label>
+						<div class="wow_fcov_image wow_stroy_media">
+							<div id="wow_fcov_img_holder">
+								<img src="<?php echo $wo['config']['theme_url'];?>/img/ad_pattern.png">
+							</div>
+							<div class="upload_ad_image" onclick="document.getElementById('user-storymedia-2').click(); return false">
+								<div class="upload_ad_image_content">
+									<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="currentColor" d="M8.5,13.5L11,16.5L14.5,12L19,18H5M21,19V5C21,3.89 20.1,3 19,3H5A2,2 0 0,0 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19Z"></path></svg> <?php echo $wo['lang']['select']; ?> <?php echo $wo['lang']['photos']; ?>
+								</div>
+							</div>
+							<span class="wow_stroy_media_count hidden" id="user-story-total-2">
+								<input type="text" class="form-control input-md bg_read_input" readonly>
+							</span>
+						</div>
+					</div>
+					<div class="create-status-alert hidden">
+						<div class="alert alert-danger"><?php echo $wo['lang']['max_number_status'] ?></div>
+					</div>
+					<div class="text-center">
+						<button class="btn btn-main btn-mat btn-mat-raised add_wow_loader" type="submit"><?php echo $wo['lang']['create']; ?></button>
+					</div>
+					<input type="file" name="statusMedia[]" class="hidden" id="user-storymedia">
+					<input type="file" name="cover" class="hidden" id="user-storymedia-2">
+				</form>
+			</div>
+		</div>
+		<!-- .col-md-8 -->
+		<?php echo Wo_LoadPage('sidebar/content');?>
+	</div>
+	<!-- .row -->
+</div>
+
+<script>
+	function getExtension(filename) {
+	  var parts = filename.split('.');
+	  return parts[parts.length - 1];
+	}
+   jQuery(document).ready(function($) {
+      $("#user-storymedia").change(function () {
+        var numFiles = this.files.length;
+        if (numFiles > 20) {
+         $("#user-storymedia").val('');
+         $(".create-status-alert").removeClass('hidden');
+        }
+        else{
+            $("#user-story-total input").val(numFiles + ' file(s) selected');
+            $("#user-story-total").removeClass('hidden').slideDown(200);
+        }
+        var ext = getExtension(this.files[0].name);
+	    switch (ext.toLowerCase()) {
+		    case 'm4v':
+		    case 'avi':
+		    case 'mpg':
+		    case 'mp4':
+		    return $('#custom_thumbnail').slideDown();
+	    }
+	    $('#custom_thumbnail').slideUp();
+      });
+      $("#user-storymedia-2").change(function () {
+        var numFiles = this.files.length;
+        if (numFiles > 20) {
+         $("#user-storymedia-2").val('');
+         $(".create-status-alert").removeClass('hidden');
+        }
+        else{
+            $("#user-story-total-2 input").val(numFiles + ' file(s) selected');
+            $("#user-story-total-2").removeClass('hidden').slideDown(200);
+        }
+      });
+      var bar = $('#bar');
+	    var percent = $('#percent');
+
+      $('.create-user-story').ajaxForm({
+       url: Wo_Ajax_Requests_File() + '?f=status&s=new',
+       type:"POST",
+       beforeSend: function() {
+       	var percentVal = '0%';
+        bar.width(percentVal);
+        percent.html(percentVal);
+        $('.create-user-story').find('.add_wow_loader').addClass('btn-loading');
+       },
+       uploadProgress: function (event, position, total, percentComplete) {
+           var percentVal = percentComplete + '%';
+           bar.width(percentVal);
+           $('#progress').slideDown(200);
+           if(percentComplete > 50) {
+             percent.addClass('white');
+           }
+           percent.html(percentVal);
+      },
+       success: function(data) {
+        scrollToTop();
+        if (data['status'] == 200) {
+          $(".create-status-alert").removeClass('hidden').html('<div class="alert alert-success">'+ data['message'] +'</div>');
+          window.location = '<?php echo $wo['config']['site_url']; ?>';
+        } 
+
+        else if (data['message']) {
+          $(".create-status-alert").removeClass('hidden').html('<div class="alert alert-danger">' + data['message'] + '</div>');
+        }
+        else{
+        	if(data.invalid_file == 3){
+	          $("#adult_image_file").modal('show');
+	          Wo_Delay(function(){
+	            $("#adult_image_file").modal('hide');
+	          },3000);
+	        }
+        } 
+
+        $('.create-user-story').find('.add_wow_loader').removeClass('btn-loading');
+      }});
+
+   });
+</script>

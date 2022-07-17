@@ -1,0 +1,26 @@
+<div class="col-md-6" data-rm-blog="<?php echo $wo['fund']['id'];?>">
+	<div class="view-blog fundings" id="<?php echo $wo['fund']['id']; ?>">
+		<div class="avatar">
+			<a href="<?php echo $wo['config']['site_url'].'/show_fund/'. $wo['fund']['hashed_id']; ?>" data-ajax="?link1=show_fund&id=<?php echo($wo['fund']['hashed_id']) ?>"><img src="<?php echo $wo['fund']['image']; ?>" alt="<?php echo $wo['fund']['title']; ?>"></a>
+		</div>
+		<div class="fundings_desc">
+			<h3><a href="<?php echo $wo['config']['site_url'].'/show_fund/'. $wo['fund']['hashed_id']; ?>" data-ajax="?link1=show_fund&id=<?php echo($wo['fund']['hashed_id']) ?>"><?php echo stripslashes($wo['fund']['title']); ?></a></h3>
+		 	<div class="fundings_desc_meta">
+				<div class="postMeta--author-text">
+					<time><?php echo date("d M Y",$wo['fund']['time']); ?></time>
+				</div>
+		 	</div>
+			<!--<p class="desc">
+				<?php 
+				$desc = str_replace('<br>', '', $wo['fund']['description']);
+				echo $desc = mb_substr($desc, 0, 190, "UTF-8") . ".."; ?>
+			</p>-->
+		</div>
+		<?php if ($wo['fund']['user_id'] == $wo['user']['id']):?>
+		<div class="fundings_footer">
+			<a class="btn btn-success" href="<?php echo $wo['site_url'].'/edit_fund/'.$wo['fund']['hashed_id']; ?>" data-ajax="?link1=edit_fund&id=<?php echo($wo['fund']['hashed_id']) ?>"  id="<?php echo $wo['fund']['id'];?>"><?php echo $wo['lang']['edit']; ?></a>
+			<a class="btn btn-danger delete-fund" id="<?php echo $wo['fund']['id'];?>"><?php echo $wo['lang']['delete']; ?></a>
+		</div>
+		<?php endif;?>
+	</div>
+</div>

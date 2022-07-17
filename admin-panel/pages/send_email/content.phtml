@@ -1,0 +1,146 @@
+<?php
+$week_end = time() - (60 * 60 * 24 * 7);
+$week_start = time() - (60 * 60 * 24 * 14);
+$week_users = $db->where('lastseen',$week_start,'>=')->where('lastseen',$week_end,'<=')->getValue(T_USERS,'COUNT(*)');
+
+$month_end = time() - (60 * 60 * 24 * 30);
+$month_start = time() - (60 * 60 * 24 * 60);
+$month_users = $db->where('lastseen',$month_start,'>=')->where('lastseen',$month_end,'<=')->getValue(T_USERS,'COUNT(*)');
+
+$month_end3 = time() - (60 * 60 * 24 * 61);
+$month_start3 = time() - (60 * 60 * 24 * 150);
+$month_users3 = $db->where('lastseen',$month_start3,'>=')->where('lastseen',$month_end3,'<=')->getValue(T_USERS,'COUNT(*)');
+
+$month_end6 = time() - (60 * 60 * 24 * 151);
+$month_start6 = time() - (60 * 60 * 24 * 210);
+$month_users6 = $db->where('lastseen',$month_start6,'>=')->where('lastseen',$month_end6,'<=')->getValue(T_USERS,'COUNT(*)');
+
+$month_end9 = time() - (60 * 60 * 24 * 211);
+$month_start9 = time() - (60 * 60 * 24 * 300);
+$month_users9 = $db->where('lastseen',$month_start9,'>=')->where('lastseen',$month_end9,'<=')->getValue(T_USERS,'COUNT(*)');
+
+$year_end = time() - (60 * 60 * 24 * 365);
+$year_users = $db->where('lastseen',$year_end,'<=')->getValue(T_USERS,'COUNT(*)');
+?>
+<div class="container-fluid">
+    <div>
+        <h3>Send E-mail</h3>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="#">Home</a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a href="#">Tools</a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">Send E-mail</li>
+            </ol>
+        </nav>
+    </div>
+    <!-- Vertical Layout -->
+    <div class="row">
+        <div class="col-lg-6 col-md-6">
+            <div class="card">
+                <div class="card-body">
+                  <h6 class="card-title">Send E-mail To Users</h6>
+                    <div id="alert"></div>
+                    <form class="mailing-settings" method="POST">
+                        <div class="form-group form-float">
+                            <div class="form-line">
+                              <label class="form-label">Subject</label>
+                                <input type="text" id="subject" name="subject" class="form-control">
+                                <small class="admin-info">Choose the title for your message.</small>
+                            </div>
+                        </div>
+                        <div class="form-group form-float">
+                            <div class="form-line">
+                              <label class="form-label">Message (HTML Allowed)</label>
+                                <textarea name="message" id="message" class="form-control" cols="30" rows="10"></textarea>
+                                <small class="admin-info">Write your message here.</small>
+                            </div>
+                        </div>
+                        <label for="send_to">Send E-mail To</label>
+                        <select class="form-control show-tick" id="send_to" name="send_to">
+                          <option value="week">Users who didn`t login for a week ----- approximately (<?php echo $week_users; ?> User)</option>
+                          <option value="month">Users who didn`t login for a month ----- approximately (<?php echo $month_users; ?> User)</option>
+                          <option value="3month">Users who didn`t login for a 3 month ----- approximately (<?php echo $month_users3; ?> User)</option>
+                          <option value="6month">Users who didn`t login for a 6 month ----- approximately (<?php echo $month_users6; ?> User)</option>
+                          <option value="9month">Users who didn`t login for a 9 month ----- approximately (<?php echo $month_users9; ?> User)</option>
+                          <option value="year">Users who didn`t login for a year ----- approximately (<?php echo $year_users; ?> User)</option>
+                        </select>
+                        <small class="admin-info">Choose the type of users you want to send the message to.</small>
+                        <div class="clearfix"></div>
+                        <div class="form-group form-float">
+                            <div class="form-line">
+                              <label class="form-label" id="mailing-selected-users">Search Users (Optional) <span></span></label>
+                                <input type="text" class="form-control" onkeydown="Wo_SearchMailingUsers(this.value)" autocomplete="off">
+                                <small class="admin-info">Send only to those users, leave it empty to send to all users.</small>
+                            </div>
+                        </div>
+                        <div class="search-mailing-users hidden"></div>
+                        <div class="form-group">
+                          <label for="test_message">Test Message (Send to my email first)</label>
+                           <input type="checkbox" id="test_message" class="filled-in" name="test_message">
+			            </div>
+                        
+                        <input type="hidden" name="hash_id" value="<?php echo Wo_CreateSession();?>">
+                        <input type="hidden" name="selected_emails" id="selected_emails">
+                        <button type="submit" class="btn btn-primary m-t-15 waves-effect">Send</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+    <!-- #END# Vertical Layout -->
+<script>
+var mailing_users = [];
+$(function () {
+   $('form.mailing-settings').ajaxForm({
+      url: Wo_Ajax_Requests_File() + '?f=admin_setting&s=send_mail_to_mock_users',
+      beforeSend: function () {
+         $('form.mailing-settings').find('.waves-effect').text('Please wait..');
+      },
+      success: function (data) {
+         if (data.status == 400) {
+            $("#alert").html('<div class="alert alert-danger">'+ data['message'] +'</div>');
+         } else if (data.status == 200) {
+            $("#alert").html('<div class="alert alert-success">Message Sent!</div>');
+         } else if (data.status == 300) {
+            $("#alert").html('<div class="alert alert-success">Messages are being sent in background.</div>');
+         }
+         $('form.mailing-settings').find('.waves-effect').text('Send');
+      }
+   });
+
+   $(document).on('click', '.search-mailing-users p', function(event) {
+      event.preventDefault();
+      var id = $(this).attr('data-user');
+      if ($.inArray(id, mailing_users) == -1) {
+         mailing_users.push(id);
+         $("#mailing-selected-users span").text(mailing_users.length);
+         $("#selected_emails").val(mailing_users.join());
+         $(this).remove();
+      }
+
+   });
+
+});
+function Wo_SearchMailingUsers(name = ''){
+   if (!name) { return false;}
+   $.ajax({
+      url: Wo_Ajax_Requests_File(),
+      type: 'GET',
+      dataType: 'json',
+      data: {f: 'admin_setting',s:'get_users_emails',name:name},
+   })
+   .done(function(data) {
+      if (data.status == 200) {
+         $('.search-mailing-users').removeClass('hidden').html(data.html);     
+      }
+   })
+   .fail(function() {
+      console.log("error");
+   })
+}
+</script>

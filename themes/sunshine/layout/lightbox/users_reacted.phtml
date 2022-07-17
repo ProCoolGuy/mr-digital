@@ -1,0 +1,67 @@
+<div class="modal fade sun_modal" id="users-reacted-modal" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></span></button>
+        <h4 class="modal-title text-center"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-shopping-cart"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg> <span id="views_info_title"></span></h4>
+      </div>
+      <div class="modal-body">
+        <div class="wo_settings_page">
+            <div class="row" id="views_info">
+            	<div class="text-center">
+            		<span class="how_reacted like-btn-love pointer" id="_post333" onclick="Wo_LoadReactedUsers('love');">
+            			<div class="inline_post_count_emoji" style="width: 25px;height: 25px">
+            				<img src="http://localhost:8012/wowonder/themes/sunshine/reaction/love-sm.png" alt="Love">
+            			</div>
+            		</span>
+
+            		<span class="how_reacted like-btn-sad pointer" id="_post333" onclick="Wo_LoadReactedUsers('sad');">
+            			<div class="inline_post_count_emoji" style="width: 25px;height: 25px">
+            				<img src="http://localhost:8012/wowonder/themes/sunshine/reaction/sad-sm.png" alt="Sad">
+            			</div>
+            		</span>
+
+            		<span class="how_reacted like-btn-haha pointer" id="_post333" onclick="Wo_LoadReactedUsers('haha');">
+            			<div class="inline_post_count_emoji" style="width: 25px;height: 25px">
+	            			<img src="http://localhost:8012/wowonder/themes/sunshine/reaction/haha-sm.png" alt="HaHa">
+	            		</div>
+            		</span>
+
+            		<span class="how_reacted like-btn-wow pointer" id="_post333" onclick="Wo_LoadReactedUsers('wow');">
+            			<div class="inline_post_count_emoji" style="width: 25px;height: 25px">
+            				<img src="http://localhost:8012/wowonder/themes/sunshine/reaction/wow-sm.png" alt="WoW">
+            			</div>
+            		</span>
+
+            		<span class="how_reacted like-btn-angry pointer" id="_post333" onclick="Wo_LoadReactedUsers('angry');">
+            			<div class="inline_post_count_emoji" style="width: 25px;height: 25px">
+            				<img src="http://localhost:8012/wowonder/themes/sunshine/reaction/angry-sm.png" alt="Angry">
+            			</div>
+            		</span>
+
+            		<span class="how_reacted like-btn-like pointer" id="_post333" onclick="Wo_LoadReactedUsers('like');">
+            			<div class="inline_post_count_emoji" style="width: 25px;height: 25px">
+            				<img src="http://localhost:8012/wowonder/themes/sunshine/reaction/like-sm.png" alt="Like">
+            			</div>
+            		</span>
+            		<br>
+            	</div>
+            	<div class="clearfix"></div>
+            	<br>
+            	<br>
+            	<div id="reacted_users_box" style="min-height: 100px;">
+            	</div>
+            	<div class="clearfix"></div>
+            	<div id="reacted_users_load" style="display: none;">
+	              <div class="load-more">
+	                <button class="btn btn-default text-center reacted_users_load_more" data-type="" post-id="" col-type="" onclick="Wo_LoadMoreReactedUsers(this);">
+	                  <span><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z"></path></svg></span> <span id="load_more_reacted_btn"><?php echo $wo['lang']['load_more'] ?></span>
+	                </button>
+	              </div>
+	            </div>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

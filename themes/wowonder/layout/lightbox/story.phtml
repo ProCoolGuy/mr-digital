@@ -1,0 +1,148 @@
+<div class="lightbox-backgrond" onclick="Wo_CloseLightbox();"></div>
+<?php if ($wo['story']['story_media'][0]['type'] == 'image') { ?>
+<style>
+.wo_imagecombo_lbox.story_lightbox .story_image_owner .draggableHelper_story:before, .wo_imagecombo_lbox.story_lightbox .story_image_not_owner .draggableHelper_story:before {background-image: url(<?php echo $wo['story']['story_media'][0]['filename']. "?cache=" . time();?>)}
+</style>
+<?php } ?>
+<div class="lightbox-content post wo_imagecombo_lbox lightpost-<?php echo $wo['story']['id'];?> <?php echo ($wo['story']['is_owner']) ? 'mobi_stor_box' : '' ?> <?php echo (!$wo['story']['is_owner']) ? 'story_width_' : '' ?> story_lightbox" id="post-<?php echo $wo['story']['id'];?>" data-post-id="<?php echo $wo['story']['id'];?>">
+	<div class="mfp-wrap"><span class="mfp_progress_line_"><span class="width_ load"></span><span></div>
+	<div class="wo_story_header">
+		<div class="wo_stor_h_info">
+			<div class="user-avatar">
+				<img src="<?php echo $wo['story']['user_data']['avatar'];?>" alt="">
+			</div>
+			<div class="wo_s_h_i_r">
+				<div class="user-name h5">
+					<a href="<?php echo $wo['story']['user_data']['url'];?>" data-ajax="?link1=timeline&u=<?php echo $wo['story']['user_data']['username']; ?>"><?php echo $wo['story']['user_data']['name'];?></a>
+				</div>
+				<span class="ajax-time" title="<?php echo date('c',$wo['story']['posted']); ?>"><?php echo Wo_Time_Elapsed_String($wo['story']['posted']); ?></span>
+			</div>
+		</div>
+		<div class="wo_stor_h_opts">
+			<?php if (!$wo['story']['is_owner']) { ?>
+			<div class="close-lightbox like-story-lightbox <?php echo(Wo_IsReacted($wo['story']['id'],$wo['user']['id'],'story') ? 'active' : '') ?>" data-story-id="<?php echo $wo['story']['id']; ?>">
+				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M7,9.5C7,8.7 7.7,8 8.5,8C9.3,8 10,8.7 10,9.5C10,10.3 9.3,11 8.5,11C7.7,11 7,10.3 7,9.5M12,17.23C10.25,17.23 8.71,16.5 7.81,15.42L9.23,14C9.68,14.72 10.75,15.23 12,15.23C13.25,15.23 14.32,14.72 14.77,14L16.19,15.42C15.29,16.5 13.75,17.23 12,17.23M15.5,11C14.7,11 14,10.3 14,9.5C14,8.7 14.7,8 15.5,8C16.3,8 17,8.7 17,9.5C17,10.3 16.3,11 15.5,11Z"></path></svg>
+			</div>
+			<div class="close-lightbox like-lightbox">
+				<a href="javascript:void(0)" onclick="Wo_OpenChatTab(<?php echo $wo['story']['user_id']; ?>,0,0,0,0,<?php echo $wo['story']['id']; ?>);">
+					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M10,9V5L3,12L10,19V14.9C15,14.9 18.5,16.5 21,20C20,15 17,10 10,9Z"></path></svg>
+				</a>
+			</div>
+			<?php } ?>
+			<?php if ($wo['story']['is_owner']) { ?>
+			<div class="like-stat stat-item post-like-status" style="<?php if ($wo['story']['is_owner']) {?> float:left; <?php }else{ ?> float:right; <?php }?>">
+		      <span class="like-emo post-reactions-icons-<?php echo $wo['story']['id']; ?>">
+		      <?php echo Wo_GetPostReactions($wo['story']['id'],'story');?>
+		      </span>
+		    </div>
+		    <?php } ?>
+		    <?php if (!$wo['story']['is_owner']) { ?>
+			<ul class="story_reacts_box reactions-box reactions-box-story-container-<?php echo $wo['story']['id']; ?>" data-id="<?php echo $wo['story']['id']; ?>">
+					<?php if (!empty($wo['reactions_types'])) {
+					    foreach ($wo['reactions_types'] as $key => $value) {
+					    	if ($value['status'] == 1) {
+					    		
+					     ?>
+						<li style="<?php if ($wo['story']['is_owner']) {?> left: 10px; <?php }else{ ?> right: 10px; <?php }?>" class="reaction reaction-<?php echo $value['id'];?>" data-reaction="<?php echo $value['name'];?>" data-reaction-id="<?php echo $value['id'];?>" data-reaction-lang="<?php echo $value['name'];?>" data-post-id="<?php echo $wo['story']['id']; ?>" onclick="Wo_RegisterStoryReaction(this,'<?php echo($value['wowonder_small_icon']) ?>',<?php echo($value['is_html']) ?>);">
+							<?php if (preg_match("/<[^<]+>/",$value['wowonder_icon'],$m)) {
+								  	echo($value['wowonder_icon']);
+								 }
+								 else{ ?>
+						     	<img src="<?php echo($value['wowonder_icon']) ?>">
+						    <?php } ?>
+						</li>
+					<?php } } } ?>
+				</ul>
+			<?php } ?>
+			<?php if ($wo['story']['is_owner']) { ?>
+				<div class="close-lightbox" onclick="Wo_DeleteStatus(<?php echo $wo['story']['id']; ?>)">
+					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z"></path></svg>
+				</div>
+			<?php } ?>
+			<div class="close-lightbox" onclick="Wo_CloseLightbox();">
+				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x" style="margin-top: 0px;width: 24px;height: 24px;"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+			</div>
+		</div>
+	</div>
+	
+	<div class="story-img <?php echo ($wo['story']['is_owner']) ? 'story_image_owner' : 'story_image_not_owner' ?> user_story_" id="<?php echo $wo['story']['id'];?>">
+		<span class="changer previous-btn pointer" onclick="Get_PreviousStory('<?php echo $wo['story']['id'];?>','<?php echo($wo['story_type']) ?>')">
+			<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M15.41,16.58L10.83,12L15.41,7.41L14,6L8,12L14,18L15.41,16.58Z" /></svg>
+		</span>
+		<span class="changer next-btn pointer" onclick="Get_NextStory('<?php echo $wo['story']['id'];?>','<?php echo($wo['story_type']) ?>')">
+			<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M8.59,16.58L13.17,12L8.59,7.41L10,6L16,12L10,18L8.59,16.58Z" /></svg>
+		</span>
+		<div id="draggableHelper" class="draggableHelper_story">
+			<?php if ($wo['story']['story_media'][0]['type'] == 'image') { ?>
+				<img src="<?php echo $wo['story']['story_media'][0]['filename']. "?cache=" . time();?>" alt="media" class="">
+			<?php }else{ ?>
+				<video class="" preload="auto" autoplay  style="width: 100%; height: 100%;" data-story-video="<?php echo $wo['story']['story_media'][0]['id'];?>" id="video_story">
+					<source src="<?php echo $wo['story']['story_media'][0]['filename'];?>" type='video/mp4'>
+					<source src="<?php echo $wo['story']['story_media'][0]['filename'];?>" type='video/webm'> 
+				</video>
+			<?php } ?>
+		</div>
+		<?php //if (!$wo['story']['is_owner']) { ?>
+			<?php if (!empty($wo['story']['description'])) { ?>
+				<div class="draggableHelper_story_content"><?php echo $wo['story']['description']; ?></div>
+			<?php } ?>
+		<?php //} ?>
+	</div>
+	<?php if ($wo['story']['is_owner']) { ?>
+	<div class="comment-section">
+		<div class="comment-section-inner">
+
+			<div class="clear"></div>
+			<div class="comment-inner-header views_count">
+				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+				<?php echo (!empty($wo['story']['view_count']))?$wo['story']['view_count']:0; ?> <?php echo $wo['lang']['views'];?>
+			</div>
+			<div class="clear"></div>
+			<div class="views_container_">
+				<?php if (!empty($wo['story']['story_views'])) {
+				foreach ($wo['story']['story_views'] as $key => $value) { ?>
+					<div class="story_views_" id="<?php echo $value['id']; ?>">
+						<div class="story_view_list">
+							<div class="user-avatar">
+								<img src="<?php echo $value['avatar'];?>" alt="">
+							</div>
+							<div class="user-name">
+								<span class="user-popover" data-type="user" data-id="<?php echo $value['user_id']; ?>">
+									<a href="<?php echo $value['url'];?>" data-ajax="?link1=timeline&u=<?php echo $value['username']; ?>"><?php echo $value['name'];?></a>
+								</span>
+							</div>
+						</div>
+						<div class="clear"></div>
+					</div>
+				<?php } } ?>
+			</div>
+			<?php if (!empty($wo['story']['story_views']) && count($wo['story']['story_views']) > 9) { ?>
+				<div class="load-more pointer" onclick="Wo_GetMoreStoryViews(<?php echo $wo['story']['id'];?>,this);">
+					<button class="btn btn-default text-center pointer" id="load_more_friends">
+						<svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather"><polyline points="6 9 12 15 18 9"></polyline></svg> <?php echo $wo['lang']['load_more'];?>
+					</button>
+				</div>
+			<?php } ?>
+		</div>
+		<div class="clear"></div>
+	</div>
+	<?php } ?>
+</div>
+<script>
+$(document).keydown(function(e) {
+    if (e.keyCode == 27) {
+        Wo_CloseLightbox();
+    }
+    $(".lighbox.textarea").triggeredAutocomplete({
+       hidden: '#hidden_inputbox_comment_lighbox',
+       source: Wo_Ajax_Requests_File() + "?f=mention",
+       trigger: "@" 
+    });
+});
+$( ".story-img" ).mouseover(function() {
+  $( ".changer" ).fadeIn(200);
+});
+$( ".story-img" ).mouseleave(function() {
+  $( ".changer" ).fadeOut(200);
+});
+</script>

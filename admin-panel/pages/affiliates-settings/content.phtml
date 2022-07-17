@@ -1,0 +1,190 @@
+<div class="container-fluid">
+    <div>
+        <h3>Affiliates Settings</h3>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="#">Home</a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a href="#">Users</a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a href="#">Affiliates System</a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">Affiliates Settings</li>
+            </ol>
+        </nav>
+    </div>
+    <!-- Vertical Layout -->
+    <div class="row">
+        <div class="col-lg-6 col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="card-title">Affiliates Settings</h6>
+                    <div class="affiliates-settings-alert"></div>
+                    <form class="affiliates-settings" method="POST">
+                        <div class="float-left">
+                            <label for="affiliate_system" class="main-label">Affiliates System</label>
+                            <br><small class="admin-info">User will earn money from invite users to your site</small>
+                        </div>
+                        <div class="form-group float-right switcher">
+                            <input type="hidden" name="affiliate_system" value="0" />
+                            <input type="checkbox" name="affiliate_system" id="chck-affiliate_system" value="1" <?php echo ($wo['config']['affiliate_system'] == 1) ? 'checked': '';?> <?php echo(EnableForMode('affiliate_system')) ?>>
+                            <label for="chck-affiliate_system" class="check-trail <?php echo(EnableForMode('affiliate_system',true)) ?>" <?php echo(EnableForMode('affiliate_system',false,true)) ?>><span class="check-handler"></span></label>
+                        </div>
+                        <div class="clearfix"></div>
+                        <hr>
+                        <label for="affiliate_type">User will earn money when</label>
+                        <select class="form-control show-tick" id="affiliate_type" name="affiliate_type">
+                          <option value="0" <?php echo ($wo['config']['affiliate_type'] == 0) ? 'selected': '';?> >New user is registred</option>
+                          <option value="1" <?php echo ($wo['config']['affiliate_type'] == 1) ? 'selected': '';?> >New user is registred & bought a pro package</option>
+                        </select>
+                        <small class="admin-info">User will earn money from Affiliates</small>
+                        <div class="clearfix"></div>
+                        <br>
+                        <div class="form-group form-float">
+                            <div class="form-line">
+                                <label class="form-label">Minimum withdrawal request</label>
+                                <input type="text" id="m_withdrawal" name="m_withdrawal" class="form-control" value="<?php echo $wo['config']['m_withdrawal']?>">
+                                <small class="admin-info">Minimum withdrawal the users can request</small>
+                            </div>
+                        </div>
+                        <div class="form-group form-float amount_ref">
+                            <div class="form-line">
+                                <label class="form-label">Amount</label>
+                                <input type="text" id="amount_ref" name="amount_ref" class="form-control" value="<?php echo $wo['config']['amount_ref']?>">
+                                <small class="admin-info">The price you'll pay for each new referred user. Default 0.10</small>
+                            </div>
+                        </div>
+                        <div class="form-group form-float amount_percent_ref">
+                            <div class="form-line">
+                                <label class="form-label">Amount %</label>
+                                <input type="number" min="0" max="100" id="amount_percent_ref" name="amount_percent_ref" class="form-control" value="<?php echo $wo['config']['amount_percent_ref']?>">
+                                <small class="admin-info">The price you'll pay for each new referred user. After he join any pro package.</small>
+                            </div>
+                        </div>
+                        <div class="form-group form-float">
+                            <div class="form-line">
+                                <label class="form-label">Affiliate Level</label>
+                                <input type="number" id="affiliate_level" name="affiliate_level" class="form-control" value="<?php echo $wo['config']['affiliate_level']?>">
+                                <small class="admin-info">EX : if you set to level 4, First affliater gets 100%, second gets 75% and third gets 50%, and so on</small>
+                            </div>
+                        </div>
+                        <input type="hidden" name="hash_id" value="<?php echo Wo_CreateSession();?>">
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+    <!-- #END# Vertical Layout -->
+<script>
+$(document).ready(function() {
+    $('#amount_ref').focus(function() { $(this).select(); } );
+    $('#amount_percent_ref').focus(function() { $(this).select(); } );
+});
+$(function() {
+
+    $('.switcher input[type=checkbox]').click(function () {
+        setToTrue = 0;
+        if ($(this).is(":checked") === true) {
+            setToTrue = 1;
+        }
+        var configName = $(this).attr('name');
+        var hash_id = $('input[name=hash_id]').val();
+        var objData = {};
+        objData[configName] = setToTrue;
+        objData['hash_id'] = hash_id;
+        $.post( Wo_Ajax_Requests_File() + '?f=admin_setting&s=update_general_setting', objData);
+    });
+
+    var setTimeOutColor = setTimeout(function (){});
+    $('select').on('change', function() {
+         clearTimeout(setTimeOutColor);
+        var thisElement = $(this);
+        var configName = thisElement.attr('name');
+        var hash_id = $('input[name=hash_id]').val();
+        var objData = {};
+        objData[configName] = this.value;
+        objData['hash_id'] = hash_id;
+        thisElement.addClass('warning');
+        $.post( Wo_Ajax_Requests_File() + '?f=admin_setting&s=update_general_setting', objData, function (data) {
+            if (data.status == 200) {
+                thisElement.removeClass('warning');
+                thisElement.addClass('success');
+            } else {
+                thisElement.addClass('error');
+            }
+            var setTimeOutColor = setTimeout(function () {
+                thisElement.removeClass('success');
+                thisElement.removeClass('warning');
+                thisElement.removeClass('error');
+            }, 2000);
+        });
+    });
+    $('input[type=text], input[type=number]').on('keyup', delay(function() {
+            clearTimeout(setTimeOutColor);
+            var thisElement = $(this);
+            var configName = thisElement.attr('name');
+            var hash_id = $('input[name=hash_id]').val();
+            var objData = {};
+            objData[configName] = this.value;
+            objData['hash_id'] = hash_id;
+            thisElement.addClass('warning');
+            $.post( Wo_Ajax_Requests_File() + '?f=admin_setting&s=update_general_setting', objData, function (data) {
+                if (data.status == 200) {
+                    thisElement.removeClass('warning');
+                    thisElement.addClass('success');
+                } else {
+                    thisElement.addClass('error');
+                }
+                var setTimeOutColor = setTimeout(function () {
+                    thisElement.removeClass('success');
+                    thisElement.removeClass('warning');
+                    thisElement.removeClass('error');
+                }, 2000);
+                //thisElement.focus();
+            });
+    }, 500));
+
+    //to ensure that value is Between 0-100
+    $('#amount_percent_ref').keyup(function(e) {
+        var num = $(this).val();
+        if(isNaN(num)||num<0 ||num>100) {
+            $('.affiliates-settings-alert').html('<div class="alert alert-danger">Only Enter Number Between 0-100</div>');
+            setTimeout(function () {
+                $('.affiliates-settings-alert').empty();
+            }, 2000);
+            $(this).val("0");
+        }
+
+        $('#amount_ref').val(0);
+    });
+
+    $('#amount_ref').keyup(function(e) {
+        var num = $(this).val();
+        if(isNaN(num)||num<0) {
+            $('.affiliates-settings-alert').html('<div class="alert alert-danger">Only Enter Number</div>');
+            setTimeout(function () {
+                $('.affiliates-settings-alert').empty();
+            }, 2000);
+            $(this).val("0");
+        }
+
+        $('#amount_percent_ref').val(0);
+    });
+
+    //to hide and show inputs according to selected value
+    // $('#affiliate_type').change(function(e){
+    //     var selected_affiliate_type = $('#affiliate_type :selected').text();
+    //     if( selected_affiliate_type == "New user is registred" ){
+    //         $('.amount_ref').show();
+    //         $('.amount_percent_ref').hide();
+    //     }else if( selected_affiliate_type == "New user is registred & bought a pro package" ){
+    //         $('.amount_ref').hide();
+    //         $('.amount_percent_ref').show();
+    //     }
+    // });
+});
+</script>

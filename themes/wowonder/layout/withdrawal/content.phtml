@@ -1,0 +1,185 @@
+<div class="page-margin">
+	<div class="row">
+		<div class="col-md-2 leftcol"><?php echo Wo_LoadPage("sidebar/left-sidebar"); ?></div>
+		<div class="col-md-7 singlecol">
+			<div class="page-margin wow_content mt-0">
+				<div class="wo_page_hdng pag_neg_padd pag_alone withdraw_hdr_title">
+					<div class="wo_page_hdng_innr big_size">
+						<span><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="currentColor" d="M15,14V11H18V9L22,12.5L18,16V14H15M14,7.7V9H2V7.7L8,4L14,7.7M7,10H9V15H7V10M3,10H5V15H3V10M13,10V12.5L11,14.3V10H13M9.1,16L8.5,16.5L10.2,18H2V16H9.1M17,15V18H14V20L10,16.5L14,13V15H17Z"></path></svg></span> <?php echo $wo['lang']['withdrawal']; ?>
+					</div>
+					<a class="btn btn-sm bold" href="<?php echo Wo_SeoLink('index.php?link1=wallet'); ?>" data-ajax="?link1=wallet">
+						<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="currentColor" d="M20,11V13H8L13.5,18.5L12.08,19.92L4.16,12L12.08,4.08L13.5,5.5L8,11H20Z"></path></svg> <?php echo $wo['lang']['go_back']; ?>
+					</a>
+				</div>
+			</div>
+			
+			<div class="wow_content">
+				<div class="wallet_holder_name">
+					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M21,18V19A2,2 0 0,1 19,21H5C3.89,21 3,20.1 3,19V5A2,2 0 0,1 5,3H19A2,2 0 0,1 21,5V6H12C10.89,6 10,6.9 10,8V16A2,2 0 0,0 12,18M12,16H22V8H12M16,13.5A1.5,1.5 0 0,1 14.5,12A1.5,1.5 0 0,1 16,10.5A1.5,1.5 0 0,1 17.5,12A1.5,1.5 0 0,1 16,13.5Z" /></svg>&nbsp;&nbsp;&nbsp;
+					<div class="infoz">
+						<b><?php echo $wo['lang']['my_balance'] ?></b>
+						<p><?php echo Wo_GetCurrency($wo['config']['ads_currency']) . ($wo['user']['balance'] + $wo['user']['wallet']);?></p>
+					</div>
+				</div>
+				<hr>
+			  
+				<?php if ($wo['user']['balance'] < $wo['config']['m_withdrawal']): ?>
+				<div class="alert alert-danger">
+					<?php 
+						$your_balance = str_replace('{balance}',  $wo['user']['balance'], $wo['lang']['your_balance']); 
+						$your_balance = str_replace('{m_withdrawal}',  $wo['config']['m_withdrawal'], $your_balance); 
+						$your_balance = str_replace('$', Wo_GetCurrency($wo['config']['ads_currency']), $your_balance);
+						
+					?>
+					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-alert-triangle"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12" y2="17"></line></svg> <?php echo $your_balance;?>
+				</div>
+				<?php endif ?>
+			  
+				<form class="setting-general-form form-horizontal" method="post">
+					<div class="setting-general-alert setting-update-alert"></div>
+					
+					<div class="row">
+						<?php if ($wo['config']['bank_withdrawal_system'] == 1) { ?>
+							<div class="col-md-12">
+								<div class="wow_form_fields">
+									<label for="withdraw_method"><?php echo $wo['lang']['withdraw_method']; ?></label>  
+									<select id="withdraw_method" name="withdraw_method" class="form-control" onchange="Wo_ShowWithdrawMethod(this)">
+										<option value="paypal"><?php echo $wo['lang']['paypal']; ?></option>
+										<option value="bank"><?php  echo $wo['lang']['bank']; ?></option>
+									</select>
+								</div>
+							</div>
+						<?php } ?>
+						<div class="paypal_withdrawal">
+							<div class="col-md-6">
+								<div class="wow_form_fields">
+									<label for="paypal_email"><?php echo $wo['lang']['paypal_email']; ?></label>  
+									<input id="paypal_email" name="paypal_email" type="text" class="form-control input-md" value="<?php echo $wo['user']['email']?>" autocomplete="off">
+									<span class="help-block checking"></span>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="wow_form_fields">
+								<label for="amount"><?php echo $wo['lang']['amount']; ?></label>  
+								<input name="amount" id="amount" type="text" class="form-control input-md" value="<?php echo $wo['user']['balance'];?>">
+							</div>
+						</div>
+						<?php if ($wo['config']['bank_withdrawal_system'] == 1) { ?>
+							<div class="bank_withdrawal" style="display: none;">
+								<div class="col-md-6">
+									<div class="wow_form_fields">
+										<label for="iban"><?php echo $wo['lang']['iban']; ?></label>  
+										<input name="iban" id="iban" type="text" class="form-control input-md">
+									</div>
+								</div>
+								<div class="col-md-6">
+									<div class="wow_form_fields">
+										<label for="country"><?php echo $wo['lang']['country']; ?></label>  
+										<input name="country" id="country" type="text" class="form-control input-md">
+									</div>
+								</div>
+								<div class="col-md-6">
+									<div class="wow_form_fields">
+										<label for="full_name"><?php echo $wo['lang']['full_name']; ?></label>  
+										<input name="full_name" id="full_name" type="text" class="form-control input-md">
+									</div>
+								</div>
+								<div class="col-md-6">
+									<div class="wow_form_fields">
+										<label for="swift_code"><?php echo $wo['lang']['swift_code']; ?></label>  
+										<input name="swift_code" id="swift_code" type="text" class="form-control input-md">
+									</div>
+								</div>
+								<div class="col-md-12">
+									<div class="wow_form_fields">
+										<label for="address"><?php echo $wo['lang']['address']; ?></label>  
+										<textarea name="address" id="address" type="text" class="form-control input-md"></textarea>
+									</div>
+								</div>
+							</div>
+						<?php } ?>
+					</div>
+					<div class="text-center">
+						<button type="submit" class="btn btn-main btn-mat btn-mat-raised add_wow_loader"><?php echo $wo['lang']['request_withdrawal']; ?></button>
+					</div>
+					<input type="hidden" name="user_id" value="<?php echo $wo['user']['user_id'];?>">
+					<input type="hidden" name="hash_id" value="<?php echo Wo_CreateSession();?>">
+					<br>
+				</form>
+			</div>
+			<div class="wow_content page-margin">
+				<div class="wo_page_hdng pag_neg_padd pag_alone">
+					<div class="wo_page_hdng_innr">
+						<span><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="currentColor" d="M13.5,8H12V13L16.28,15.54L17,14.33L13.5,12.25V8M13,3A9,9 0 0,0 4,12H1L4.96,16.03L9,12H6A7,7 0 0,1 13,5A7,7 0 0,1 20,12A7,7 0 0,1 13,19C11.07,19 9.32,18.21 8.06,16.94L6.64,18.36C8.27,20 10.5,21 13,21A9,9 0 0,0 22,12A9,9 0 0,0 13,3"></path></svg></span> <?php echo $wo['lang']['payment_history']; ?>
+					</div>
+				</div>
+				<div class="table-responsive">
+					<table class="table table-condensed setting-table wow_pymnt_table">
+						<thead>
+							<tr>
+								<th>#</th>
+								<th><?php echo $wo['lang']['amount']; ?></th>
+								<th><?php echo $wo['lang']['requested']; ?></th>
+								<th><?php echo $wo['lang']['status']; ?></th>
+							</tr>
+						</thead>
+						<tbody>
+							<?php
+								$get_payment = Wo_GetPaymentsHistory($wo['user']['user_id']);
+								if (count($get_payment) > 0) {
+									foreach ($get_payment as $wo['key'] => $wo['payment']) {
+										$wo['key'] = ($wo['key'] + 1);
+										$wo['html_class'] = 'label-warning';
+										$wo['html_text'] = $wo['lang']['pending'];
+										if ($wo['payment']['status'] == 1) {
+											$wo['html_class'] = 'label-success';
+											$wo['html_text'] = $wo['lang']['approved'];
+										} else if ($wo['payment']['status'] == 2) {
+											$wo['html_class'] = 'label-danger';
+											$wo['html_text'] = $wo['lang']['declined'];
+										}
+										echo Wo_LoadPage('setting/payment-history');
+									}
+								}
+							?>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+function Wo_ShowWithdrawMethod(self) {
+	if ($(self).val() == 'bank') {
+		$('.paypal_withdrawal').slideUp();
+		$('.bank_withdrawal').slideDown();
+	}
+	else{
+		$('.bank_withdrawal').slideUp();
+		$('.paypal_withdrawal').slideDown();
+	}
+}
+$(function() {
+  $('form.setting-general-form').ajaxForm({
+    url: Wo_Ajax_Requests_File() + '?f=request_payment',
+    beforeSend: function() {
+      $('.wo_settings_page').find('.add_wow_loader').addClass('btn-loading');
+    },
+    success: function(data) {
+      scrollToTop();
+      if (data.status == 200) {
+        $('.setting-general-alert').html('<div class="alert alert-success">' + data.message + '</div>');
+        $('.alert-success').fadeIn('fast');
+      } else if (data.errors) {
+          var errors = data.errors.join("<br>");
+          $('.setting-general-alert').html('<div class="alert alert-danger">' + errors + '</div>');
+          $('.alert-danger').fadeIn(300);
+      }
+      $('.wo_settings_page').find('.add_wow_loader').removeClass('btn-loading');
+    }
+  });
+});
+</script>

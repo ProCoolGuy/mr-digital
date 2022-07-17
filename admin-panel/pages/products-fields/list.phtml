@@ -1,0 +1,22 @@
+<tr class="setting-postlist" id="<?php echo $wo['field']['id'];?>" data_selected="<?php echo($wo['field']['id']) ?>">
+  <td><input type="checkbox" id="check-data-<?php echo($wo['field']['id']) ?>" class="delete-checkbox filled-in"><label for="check-data-<?php echo($wo['field']['id']) ?>"></label></td>
+   <td><?php echo $wo['field']['id'];?></td>
+   <td><?php echo $wo['field']['name'];?></td>
+   <td>
+      <?php
+         if ($wo['field']['type'] == 'selectbox') {
+          echo 'Select box';
+         } else if ($wo['field']['type'] == 'textarea') {
+          echo 'Text area';
+         } else if ($wo['field']['type'] == 'textbox') {
+          echo 'Text box';
+         }
+         ?>
+   </td>
+   <td><?php echo $wo['field']['length'];?></td>
+   <td><?php echo ucfirst($wo['field']['placement']);?></td>
+   <td>
+      <a class="btn bg-success admn_table_btn" href="javascript:void(0)" onclick="ShowEditModal(this,<?php echo $wo['field']['id'];?>)">Edit</a>
+      <button onclick="Wo_DeleteField(<?php echo $wo['field']['id'];?>,'hide');" type="button" class="btn bg-danger admn_table_btn">Delete</button>
+   </td>
+</tr>

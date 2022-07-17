@@ -1,0 +1,141 @@
+<div class="wow_content wow_sett_content">
+	<div class="wo_page_hdng pag_neg_padd">
+		<div class="wo_page_hdng_innr">
+			<span><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="currentColor" d="M22.7,19L13.6,9.9C14.5,7.6 14,4.9 12.1,3C10.1,1 7.1,0.6 4.7,1.7L9,6L6,9L1.6,4.7C0.4,7.1 0.9,10.1 2.9,12.1C4.8,14 7.5,14.5 9.8,13.6L18.9,22.7C19.3,23.1 19.9,23.1 20.3,22.7L22.6,20.4C23.1,20 23.1,19.3 22.7,19Z"></path></svg></span> <?php echo $wo['lang']['page_information'];?>
+		</div>
+	</div>
+	<form  method="post" class="form-horizontal setting-information-form">
+		<div class="setting-information-alert setting-update-alert"></div>
+		
+		<div class="row">
+			<div class="col-md-6">
+				<div class="wow_form_fields">
+					<label for="company"><?php echo $wo['lang']['company']; ?></label>
+					<input name="company" id="company" type="text" value="<?php echo $wo['setting']['company']?>" autocomplete="off">
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div class="wow_form_fields">
+					<label for="phone"><?php echo $wo['lang']['phone_number'] ?></label>
+					<input id="phone" name="phone" type="text" value="<?php echo $wo['setting']['phone'];?>">
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-6">
+				<div class="wow_form_fields">
+					<label for="address"><?php echo $wo['lang']['location']; ?></label>
+					<input name="address" id="address" type="text" value="<?php echo $wo['setting']['address']?>">
+					<?php if ($wo['config']['yandex_map'] == 1) { ?>
+            <div class="yandex_search_page"></div>
+          <?php } ?>
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div class="wow_form_fields">
+					<label for="website"><?php echo $wo['lang']['website'] ?></label>
+					<input id="website" name="website" type="text" value="<?php echo $wo['setting']['website'];?>">
+					<span class="help-block"><?php echo $wo['lang']['site_eg'];?></span>
+				</div>
+			</div>
+		</div>
+		<div class="wow_form_fields">
+			<label for="page_description"><?php echo $wo['lang']['about'] ?></label>
+			<?php $text = br2nl($wo['setting']['about']); ?>         
+			<textarea id="page_description" name="page_description" rows="4"><?php echo $text;?></textarea>
+		</div>
+		
+		<div class="text-center">
+			<button type="submit" class="btn btn-main btn-mat btn-mat-raised add_wow_loader"><?php echo $wo['lang']['save']; ?></button>
+		</div>
+		<input type="hidden" name="page_id" value="<?php echo $wo['setting']['page_id'];?>">
+		<input type="hidden" name="hash_id" value="<?php echo Wo_CreateSession();?>">
+	</form>
+</div>
+<script type="text/javascript">
+   $(function() {
+     $('form.setting-information-form').ajaxForm({
+       url: Wo_Ajax_Requests_File() + '?f=pages&s=update_information_setting',
+       beforeSend: function() {
+         $('.setting-information-form').find('.add_wow_loader').addClass('btn-loading');
+       },
+       success: function(data) {
+         if (data.status == 200) {
+           scrollToTop();
+           $('.setting-information-alert').html('<div class="alert alert-success">' + data.message + '</div>');
+           $('.alert-success').fadeIn('fast', function() {
+             $(this).delay(2500).slideUp(500, function() {
+               $(this).remove();
+             });
+           });
+         } else {
+           var errors = data.errors.join("<br>");
+           scrollToTop();
+           $('.setting-profile-alert').html('<div class="alert alert-danger">' + errors + '</div>');
+           $('.alert-danger').fadeIn(300);
+         }
+         $('.setting-information-form').find('.add_wow_loader').removeClass('btn-loading');
+       }
+     });
+   });
+   <?php if ($wo['config']['google_map'] == 1) { ?>
+   var pac_input = document.getElementById('address');
+     (function pacSelectFirst(input) {
+       // store the original event binding function
+       var _addEventListener = (input.addEventListener) ? input.addEventListener : input.attachEvent;
+       function addEventListenerWrapper(type, listener) {
+         // Simulate a 'down arrow' keypress on hitting 'return' when no pac suggestion is selected,
+         // and then trigger the original listener.
+         if(type == "keydown") {
+           var orig_listener = listener;
+           listener = function (event) {
+             var suggestion_selected = $(".pac-item-selected").length > 0;
+             if(event.which == 13 && !suggestion_selected) {
+               var simulated_downarrow = $.Event("keydown", {
+                 keyCode: 40,
+                 which: 40
+               });
+               orig_listener.apply(input, [simulated_downarrow]);
+             }
+             orig_listener.apply(input, [event]);
+           };
+         }
+         // add the modified listener
+         _addEventListener.apply(input, [type, listener]);
+       }
+       if(input.addEventListener)
+         input.addEventListener = addEventListenerWrapper;
+       else if(input.attachEvent)
+         input.attachEvent = addEventListenerWrapper;
+     })(pac_input);
+   
+     $(function () {
+        var autocomplete = new google.maps.places.Autocomplete(pac_input);
+     });
+   <?php } ?>
+<?php if ($wo['config']['yandex_map'] == 1) { ?>
+  $(function() {
+    $('#address').on( "keydown", function() {
+      let self = this;
+      var myGeocoder = ymaps.geocode($(this).val());
+      myGeocoder.then(
+          function (res) {
+            if (res.geoObjects.getLength() == 0) {
+              $('.yandex_search_page').html('');
+            }
+            else{
+              let html = '';
+              for (var i = 0; i < res.geoObjects.getLength(); i++) {
+                html += '<p class="pointer" onclick="AddYandexResult(\'#address\',this,\'.yandex_search_page\')">'+res.geoObjects.get(i).properties.get('name')+'</p>';
+              }
+              $('.yandex_search_page').html(html);
+            }
+          },
+          function (err) {
+              $('.yandex_search_page').html('');
+          }
+      );
+    });
+  });
+<?php } ?>
+</script>

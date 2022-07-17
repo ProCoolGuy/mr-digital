@@ -1,0 +1,235 @@
+<script type="text/javascript">
+let token = '<?php echo($wo['config']['live_token']) ?>';
+let streamName = 'stream_<?php echo($wo['user']['id']."_".rand(1111111,9999999)); ?>';
+let accountId = '<?php echo($wo['config']['live_account_id']) ?>';
+const apiPath = 'https://director.millicast.com/api/director/publish';
+const turnUrl = 'https://turn.millicast.com/webrtc/_turn';
+
+function updateMillicastAuth() {
+  return new Promise((resolve, reject) => {
+    let xhr                = new XMLHttpRequest();
+    xhr.onreadystatechange = function (evt) {
+      if (xhr.readyState == 4) {
+        let res = JSON.parse(xhr.responseText);
+        switch (xhr.status) {
+          case 200:
+            let d = res.data;
+            jwt   = d.jwt;
+            url   = d.urls[0];
+            resolve(d);
+            break;
+          default:
+            reject(res);
+        }
+      }
+    }
+    xhr.open("POST", apiPath, true);
+    xhr.setRequestHeader("Authorization", `Bearer ${token}`);
+    xhr.setRequestHeader("Content-Type", "application/json");
+    xhr.send(JSON.stringify({streamName: streamName}));
+  });
+}
+
+function getICEServers() {
+  return new Promise((resolve, reject) => {
+    let xhr                = new XMLHttpRequest();
+    xhr.onreadystatechange = function (evt) {
+      if (xhr.readyState == 4) {
+        let res = JSON.parse(xhr.responseText), a;
+        switch (xhr.status) {
+          case 200:
+            //returns array.
+            if (res.s !== 'ok') {
+              a = [];
+              //failed to get ice servers, resolve anyway to connect w/ out.
+              resolve(a);
+              return
+            }
+            let list = res.v.iceServers;
+            a        = [];
+            //call returns old format, this updates URL to URLS in credentials path.
+            list.forEach(cred => {
+              let v = cred.url;
+              //console.log('cred:',cred);
+              if (!!v) {
+                cred.urls = v;
+                delete cred.url;
+              }
+              a.push(cred);
+            });
+            //console.log('ice: ',a);
+            resolve(a);
+            break;
+          default:
+            a = [];
+            //failed to get ice servers, resolve anyway to connect w/ out.
+            resolve(a);
+            break;
+        }
+      }
+    }
+    xhr.open("PUT", turnUrl, true);
+    xhr.send();
+  })
+}
+
+function connect() {
+
+    if (token && !url || token && !jwt) {
+      updateMillicastAuth()
+        .then(d => {
+          connect();
+        })
+        .catch(e => {
+          alert("Error: The API encountered an problem!", e);
+        });
+      return;
+    }
+
+    //create Peer connection object, add TURN servers for fallback.
+    let pc = new RTCPeerConnection({iceServers: iceServers, bundlePolicy: "max-bundle"});
+    //add media to connection
+    stream.getTracks()
+      .forEach(track => {
+        pc.addTrack(track, stream)
+      });
+
+    //connect with Websockets for handshake to media server.
+    let ws    = new WebSocket(url + '?token=' + jwt);//token
+    ws.onopen = function () {
+      //Connect to our media server via WebRTC
+      //create a WebRTC offer to send to the media server
+      let offer = pc.createOffer({
+                                   offerToReceiveAudio: true,
+                                   offerToReceiveVideo: true
+                                 }).then(desc => {
+        //set local description and send offer to media server via ws.
+        pc.setLocalDescription(desc)
+          .then(() => {
+            //set required information for media server.
+            let data    = {
+              name:  streamName,
+              sdp:   desc.sdp,
+              codec: 'h264'
+            }
+            //create payload
+            let payload = {
+              type:    "cmd",
+              transId: Math.random() * 10000,
+              name:    'publish',
+              data:    data
+            }
+            ws.send(JSON.stringify(payload));
+          })
+          .catch(e => {
+            alert('setLocalDescription failed: ', e);
+          })
+      }).catch(e => {
+        alert('createOffer Failed: ', e);
+      });
+    }
+
+    ws.addEventListener('message', evt => {
+      let msg = JSON.parse(evt.data);
+      switch (msg.type) {
+        //Handle counter response coming from the Media Server.
+        case "response":
+          let data   = msg.data;
+          let answer = new RTCSessionDescription({
+                                                   type: 'answer',
+                                                   sdp:  data.sdp + "a=x-google-flag:conference\r\n"
+                                                 });
+
+          pc.setRemoteDescription(answer)
+            .then(d => {
+              console.log('setRemoteDescription Success! ');
+              $('#publishBtn').removeAttr('disabled');
+              $('#publishBtn').text("<?php echo($wo['lang']['please_wait']); ?>");
+              $('#publishBtn').addClass('hidden');
+              $('.end_vdo_call').removeClass('hidden');
+              $.post(Wo_Ajax_Requests_File() + "?f=live&s=create", {stream_name: streamName}, function(data, textStatus, xhr) {
+                if (data.status == 200) {
+                  $('#live_post_id').val(data.post_id);
+                  setTimeout(function () {
+                      image = capture_video_frame("basic-stream", 'png');
+                      var thumb   = new File([base64_2_blob(image.dataUri)], "thumb.png", {type:"image/png"});
+                      var formData = new FormData();
+                      formData.append('thumb',thumb);
+                      formData.append('post_id',data.post_id);
+
+                      $.ajax({
+                        processData: false,
+                        url: Wo_Ajax_Requests_File() + "?f=live&s=create_thumb",
+                        type: 'POST',
+                        dataType: 'json',
+                        data: formData,
+                        contentType: false,
+                      })
+                      .done(function() {
+                        console.log("success");
+                      })
+                      .fail(function() {
+                        console.log("error");
+                      })
+                      .always(function() {
+                        console.log("complete");
+                      });
+                    },500);
+                }
+              });
+            })
+            .catch(e => {
+              alert('setRemoteDescription failed: ', e);
+            });
+          break;
+      }
+    })
+}
+
+function startBroadcast() {
+  $('#publishBtn').attr('disabled', 'true');
+  $('#publishBtn').text("<?php echo($wo['lang']['please_wait']); ?>");
+  // get a list of Xirsys ice servers.
+  getICEServers()
+    .then(list => {
+      iceServers = list;
+      //ready to connect.
+      connect();
+    })
+    .catch(e => {
+      alert('getICEServers Error: ', e);
+      connect();//proceed with no (TURN)
+    });
+}
+
+function ready() {
+  //sets required data to broadcast and view.
+  updateMillicastAuth();
+
+  //Setup publish button
+  let pubBtn = document.getElementById('publishBtn');
+  if (pubBtn) {
+    pubBtn.onclick = evt => {
+      startBroadcast();
+    };
+  }
+
+  //Get users camera and mic
+  getMedia()
+    .then(str => {
+      stream     = str;
+      //set cam feed to video window so user can see self.
+      let vidWin = document.getElementsByTagName('video')[0];
+      if (vidWin) {
+
+        $('#basic-stream').removeClass('hidden');
+        //$('.end_vdo_call').removeClass('hidden');
+        vidWin.srcObject = stream;
+        //startBroadcast();
+      }
+    })
+    .catch(e => {
+      $('#remote-media').html('<div class="empty_state"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path d="M3.27,2L2,3.27L4.73,6H4A1,1 0 0,0 3,7V17A1,1 0 0,0 4,18H16C16.2,18 16.39,17.92 16.54,17.82L19.73,21L21,19.73M21,6.5L17,10.5V7A1,1 0 0,0 16,6H9.82L21,17.18V6.5Z" fill="currentColor"></path></svg> getUserMedia Error: '+e+'</div>');
+    });
+}
+</script>

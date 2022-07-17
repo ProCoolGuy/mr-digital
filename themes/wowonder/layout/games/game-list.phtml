@@ -1,0 +1,11 @@
+<div class="col-xs-12 col-md-6">
+	<div class="wow_content wow_pop_gam_list">
+		<a href="<?php echo $wo['game']['url'];?>" data-ajax="?link1=game&id=<?php echo $wo['game']['id'];?>">
+			<div class="avatar <?php echo Wo_RightToLeft('pull-left');?>">
+				<img src="<?php echo $wo['game']['game_avatar'];?>" alt="<?php echo $wo['game']['game_name']; ?> Profile Picture" />
+			</div>
+			<div class="game-name"><?php echo $wo['game']['game_name']; ?></div>
+			<p><?php echo $wo['lang']['last_play'];?> <?php echo Wo_Time_Elapsed_String($wo['game']['last_play']);?></p>
+		</a>
+	</div>
+</div>

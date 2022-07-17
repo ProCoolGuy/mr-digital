@@ -1,0 +1,10 @@
+<div class="movies-film-wrapper" data-film-id="<?php echo $wo['film']['id']; ?>">
+	<figure>
+		<a href="<?php echo $wo['film']['url']; ?>">
+			<img src="<?php echo $wo['film']['cover']; ?>" alt="" class="responsive-img">
+			<span class="movie_rating_sml"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z" /></svg> <?php echo round($wo['film']['rating'],1); ?></span>
+		</a>
+		<h3 title="<?php echo $wo['film']['name']; ?>"><a href="<?php echo $wo['film']['url']; ?>"><?php echo $wo['film']['name']; ?></a></h3>
+		<p><?php echo $wo['film']['genre']; ?></p>
+	</figure>
+</div>

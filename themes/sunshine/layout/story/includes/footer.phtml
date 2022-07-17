@@ -1,0 +1,253 @@
+<?php if ($wo['loggedin'] == true) { ?>
+<div class="stats post-actions <?php echo Wo_RightToLeft('pull-left');?>" id="<?php if ($wo['config']['second_post_button'] == 'reaction') { ?>active_react<?php } ?>">
+   <?php if ($wo['config']['second_post_button'] == 'reaction') { ?>
+   <div class="like-stat stat-item post-like-status">
+      <span class="like-emo post-reactions-icons-<?php echo $wo['story']['id']; ?>">
+      <?php echo Wo_GetPostReactions($wo['story']['id']);?>
+      </span>
+   </div>
+   <?php } else { ?>
+   <div class="btn btn-default stat-item post-like-status" title="<?php echo $wo['lang']['likes'];?>" <?php echo (PatreonPostSubscribed($wo['story']['user_id'],$wo['story']['id']) ? 'onclick="Wo_OpenPostLikedUsers("'.$wo['story']['id'].'","post");"' : ''); ?>>
+      <?php echo GetModeBtn('like_icon'); ?>
+      <span id="likes"><?php echo $wo['story']['post_likes'];?></span>
+   </div>
+   <?php if ($wo['config']['second_post_button'] != 'disabled') { ?>
+   <div class="btn btn-default stat-item post-wonders-status" title="<?php echo ($wo['config']['second_post_button'] == 'wonder') ? $wo['lang']['wonders']: $wo['lang']['dislikes'];?>" <?php echo(PatreonPostSubscribed($wo['story']['user_id'],$wo['story']['id']) ? 'onclick="Wo_OpenPostWonderedUsers('.$wo['story']['id'].',"post");"' : '') ?>>
+      <?php echo $wo['second_post_button_icon'];?>
+      <span id="wonders"><?php echo $wo['story']['post_wonders'];?></span>
+   </div>
+   <?php } ?>
+   <div class="btn btn-default stat-item post-share-status" title="<?php echo $wo['lang']['share'];?>" <?php echo(PatreonPostSubscribed($wo['story']['user_id'],$wo['story']['id']) ? 'onclick="Wo_OpenPostSharedUsers('.$wo['story']['id'].');"' : '') ?> >
+      <svg xmlns="http://www.w3.org/2000/svg" class="feather" width="24" height="24" viewBox="0 0 24 24">
+         <path fill="currentColor" d="M18,16.08C17.24,16.08 16.56,16.38 16.04,16.85L8.91,12.7C8.96,12.47 9,12.24 9,12C9,11.76 8.96,11.53 8.91,11.3L15.96,7.19C16.5,7.69 17.21,8 18,8A3,3 0 0,0 21,5A3,3 0 0,0 18,2A3,3 0 0,0 15,5C15,5.24 15.04,5.47 15.09,5.7L8.04,9.81C7.5,9.31 6.79,9 6,9A3,3 0 0,0 3,12A3,3 0 0,0 6,15C6.79,15 7.5,14.69 8.04,14.19L15.16,18.34C15.11,18.55 15.08,18.77 15.08,19C15.08,20.61 16.39,21.91 18,21.91C19.61,21.91 20.92,20.61 20.92,19A2.92,2.92 0 0,0 18,16.08Z"></path>
+      </svg>
+      <span id="post_share"><?php echo $wo['story']['post_share'];?></span>
+   </div>
+   <?php } ?>
+   <?php if (!empty($wo['story']['postFile']) && strpos($wo['story']['postFile'], '_video') !== false): ?>
+   <div class="btn btn-default stat-item post-wonders-status" <?php if ($wo['config']['second_post_button'] == 'reaction') { ?>style="line-height: 2;"<?php } ?>>
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye">
+         <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+         <circle cx="12" cy="12" r="3"></circle>
+      </svg>
+      <span data-post-video-views="<?php echo $wo['story']['id']; ?>"><?php echo $wo['story']['videoViews'];?></span>
+   </div>
+   <?php endif; ?>
+</div>
+<?php if ($wo['story']['comments_status'] == 1) { ?>
+<div class="stats post-actions  <?php echo Wo_RightToLeft('pull-right');?>">
+   <div class="btn btn-default stat-item" title="<?php echo $wo['lang']['comments'];?>" onclick="Wo_ShowComments(<?php echo $wo['story']['id'] ?>);">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-message-circle">
+         <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
+      </svg>
+      <span id="comments"><?php echo $wo['story']['post_comments'];?></span>
+   </div>
+</div>
+<?php } ?>
+<div class="clear"></div>
+<?php } ?>
+<div class="stats <?php echo Wo_RightToLeft('pull-left');?>" id="wo_post_stat_button" <?php if ($wo['loggedin'] != true) { ?>onclick="location.href= '<?php echo $wo['config']['site_url'];?>'"<?php } ?>>
+   <?php echo Wo_LoadPage('buttons/like-wonder');?>
+
+   <div class="btn btn-default stat-item" onclick="Wo_ShowComments(<?php echo $wo['story']['id']; ?>);" title="<?php echo $wo['lang']['comments'];?>">
+      <?php echo GetModeBtn('comments_btn');?>
+   </div>
+   <?php if($wo['config']['social_share_twitter'] == 0 && $wo['config']['social_share_facebook'] == 0 && $wo['config']['social_share_whatsup'] == 0 && $wo['config']['social_share_pinterest'] == 0 && $wo['config']['social_share_linkedin'] == 0 && $wo['config']['social_share_telegram'] == 0) { ?>
+   <?php if (empty($wo['story']['parent_id']) && $wo['story']['post_is_promoted'] != 1) { ?>
+   <div class="btn btn-default stat-item" title="<?php echo $wo['lang']['share'];?>" <?php echo(PatreonPostSubscribed($wo['story']['user_id'],$wo['story']['id']) ? 'onclick="Wo_SharePostOn('.$wo['story']['id'].','.$wo['story']['user_id'].',\'timeline\')"' : '') ?>>
+      <?php echo GetModeBtn('share_btn');?>
+      <!--<span id="shares">
+         <?php echo $wo['story']['post_shares'];?>
+         </span>-->
+   </div>
+   <?php } ?>
+   <?php }else{ ?>
+   <?php if (empty($wo['story']['parent_id']) && $wo['story']['post_is_promoted'] != 1) { ?>
+   <div class="btn btn-default stat-item" title="<?php echo $wo['lang']['share'];?>" <?php echo(PatreonPostSubscribed($wo['story']['user_id'],$wo['story']['id']) ? 'onclick="Wo_SharePostOn('.$wo['story']['id'].','.$wo['story']['user_id'].',\'timeline\')"' : '') ?>>
+      <?php echo GetModeBtn('share_btn');?>
+      <!--<span id="shares">
+         <?php echo $wo['story']['post_shares'];?>
+         </span>-->
+   </div>
+   <?php } } ?>
+</div>
+
+<div class="clear"></div>
+</div>
+<div class="post-footer post-likes"></div>
+<div class="clear"></div>
+<div class="post-footer post-wonders"></div>
+<div class="clear"></div>
+<div class="post-footer post-shared"></div>
+<div class="clear"></div>
+<div class="post-footer post-reacted"></div>
+<div class="clear"></div>
+<?php if (PatreonPostSubscribed($wo['story']['user_id'],$wo['story']['id'])) { ?>
+<div class="post-footer post-comments <?php echo ($wo['page'] != 'story') ? '' : ''; ?>" id="post-comments-<?php echo $wo['story']['id']; ?>">
+   <div id="hidden_inputbox_comment"></div>
+   <?php if($wo['story']['post_comments'] > 3 && $wo['story']['comments_status'] == 1) { ?>
+   <div class="row view-more-wrapper load-more-comments page-margin">
+      <?php if ($wo['story']['limited_comments'] === true) { ?>
+      <span onclick="Wo_loadPostMoreComments(<?php echo $wo['story']['id']; ?>,this);"><?php echo $wo['lang']['view_more_comments'];?></span>
+
+      <?php } ?>
+      <?php if ($wo['config']['website_mode'] != 'askfm') { ?>
+      <div class="order-by <?php echo Wo_RightToLeft('pull-right');?>">
+         <div class="dropdown">
+            <?php echo $wo['lang']['sort_by'] ?>: <a class="dropdown-toggle" type="button" data-toggle="dropdown">
+            <span class="order-text order-text-<?php echo $wo['story']['id']; ?>"><?php echo $wo['lang']['latest']; ?></span>
+            <span class="caret"></span></a>
+            <ul class="dropdown-menu dropdown-menu-right">
+               <li><a href="javascript:void(0)" onclick="Wo_SortComments('top',<?php echo $wo['story']['id']; ?>);"><?php echo $wo['lang']['top'] ?></a></li>
+               <li><a href="javascript:void(0)" onclick="Wo_SortComments('latest',<?php echo $wo['story']['id']; ?>);"><?php echo $wo['lang']['latest'] ?></a></li>
+            </ul>
+         </div>
+      </div>
+      <?php } ?>
+	  <div class="ball-pulse <?php echo Wo_RightToLeft('pull-right');?> ball-pulse-<?php echo $wo['story']['id']; ?>" style="line-height: 20px;">
+         <div></div>
+         <div></div>
+         <div></div>
+      </div>
+   </div>
+
+   <?php } ?>
+   <?php if ($wo['config']['live_video'] != 1 || ($wo['config']['live_video'] == 1 && !$wo['story']['is_still_live']) ) { ?>
+   <div class="comments-list">
+      <span class="comment-container"></span>
+      <?php
+         foreach($wo['story']['get_post_comments'] as $wo['comment']) {
+           echo Wo_LoadPage('comment/content');
+         }
+         ?>
+   </div>
+   <?php if (count($wo['story']['get_post_comments']) <  $wo['story']['post_comments'] && $wo['story']['comments_status'] == 1) { ?>
+      <div>
+         <span onclick="Wo_loadPostMoreComments(<?php echo $wo['story']['id']; ?>,this);" class="pointer"><?php echo $wo['lang']['view_more_comments'];?></span>
+      </div>
+
+      <br>
+      <div class="clear"></div>
+   <?php } ?>
+   <?php } ?>
+   <?php if ($wo['config']['website_mode'] != 'askfm' || ($wo['config']['website_mode'] == 'askfm' && ((!empty($wo['story']['recipient_id']) && $wo['story']['recipient_id'] == $wo['user']['user_id']) || empty($wo['story']['recipient_id'])))) { ?>
+   <?php if ($wo['story']['comments_status'] == 1) { ?>
+
+   <div class="post-commet-textarea" <?php if ($wo['loggedin'] != true) { ?>onclick="location.href= '<?php echo $wo['config']['site_url'];?>'"<?php } ?>>
+      <div class="loading_cont">
+         <div class="loading hidden"></div>
+      </div>
+      <div id="wo_comment_combo" class="remove_combo_on_click">
+         <div style="display: flex;">
+            <?php if ($wo['loggedin'] == true) { ?>
+            <img class="avatar" src="<?php echo $wo['user']['avatar'];?>"/>
+         <?php } ?>
+            <textarea class="form-control comment-textarea textarea" placeholder="<?php echo TextForMode('write_comment');?>" type="text" onkeyup="Wo_LiveComment(this.value,event,<?php echo $wo['story']['id']; ?>);Wo_RegisterComment(this.value,<?php echo $wo['story']['id']; ?>,<?php echo $wo['story']['publisher']['user_id']; ?>, event, <?php echo (!empty($wo['story']['publisher']['page_id'])) ? $wo['story']['publisher']['page_id'] : '0'; ?>)" onkeydown="textAreaAdjust(this, 31,'comm'); " dir="auto" oninput="count_char(this,<?php echo $wo['story']['id']; ?>)"></textarea>
+            <div class="<?php echo Wo_RightToLeft('pull-left');?> charsLeft-post"><span id="charsLeft_<?php echo $wo['story']['id']; ?>" data_num="<?php if ($wo['config']['maxCharacters'] != 10000) { echo $wo['config']['maxCharacters']; } ?>">
+                  <?php if ($wo['config']['maxCharacters'] != 10000) { echo $wo['config']['maxCharacters']; } ?>
+               </span></div>
+            <nav class="sun_comm_addmore sun_comm_dd_<?php echo $wo['story']['id']; ?> dropdown">
+               <div role="button" aria-expanded="false" class="dropdown-toggle">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                     <path fill="currentColor" d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z" />
+                  </svg>
+               </div>
+               <ul class="dropdown-menu dropdown-menu-right sun_comm_dd_menu_<?php echo $wo['story']['id']; ?>">
+                  <?php if (!$wo['story']['is_still_live']) { ?>
+                  <?php if ($wo['config']['audio_upload'] == 1) { ?>
+                  <li class="rec">
+                     <span data-record="0" class="btn record-comment-audio" id="<?php echo $wo['story']['id']; ?>">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+                           <path fill="currentColor" d="M12,2A3,3 0 0,1 15,5V11A3,3 0 0,1 12,14A3,3 0 0,1 9,11V5A3,3 0 0,1 12,2M19,11C19,14.53 16.39,17.44 13,17.93V21H11V17.93C7.61,17.44 5,14.53 5,11H7A5,5 0 0,0 12,16A5,5 0 0,0 17,11H19Z"></path>
+                        </svg>
+                     </span>
+                     <span class="sun_comm_rec_time hidden" data-comment-rtime="<?php echo $wo['story']['id']; ?>">00:00</span>
+                  </li>
+                  <?php } ?>
+                  <?php } ?>
+
+                  <li class="emo dropdown-submenu">
+                     <span data-toggle="dropdown" role="button" aria-expanded="false" class="dropdown-toggle sun_comm_dd_dt_<?php echo $wo['story']['id']; ?>" onclick="load_ajax_emojii('<?php echo $wo["story"]["id"];?>','<?php echo $wo['config']['theme_url'];?>/emoji/');">
+                        <span class="btn btn-file">
+                           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+                              <path fill="currentColor" d="M9.153 11.603c.795 0 1.439-.879 1.439-1.962s-.644-1.962-1.439-1.962-1.439.879-1.439 1.962.644 1.962 1.439 1.962zm-3.204 1.362c-.026-.307-.131 5.218 6.063 5.551 6.066-.25 6.066-5.551 6.066-5.551-6.078 1.416-12.129 0-12.129 0zm11.363 1.108s-.669 1.959-5.051 1.959c-3.505 0-5.388-1.164-5.607-1.959 0 0 5.912 1.055 10.658 0zM11.804 1.011C5.609 1.011.978 6.033.978 12.228s4.826 10.761 11.021 10.761S23.02 18.423 23.02 12.228c.001-6.195-5.021-11.217-11.216-11.217zM12 21.354c-5.273 0-9.381-3.886-9.381-9.159s3.942-9.548 9.215-9.548 9.548 4.275 9.548 9.548c-.001 5.272-4.109 9.159-9.382 9.159zm3.108-9.751c.795 0 1.439-.879 1.439-1.962s-.644-1.962-1.439-1.962-1.439.879-1.439 1.962.644 1.962 1.439 1.962z"></path>
+                           </svg>
+                        </span>
+                     </span>
+                     <ul class="dropdown-menu dropdown-menu-right emo-comment-container-<?php echo $wo["story"]["id"];?>" id="wo_comm_emojis"></ul>
+                  </li>
+                  <?php if (!$wo['story']['is_still_live'] && $wo['config']['website_mode'] != 'askfm') { ?>
+                  <li class="img">
+                     <form action="#" method="post" class="hidden">
+                        <input accept="image/x-png, image/jpeg" type="file" name="comment_image" id="comment_image_<?php echo $wo['story']['id']; ?>" onchange="Wo_UploadCommentImage(<?php echo $wo['story']['id']; ?>);">
+                        <input type="hidden" value="" id="comment_src_image">
+                     </form>
+                     <span class="btn btn-file btn-upload-comment">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" onclick="document.getElementById('comment_image_<?php echo $wo['story']['id'];?>').click(); return false">
+                           <path fill="currentColor" d="M22,16V4A2,2 0 0,0 20,2H8A2,2 0 0,0 6,4V16A2,2 0 0,0 8,18H20A2,2 0 0,0 22,16M11,12L13.03,14.71L16,11L20,16H8M2,6V20A2,2 0 0,0 4,22H18V20H4V6"></path>
+                        </svg>
+                     </span>
+                  </li>
+               <?php } ?>
+			   <?php if ($wo['config']['stickers'] == 1){ ?>
+               <li class="gif" role="button" aria-expanded="false" onclick="ShowCommentGif(<?php echo $wo['story']['id']; ?>,'story')">
+                  <svg fill="currentColor" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M11,8H13V16H11V8M7.67,8H4.33C3.53,8 3,8.67 3,9.33V14.67C3,15.33 3.53,16 4.33,16H7.67C8.47,16 9,15.33 9,14.67V12H7V14H5V10H9V9.33C9,8.67 8.47,8 7.67,8M21,10V8H15V16H17V14H19.5V12H17V10H21Z"/>
+                     </svg>
+               </li>
+               <?php $stickers_system = Wo_GetAllStickers(50000);
+            if( count( $stickers_system ) > 0 ){ ?>
+               <li role="button" aria-expanded="false" class="stick sticker-form-<?php echo $wo['story']['id']; ?>" onclick="ShowCommentStickers(<?php echo $wo['story']['id']; ?>,'story')">
+                  <span class="btn btn-file btngif">
+                     <svg fill="currentColor" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M5.5,2C3.56,2 2,3.56 2,5.5V18.5C2,20.44 3.56,22 5.5,22H16L22,16V5.5C22,3.56 20.44,2 18.5,2H5.5M5.75,4H18.25A1.75,1.75 0 0,1 20,5.75V15H18.5C16.56,15 15,16.56 15,18.5V20H5.75A1.75,1.75 0 0,1 4,18.25V5.75A1.75,1.75 0 0,1 5.75,4M14.44,6.77C14.28,6.77 14.12,6.79 13.97,6.83C13.03,7.09 12.5,8.05 12.74,9C12.79,9.15 12.86,9.3 12.95,9.44L16.18,8.56C16.18,8.39 16.16,8.22 16.12,8.05C15.91,7.3 15.22,6.77 14.44,6.77M8.17,8.5C8,8.5 7.85,8.5 7.7,8.55C6.77,8.81 6.22,9.77 6.47,10.7C6.5,10.86 6.59,11 6.68,11.16L9.91,10.28C9.91,10.11 9.89,9.94 9.85,9.78C9.64,9 8.95,8.5 8.17,8.5M16.72,11.26L7.59,13.77C8.91,15.3 11,15.94 12.95,15.41C14.9,14.87 16.36,13.25 16.72,11.26Z"/>
+                     </svg>
+                  </span>
+               </li>
+               <?php }} ?>
+               </ul>
+            </nav>
+			&nbsp;<button type="button" onclick="Wo_LiveComment(this.value,event,<?php echo $wo['story']['id']; ?>,1);Wo_RegisterComment2(<?php echo $wo['story']['id']; ?>,<?php echo $wo['story']['publisher']['user_id']; ?>, <?php echo (!empty($wo['story']['publisher']['page_id'])) ? $wo['story']['publisher']['page_id'] : '0'; ?>)" class="btn btn-add-comm-postt" title="<?php echo $wo['lang']['post']; ?>">
+				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M2,21L23,12L2,3V10L17,12L2,14V21Z" /></svg>
+			</button>
+         </div>
+      </div>
+      <?php if ($wo['config']['stickers'] == 1): ?>
+         <div id="gif-form-<?php echo $wo['story']['id']; ?>" style="display: none;" class="gif_post_comment">
+            <div class="gif_post_comment_innr" id="publisher-box-stickers-<?php echo $wo['story']['id']; ?>">
+               <input type="text" class="form-control" style="border: none;" placeholder="<?php echo $wo['lang']['search'] ?> GIFs" onkeyup="SearchForGif(this.value,<?php echo $wo['story']['id']; ?>,'story')">
+               <div id="publisher-box-stickers-cont-<?php echo $wo['story']['id']; ?>" class="gif_post_comment_gif"></div>
+            </div>
+         </div>
+         <div id="sticker-form-<?php echo $wo['story']['id']; ?>" style="display: none;">
+            <div class="sticker_post_comment_innr" id="publisher-box-stickers-<?php echo $wo['story']['id']; ?>">
+               <div id="publisher-box-sticker-cont-<?php echo $wo['story']['id']; ?>" class="chat-box-stickers-cont"></div>
+            </div>
+         </div>
+      <?php endif ?>
+   </div>
+   <div id="comment-image" class="hidden comment-image-con"></div>
+   <?php } else { ?>
+   <small style="color: #777; font-size: 12px;"><?php echo str_replace('%d', $wo['story']['publisher']['name'],$wo['lang']['comments_disabled']);?></small>
+   <?php } ?>
+   <?php } ?>
+</div>
+<?php } ?>
+<script type="text/javascript">
+   function Wo_PostCommentGif_<?php echo $wo['story']['id']; ?>(self,id) {
+      Wo_RegisterComment2(<?php echo $wo['story']['id']; ?>,<?php echo $wo['story']['publisher']['user_id']; ?>, <?php echo (!empty($wo['story']['publisher']['page_id'])) ? $wo['story']['publisher']['page_id'] : '0'; ?>,'',$(self).attr('src'));
+   }
+   function Wo_PostCommentSticker_<?php echo $wo['story']['id']; ?>(self,id) {
+      Wo_RegisterComment2(<?php echo $wo['story']['id']; ?>,<?php echo $wo['story']['publisher']['user_id']; ?>, <?php echo (!empty($wo['story']['publisher']['page_id'])) ? $wo['story']['publisher']['page_id'] : '0'; ?>,'',$(self).attr('src'));
+   }
+
+</script>
+<style type="text/css">
+   .chat-box-stickers-cont img{
+          width: 50%;
+    height: 80px;
+    display: inline;
+    cursor: pointer;
+    float: left;
+   }
+</style>

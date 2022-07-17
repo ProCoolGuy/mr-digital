@@ -1,0 +1,1317 @@
+<?php
+if (empty($_GET['user_id'])) {
+    header("Location: " . $wo['config']['site_url']);
+    exit();
+}
+$user_data = Wo_UserData($_GET['user_id']);
+if (empty($user_data)) {
+    header("Location: " . $wo['config']['site_url']);
+    exit();
+}
+
+$per_array = array();
+if (!empty($wo['all_pages'])) {
+    foreach ($wo['all_pages']  as $key => $value) {
+        if (in_array($value,$wo['mod_pages'])) {
+            $per_array[$value] = 1;
+        }
+        else{
+            $per_array[$value] = 0;
+        } 
+    }
+}
+if (empty($user_data['permission'])) {
+    $permission = json_encode($per_array);
+    $db->where('user_id',$user_data['user_id'])->update(T_USERS,array('permission' => $permission));
+    $user_data = Wo_UserData($user_data['user_id']);
+    $user_data['permission'] = json_decode($user_data['permission'],true);
+}
+else{
+    $user_data['permission'] = json_decode($user_data['permission'],true);
+    foreach ($per_array as $key => $value) {
+        if (!in_array($key, array_keys($user_data['permission']))) {
+            $user_data['permission'][$key] = 0;
+        }
+    }
+    $permission = json_encode($user_data['permission']);
+    $db->where('user_id',$user_data['user_id'])->update(T_USERS,array('permission' => $permission));
+    $user_data = Wo_UserData($user_data['user_id']);
+    $user_data['permission'] = json_decode($user_data['permission'],true);
+}
+
+?>
+<div class="container-fluid">
+    <div>
+        <h3>Manage Permissions</h3>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="#">Home</a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a href="#">Users</a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">Manage Permissions</li>
+            </ol>
+        </nav>
+    </div>
+    <div class="row">
+        
+        <div class="clearfix"></div>
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="card-title">User Permission</h6>
+                    <div class="float-left">
+                        <label for="dashboard" class="main-label"></label>
+                    </div>
+					<div class="text-center">
+						<button type="button" name="permission_type" value="normal" id="btn_permission_normal" class="btn select_user_perm <?php echo($user_data['admin'] == 0 ? 'btn-info' : 'active_permissions') ?>" <?php if($user_data['admin'] != 0){ ?>onclick="Wo_Permission(<?php echo $user_data['user_id']?>,'hide','normal');" <?php } ?>>
+							<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M12,4A4,4 0 0,1 16,8A4,4 0 0,1 12,12A4,4 0 0,1 8,8A4,4 0 0,1 12,4M12,14C16.42,14 20,15.79 20,18V20H4V18C4,15.79 7.58,14 12,14Z" /></svg> Normal
+						</button>
+						<button type="button" name="permission_type" value="moderator" id="btn_permission_moderator" class="btn select_user_perm <?php echo($user_data['admin'] == 2 ? 'btn-info' : 'active_permissions') ?>" <?php if($user_data['admin'] != 2){ ?>onclick="Wo_Permission(<?php echo $user_data['user_id']?>,'hide','moderator');" <?php } ?>>
+							<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M12 3C14.21 3 16 4.79 16 7S14.21 11 12 11 8 9.21 8 7 9.79 3 12 3M16 13.54C16 14.6 15.72 17.07 13.81 19.83L13 15L13.94 13.12C13.32 13.05 12.67 13 12 13S10.68 13.05 10.06 13.12L11 15L10.19 19.83C8.28 17.07 8 14.6 8 13.54C5.61 14.24 4 15.5 4 17V21H20V17C20 15.5 18.4 14.24 16 13.54Z" /></svg> Moderator
+						</button>
+						<button type="button" name="permission_type" value="admin" id="btn_permission_admin" class="btn select_user_perm <?php echo($user_data['admin'] == 1 ? 'btn-info' : 'active_permissions') ?>" <?php if($user_data['admin'] != 1){ ?> onclick="Wo_Permission(<?php echo $user_data['user_id']?>,'hide','admin');" <?php } ?>>
+							<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M12,1L3,5V11C3,16.55 6.84,21.74 12,23C17.16,21.74 21,16.55 21,11V5L12,1M12,5A3,3 0 0,1 15,8A3,3 0 0,1 12,11A3,3 0 0,1 9,8A3,3 0 0,1 12,5M17.13,17C15.92,18.85 14.11,20.24 12,20.92C9.89,20.24 8.08,18.85 6.87,17C6.53,16.5 6.24,16 6,15.47C6,13.82 8.71,12.47 12,12.47C15.29,12.47 18,13.79 18,15.47C17.76,16 17.47,16.5 17.13,17Z" /></svg> Admin
+						</button>
+					</div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+            <div>
+        </div>
+        </div>
+        <br>
+        <div class="clearfix"></div>
+        <?php if ($user_data['admin'] == 2) { ?>
+        <div class="col-lg-3 col-md-3">
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="card-title">Dashboard</h6>
+                    <div class="float-left">
+                        <label for="dashboard" class="main-label">Dashboard</label>
+                    </div>
+                    <div class="form-group float-right switcher">
+                        <input type="hidden" name="dashboard" value="0" />
+                        <input type="checkbox" name="dashboard" id="chck-dashboard" value="1" <?php echo ($user_data['permission']['dashboard'] == 1) ? 'checked': '';?>>
+                        <label for="chck-dashboard" class="check-trail"><span class="check-handler"></span></label>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="card-title">Settings</h6>
+                    <div class="float-left">
+                        <label for="general-settings" class="main-label">General Configuration</label>
+                    </div>
+                    <div class="form-group float-right switcher">
+                        <input type="hidden" name="general-settings" value="0" />
+                        <input type="checkbox" name="general-settings" id="chck-general-settings" value="1" <?php echo ($user_data['permission']['general-settings'] == 1) ? 'checked': '';?>>
+                        <label for="chck-general-settings" class="check-trail"><span class="check-handler"></span></label>
+                    </div>
+                    <div class="clearfix"></div>
+                    <hr>
+                    <div class="float-left">
+                        <label for="site-settings" class="main-label">Website Information</label>
+                    </div>
+                    <div class="form-group float-right switcher">
+                        <input type="hidden" name="site-settings" value="0" />
+                        <input type="checkbox" name="site-settings" id="chck-site-settings" value="1" <?php echo ($user_data['permission']['site-settings'] == 1) ? 'checked': '';?>>
+                        <label for="chck-site-settings" class="check-trail"><span class="check-handler"></span></label>
+                    </div>
+                    <div class="clearfix"></div>
+                    <hr>
+                    <div class="float-left">
+                        <label for="amazon-settings" class="main-label">File Upload Configuration</label>
+                    </div>
+                    <div class="form-group float-right switcher">
+                        <input type="hidden" name="amazon-settings" value="0" />
+                        <input type="checkbox" name="amazon-settings" id="chck-amazon-settings" value="1" <?php echo ($user_data['permission']['amazon-settings'] == 1) ? 'checked': '';?>>
+                        <label for="chck-amazon-settings" class="check-trail"><span class="check-handler"></span></label>
+                    </div>
+                    <div class="clearfix"></div>
+                    <hr>
+                    <div class="float-left">
+                        <label for="email-settings" class="main-label">E-mail & SMS Setup</label>
+                    </div>
+                    <div class="form-group float-right switcher">
+                        <input type="hidden" name="email-settings" value="0" />
+                        <input type="checkbox" name="email-settings" id="chck-email-settings" value="1" <?php echo ($user_data['permission']['email-settings'] == 1) ? 'checked': '';?>>
+                        <label for="chck-email-settings" class="check-trail"><span class="check-handler"></span></label>
+                    </div>
+                    <div class="clearfix"></div>
+                    <hr>
+                    <div class="float-left">
+                        <label for="video-settings" class="main-label">Chat & Video/Audio</label>
+                    </div>
+                    <div class="form-group float-right switcher">
+                        <input type="hidden" name="video-settings" value="0" />
+                        <input type="checkbox" name="video-settings" id="chck-video-settings" value="1" <?php echo ($user_data['permission']['video-settings'] == 1) ? 'checked': '';?>>
+                        <label for="chck-video-settings" class="check-trail"><span class="check-handler"></span></label>
+                    </div>
+                    <div class="clearfix"></div>
+                    <hr>
+                    <div class="float-left">
+                        <label for="social-login" class="main-label">Social Login Settings</label>
+                    </div>
+                    <div class="form-group float-right switcher">
+                        <input type="hidden" name="social-login" value="0" />
+                        <input type="checkbox" name="social-login" id="chck-social-login" value="1" <?php echo ($user_data['permission']['social-login'] == 1) ? 'checked': '';?>>
+                        <label for="chck-social-login" class="check-trail"><span class="check-handler"></span></label>
+                    </div>
+                    <div class="clearfix"></div>
+                    <hr>
+                    <div class="float-left">
+                        <label for="node" class="main-label">NodeJS Settings</label>
+                    </div>
+                    <div class="form-group float-right switcher">
+                        <input type="hidden" name="node" value="0" />
+                        <input type="checkbox" name="node" id="chck-node" value="1" <?php echo ($user_data['permission']['node'] == 1) ? 'checked': '';?>>
+                        <label for="chck-node" class="check-trail"><span class="check-handler"></span></label>
+                    </div>
+                    <div class="clearfix"></div>
+                    <hr>
+                    <div class="float-left">
+                        <label for="website_mode" class="main-label">Website mode</label>
+                    </div>
+                    <div class="form-group float-right switcher">
+                        <input type="hidden" name="website_mode" value="0" />
+                        <input type="checkbox" name="website_mode" id="chck-website_mode" value="1" <?php echo ($user_data['permission']['website_mode'] == 1) ? 'checked': '';?>>
+                        <label for="chck-website_mode" class="check-trail"><span class="check-handler"></span></label>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="card-title">Pro System</h6>
+                    <div class="float-left">
+                        <label for="pro-settings" class="main-label">Pro System Settings</label>
+                    </div>
+                    <div class="form-group float-right switcher">
+                        <input type="hidden" name="pro-settings" value="0" />
+                        <input type="checkbox" name="pro-settings" id="chck-pro-settings" value="1" <?php echo ($user_data['permission']['pro-settings'] == 1) ? 'checked': '';?>>
+                        <label for="chck-pro-settings" class="check-trail"><span class="check-handler"></span></label>
+                    </div>
+                    <div class="clearfix"></div>
+                    <hr>
+                    <div class="float-left">
+                        <label for="pro-features" class="main-label">Pro Features</label>
+                    </div>
+                    <div class="form-group float-right switcher">
+                        <input type="hidden" name="pro-features" value="0" />
+                        <input type="checkbox" name="pro-features" id="chck-pro-features" value="1" <?php echo ($user_data['permission']['pro-features'] == 1) ? 'checked': '';?>>
+                        <label for="chck-pro-features" class="check-trail"><span class="check-handler"></span></label>
+                    </div>
+                    <div class="clearfix"></div>
+                    <hr>
+                    <div class="float-left">
+                        <label for="pro-payments" class="main-label">Manage Payments</label>
+                    </div>
+                    <div class="form-group float-right switcher">
+                        <input type="hidden" name="pro-payments" value="0" />
+                        <input type="checkbox" name="pro-payments" id="chck-pro-payments" value="1" <?php echo ($user_data['permission']['pro-payments'] == 1) ? 'checked': '';?>>
+                        <label for="chck-pro-payments" class="check-trail"><span class="check-handler"></span></label>
+                    </div>
+                    <div class="clearfix"></div>
+                    <hr>
+                    <div class="float-left">
+                        <label for="pro-memebers" class="main-label">Manage Members</label>
+                    </div>
+                    <div class="form-group float-right switcher">
+                        <input type="hidden" name="pro-memebers" value="0" />
+                        <input type="checkbox" name="pro-memebers" id="chck-pro-memebers" value="1" <?php echo ($user_data['permission']['pro-memebers'] == 1) ? 'checked': '';?>>
+                        <label for="chck-pro-memebers" class="check-trail"><span class="check-handler"></span></label>
+                    </div>
+                    <div class="clearfix"></div>
+                    <hr>
+                    <div class="float-left">
+                        <label for="pro-refund" class="main-label">Manage Refund Requests</label>
+                    </div>
+                    <div class="form-group float-right switcher">
+                        <input type="hidden" name="pro-refund" value="0" />
+                        <input type="checkbox" name="pro-refund" id="chck-pro-refund" value="1" <?php echo ($user_data['permission']['pro-refund'] == 1) ? 'checked': '';?>>
+                        <label for="chck-pro-refund" class="check-trail"><span class="check-handler"></span></label>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="card-title">Design</h6>
+                    <div class="float-left">
+                        <label for="manage-themes" class="main-label">Themes</label>
+                    </div>
+                    <div class="form-group float-right switcher">
+                        <input type="hidden" name="manage-themes" value="0" />
+                        <input type="checkbox" name="manage-themes" id="chck-manage-themes" value="1" <?php echo ($user_data['permission']['manage-themes'] == 1) ? 'checked': '';?>>
+                        <label for="chck-manage-themes" class="check-trail"><span class="check-handler"></span></label>
+                    </div>
+                    <div class="clearfix"></div>
+                    <hr>
+                    <div class="float-left">
+                        <label for="manage-site-design" class="main-label">Change Site Design</label>
+                    </div>
+                    <div class="form-group float-right switcher">
+                        <input type="hidden" name="manage-site-design" value="0" />
+                        <input type="checkbox" name="manage-site-design" id="chck-manage-site-design" value="1" <?php echo ($user_data['permission']['manage-site-design'] == 1) ? 'checked': '';?>>
+                        <label for="chck-manage-site-design" class="check-trail"><span class="check-handler"></span></label>
+                    </div>
+                    <div class="clearfix"></div>
+                    <hr>
+                    <div class="float-left">
+                        <label for="custom-code" class="main-label">Custom JS / CSS</label>
+                    </div>
+                    <div class="form-group float-right switcher">
+                        <input type="hidden" name="custom-code" value="0" />
+                        <input type="checkbox" name="custom-code" id="chck-custom-code" value="1" <?php echo ($user_data['permission']['custom-code'] == 1) ? 'checked': '';?>>
+                        <label for="chck-custom-code" class="check-trail"><span class="check-handler"></span></label>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="card-title">Tools</h6>
+                    <div class="float-left">
+                        <label for="manage_emails" class="main-label">Manage Emails</label>
+                    </div>
+                    <div class="form-group float-right switcher">
+                        <input type="hidden" name="manage_emails" value="0" />
+                        <input type="checkbox" name="manage_emails" id="chck-manage_emails" value="1" <?php echo ($user_data['permission']['manage_emails'] == 1) ? 'checked': '';?>>
+                        <label for="chck-manage_emails" class="check-trail"><span class="check-handler"></span></label>
+                    </div>
+                    <div class="clearfix"></div>
+                    <hr>
+                    <div class="float-left">
+                        <label for="manage-invitation" class="main-label">Users Invitation</label>
+                    </div>
+                    <div class="form-group float-right switcher">
+                        <input type="hidden" name="manage-invitation" value="0" />
+                        <input type="checkbox" name="manage-invitation" id="chck-manage-invitation" value="1" <?php echo ($user_data['permission']['manage-invitation'] == 1) ? 'checked': '';?>>
+                        <label for="chck-manage-invitation" class="check-trail"><span class="check-handler"></span></label>
+                    </div>
+                    <div class="clearfix"></div>
+                    <hr>
+                    <div class="float-left">
+                        <label for="send_email" class="main-label">Send E-mail</label>
+                    </div>
+                    <div class="form-group float-right switcher">
+                        <input type="hidden" name="send_email" value="0" />
+                        <input type="checkbox" name="send_email" id="chck-send_email" value="1" <?php echo ($user_data['permission']['send_email'] == 1) ? 'checked': '';?>>
+                        <label for="chck-send_email" class="check-trail"><span class="check-handler"></span></label>
+                    </div>
+                    <div class="clearfix"></div>
+                    <hr>
+                    <div class="float-left">
+                        <label for="manage-announcements" class="main-label">Announcements</label>
+                    </div>
+                    <div class="form-group float-right switcher">
+                        <input type="hidden" name="manage-announcements" value="0" />
+                        <input type="checkbox" name="manage-announcements" id="chck-manage-announcements" value="1" <?php echo ($user_data['permission']['manage-announcements'] == 1) ? 'checked': '';?>>
+                        <label for="chck-manage-announcements" class="check-trail"><span class="check-handler"></span></label>
+                    </div>
+                    <div class="clearfix"></div>
+                    <hr>
+                    <div class="float-left">
+                        <label for="auto-delete" class="main-label">Auto Delete Data</label>
+                    </div>
+                    <div class="form-group float-right switcher">
+                        <input type="hidden" name="auto-delete" value="0" />
+                        <input type="checkbox" name="auto-delete" id="chck-auto-delete" value="1" <?php echo ($user_data['permission']['auto-delete'] == 1) ? 'checked': '';?>>
+                        <label for="chck-auto-delete" class="check-trail"><span class="check-handler"></span></label>
+                    </div>
+                    <div class="clearfix"></div>
+                    <hr>
+                    <div class="float-left">
+                        <label for="auto-friend" class="main-label">Auto Friend</label>
+                    </div>
+                    <div class="form-group float-right switcher">
+                        <input type="hidden" name="auto-friend" value="0" />
+                        <input type="checkbox" name="auto-friend" id="chck-auto-friend" value="1" <?php echo ($user_data['permission']['auto-friend'] == 1) ? 'checked': '';?>>
+                        <label for="chck-auto-friend" class="check-trail"><span class="check-handler"></span></label>
+                    </div>
+                    <div class="clearfix"></div>
+                    <hr>
+                    <div class="float-left">
+                        <label for="auto-like" class="main-label">Auto Page Like</label>
+                    </div>
+                    <div class="form-group float-right switcher">
+                        <input type="hidden" name="auto-like" value="0" />
+                        <input type="checkbox" name="auto-like" id="chck-auto-like" value="1" <?php echo ($user_data['permission']['auto-like'] == 1) ? 'checked': '';?>>
+                        <label for="chck-auto-like" class="check-trail"><span class="check-handler"></span></label>
+                    </div>
+                    <div class="clearfix"></div>
+                    <hr>
+                    <div class="float-left">
+                        <label for="auto-join" class="main-label">Auto Group Join</label>
+                    </div>
+                    <div class="form-group float-right switcher">
+                        <input type="hidden" name="auto-join" value="0" />
+                        <input type="checkbox" name="auto-join" id="chck-auto-join" value="1" <?php echo ($user_data['permission']['auto-join'] == 1) ? 'checked': '';?>>
+                        <label for="chck-auto-join" class="check-trail"><span class="check-handler"></span></label>
+                    </div>
+                    <div class="clearfix"></div>
+                    <hr>
+                    <div class="float-left">
+                        <label for="fake-users" class="main-label">Fake User Generator</label>
+                    </div>
+                    <div class="form-group float-right switcher">
+                        <input type="hidden" name="fake-users" value="0" />
+                        <input type="checkbox" name="fake-users" id="chck-fake-users" value="1" <?php echo ($user_data['permission']['fake-users'] == 1) ? 'checked': '';?>>
+                        <label for="chck-fake-users" class="check-trail"><span class="check-handler"></span></label>
+                    </div>
+                    <div class="clearfix"></div>
+                    <hr>
+                    <div class="float-left">
+                        <label for="mailing-list" class="main-label">Maling List</label>
+                    </div>
+                    <div class="form-group float-right switcher">
+                        <input type="hidden" name="mailing-list" value="0" />
+                        <input type="checkbox" name="mailing-list" id="chck-mailing-list" value="1" <?php echo ($user_data['permission']['mailing-list'] == 1) ? 'checked': '';?>>
+                        <label for="chck-mailing-list" class="check-trail"><span class="check-handler"></span></label>
+                    </div>
+                    <div class="clearfix"></div>
+                    <hr>
+                    <div class="float-left">
+                        <label for="mass-notifications" class="main-label">Mass Notifications</label>
+                    </div>
+                    <div class="form-group float-right switcher">
+                        <input type="hidden" name="mass-notifications" value="0" />
+                        <input type="checkbox" name="mass-notifications" id="chck-mass-notifications" value="1" <?php echo ($user_data['permission']['mass-notifications'] == 1) ? 'checked': '';?>>
+                        <label for="chck-mass-notifications" class="check-trail"><span class="check-handler"></span></label>
+                    </div>
+                    <div class="clearfix"></div>
+                    <hr>
+                    <div class="float-left">
+                        <label for="ban-users" class="main-label">BlackList</label>
+                    </div>
+                    <div class="form-group float-right switcher">
+                        <input type="hidden" name="ban-users" value="0" />
+                        <input type="checkbox" name="ban-users" id="chck-ban-users" value="1" <?php echo ($user_data['permission']['ban-users'] == 1) ? 'checked': '';?>>
+                        <label for="chck-ban-users" class="check-trail"><span class="check-handler"></span></label>
+                    </div>
+                    <div class="clearfix"></div>
+                    <hr>
+                    <div class="float-left">
+                        <label for="generate-sitemap" class="main-label">Generate SiteMap</label>
+                    </div>
+                    <div class="form-group float-right switcher">
+                        <input type="hidden" name="generate-sitemap" value="0" />
+                        <input type="checkbox" name="generate-sitemap" id="chck-generate-sitemap" value="1" <?php echo ($user_data['permission']['generate-sitemap'] == 1) ? 'checked': '';?>>
+                        <label for="chck-generate-sitemap" class="check-trail"><span class="check-handler"></span></label>
+                    </div>
+                    <div class="clearfix"></div>
+                    <hr>
+                    <div class="float-left">
+                        <label for="manage-invitation-keys" class="main-label">Invitation Codes</label>
+                    </div>
+                    <div class="form-group float-right switcher">
+                        <input type="hidden" name="manage-invitation-keys" value="0" />
+                        <input type="checkbox" name="manage-invitation-keys" id="chck-manage-invitation-keys" value="1" <?php echo ($user_data['permission']['manage-invitation-keys'] == 1) ? 'checked': '';?>>
+                        <label for="chck-manage-invitation-keys" class="check-trail"><span class="check-handler"></span></label>
+                    </div>
+                    <div class="clearfix"></div>
+                    <hr>
+                    <div class="float-left">
+                        <label for="backups" class="main-label">Backup SQL & Files</label>
+                    </div>
+                    <div class="form-group float-right switcher">
+                        <input type="hidden" name="backups" value="0" />
+                        <input type="checkbox" name="backups" id="chck-backups" value="1" <?php echo ($user_data['permission']['backups'] == 1) ? 'checked': '';?>>
+                        <label for="chck-backups" class="check-trail"><span class="check-handler"></span></label>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-3">
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="card-title">Posts Settings</h6>
+                    <div class="float-left">
+                        <label for="post-settings" class="main-label">Posts Settings</label>
+                    </div>
+                    <div class="form-group float-right switcher">
+                        <input type="hidden" name="post-settings" value="0" />
+                        <input type="checkbox" name="post-settings" id="chck-post-settings" value="1" <?php echo ($user_data['permission']['post-settings'] == 1) ? 'checked': '';?>>
+                        <label for="chck-post-settings" class="check-trail"><span class="check-handler"></span></label>
+                    </div>
+                    <div class="clearfix"></div>
+                    <hr>
+                    <div class="float-left">
+                        <label for="manage-colored-posts" class="main-label">Manage Colored Posts</label>
+                    </div>
+                    <div class="form-group float-right switcher">
+                        <input type="hidden" name="manage-colored-posts" value="0" />
+                        <input type="checkbox" name="manage-colored-posts" id="chck-manage-colored-posts" value="1" <?php echo ($user_data['permission']['manage-colored-posts'] == 1) ? 'checked': '';?>>
+                        <label for="chck-manage-colored-posts" class="check-trail"><span class="check-handler"></span></label>
+                    </div>
+                    <div class="clearfix"></div>
+                    <hr>
+                    <div class="float-left">
+                        <label for="manage-reactions" class="main-label">Post Reactions</label>
+                    </div>
+                    <div class="form-group float-right switcher">
+                        <input type="hidden" name="manage-reactions" value="0" />
+                        <input type="checkbox" name="manage-reactions" id="chck-manage-reactions" value="1" <?php echo ($user_data['permission']['manage-reactions'] == 1) ? 'checked': '';?>>
+                        <label for="chck-manage-reactions" class="check-trail"><span class="check-handler"></span></label>
+                    </div>
+                    <div class="clearfix"></div>
+                    <hr>
+                    <div class="float-left">
+                        <label for="live" class="main-label">Setup Live Streaming</label>
+                    </div>
+                    <div class="form-group float-right switcher">
+                        <input type="hidden" name="live" value="0" />
+                        <input type="checkbox" name="live" id="chck-live" value="1" <?php echo ($user_data['permission']['live'] == 1) ? 'checked': '';?>>
+                        <label for="chck-live" class="check-trail"><span class="check-handler"></span></label>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="card-title">Movies</h6>
+                    <div class="float-left">
+                        <label for="manage-movies" class="main-label">Manage Movies</label>
+                    </div>
+                    <div class="form-group float-right switcher">
+                        <input type="hidden" name="manage-movies" value="0" />
+                        <input type="checkbox" name="manage-movies" id="chck-manage-movies" value="1" <?php echo ($user_data['permission']['manage-movies'] == 1) ? 'checked': '';?>>
+                        <label for="chck-manage-movies" class="check-trail"><span class="check-handler"></span></label>
+                    </div>
+                    <div class="clearfix"></div>
+                    <hr>
+                    <div class="float-left">
+                        <label for="add-new-movies" class="main-label">Add New Movie</label>
+                    </div>
+                    <div class="form-group float-right switcher">
+                        <input type="hidden" name="add-new-movies" value="0" />
+                        <input type="checkbox" name="add-new-movies" id="chck-add-new-movies" value="1" <?php echo ($user_data['permission']['add-new-movies'] == 1) ? 'checked': '';?>>
+                        <label for="chck-add-new-movies" class="check-trail"><span class="check-handler"></span></label>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="card-title">Games</h6>
+                    <div class="float-left">
+                        <label for="manage-games" class="main-label">Manage Games</label>
+                    </div>
+                    <div class="form-group float-right switcher">
+                        <input type="hidden" name="manage-games" value="0" />
+                        <input type="checkbox" name="manage-games" id="chck-manage-games" value="1" <?php echo ($user_data['permission']['manage-games'] == 1) ? 'checked': '';?>>
+                        <label for="chck-manage-games" class="check-trail"><span class="check-handler"></span></label>
+                    </div>
+                    <div class="clearfix"></div>
+                    <hr>
+                    <div class="float-left">
+                        <label for="add-new-game" class="main-label">Add New Game</label>
+                    </div>
+                    <div class="form-group float-right switcher">
+                        <input type="hidden" name="add-new-game" value="0" />
+                        <input type="checkbox" name="add-new-game" id="chck-add-new-game" value="1" <?php echo ($user_data['permission']['add-new-game'] == 1) ? 'checked': '';?>>
+                        <label for="chck-add-new-game" class="check-trail"><span class="check-handler"></span></label>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="card-title">Categories</h6>
+                    <div class="float-left">
+                        <label for="pages-categories" class="main-label">Pages Categories</label>
+                    </div>
+                    <div class="form-group float-right switcher">
+                        <input type="hidden" name="pages-categories" value="0" />
+                        <input type="checkbox" name="pages-categories" id="chck-pages-categories" value="1" <?php echo ($user_data['permission']['pages-categories'] == 1) ? 'checked': '';?>>
+                        <label for="chck-pages-categories" class="check-trail"><span class="check-handler"></span></label>
+                    </div>
+                    <div class="clearfix"></div>
+                    <hr>
+                    <div class="float-left">
+                        <label for="pages-sub-categories" class="main-label">Pages Sub Categories</label>
+                    </div>
+                    <div class="form-group float-right switcher">
+                        <input type="hidden" name="pages-sub-categories" value="0" />
+                        <input type="checkbox" name="pages-sub-categories" id="chck-pages-sub-categories" value="1" <?php echo ($user_data['permission']['pages-sub-categories'] == 1) ? 'checked': '';?>>
+                        <label for="chck-pages-sub-categories" class="check-trail"><span class="check-handler"></span></label>
+                    </div>
+                    <div class="clearfix"></div>
+                    <hr>
+                    <div class="float-left">
+                        <label for="groups-categories" class="main-label">Groups Categories</label>
+                    </div>
+                    <div class="form-group float-right switcher">
+                        <input type="hidden" name="groups-categories" value="0" />
+                        <input type="checkbox" name="groups-categories" id="chck-groups-categories" value="1" <?php echo ($user_data['permission']['groups-categories'] == 1) ? 'checked': '';?>>
+                        <label for="chck-groups-categories" class="check-trail"><span class="check-handler"></span></label>
+                    </div>
+                    <div class="clearfix"></div>
+                    <hr>
+                    <div class="float-left">
+                        <label for="groups-sub-categories" class="main-label">Groups Sub Categories</label>
+                    </div>
+                    <div class="form-group float-right switcher">
+                        <input type="hidden" name="groups-sub-categories" value="0" />
+                        <input type="checkbox" name="groups-sub-categories" id="chck-groups-sub-categories" value="1" <?php echo ($user_data['permission']['groups-sub-categories'] == 1) ? 'checked': '';?>>
+                        <label for="chck-groups-sub-categories" class="check-trail"><span class="check-handler"></span></label>
+                    </div>
+                    <div class="clearfix"></div>
+                    <hr>
+                    <div class="float-left">
+                        <label for="blogs-categories" class="main-label">Blogs Categories</label>
+                    </div>
+                    <div class="form-group float-right switcher">
+                        <input type="hidden" name="blogs-categories" value="0" />
+                        <input type="checkbox" name="blogs-categories" id="chck-blogs-categories" value="1" <?php echo ($user_data['permission']['blogs-categories'] == 1) ? 'checked': '';?>>
+                        <label for="chck-blogs-categories" class="check-trail"><span class="check-handler"></span></label>
+                    </div>
+                    <div class="clearfix"></div>
+                    <hr>
+                    <div class="float-left">
+                        <label for="products-categories" class="main-label">Products Categories</label>
+                    </div>
+                    <div class="form-group float-right switcher">
+                        <input type="hidden" name="products-categories" value="0" />
+                        <input type="checkbox" name="products-categories" id="chck-products-categories" value="1" <?php echo ($user_data['permission']['products-categories'] == 1) ? 'checked': '';?>>
+                        <label for="chck-products-categories" class="check-trail"><span class="check-handler"></span></label>
+                    </div>
+                    <div class="clearfix"></div>
+                    <hr>
+                    <div class="float-left">
+                        <label for="products-sub-categories" class="main-label">Products Sub Categories</label>
+                    </div>
+                    <div class="form-group float-right switcher">
+                        <input type="hidden" name="products-sub-categories" value="0" />
+                        <input type="checkbox" name="products-sub-categories" id="chck-products-sub-categories" value="1" <?php echo ($user_data['permission']['products-sub-categories'] == 1) ? 'checked': '';?>>
+                        <label for="chck-products-sub-categories" class="check-trail"><span class="check-handler"></span></label>
+                    </div>
+                    <div class="clearfix"></div>
+                    <hr>
+                    <div class="float-left">
+                        <label for="job-categories" class="main-label">Job Categories</label>
+                    </div>
+                    <div class="form-group float-right switcher">
+                        <input type="hidden" name="job-categories" value="0" />
+                        <input type="checkbox" name="job-categories" id="chck-job-categories" value="1" <?php echo ($user_data['permission']['job-categories'] == 1) ? 'checked': '';?>>
+                        <label for="chck-job-categories" class="check-trail"><span class="check-handler"></span></label>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="card-title">Pages</h6>
+                    <div class="float-left">
+                        <label for="manage-custom-pages" class="main-label">Manage Custom Pages</label>
+                    </div>
+                    <div class="form-group float-right switcher">
+                        <input type="hidden" name="manage-custom-pages" value="0" />
+                        <input type="checkbox" name="manage-custom-pages" id="chck-manage-custom-pages" value="1" <?php echo ($user_data['permission']['manage-custom-pages'] == 1) ? 'checked': '';?>>
+                        <label for="chck-manage-custom-pages" class="check-trail"><span class="check-handler"></span></label>
+                    </div>
+                    <div class="clearfix"></div>
+                    <hr>
+                    <div class="float-left">
+                        <label for="add-new-custom-page" class="main-label">Add New Custom Page</label>
+                    </div>
+                    <div class="form-group float-right switcher">
+                        <input type="hidden" name="add-new-custom-page" value="0" />
+                        <input type="checkbox" name="add-new-custom-page" id="chck-add-new-custom-page" value="1" <?php echo ($user_data['permission']['add-new-custom-page'] == 1) ? 'checked': '';?>>
+                        <label for="chck-add-new-custom-page" class="check-trail"><span class="check-handler"></span></label>
+                    </div>
+                    <div class="clearfix"></div>
+                    <hr>
+                    <div class="float-left">
+                        <label for="edit-custom-page" class="main-label">Edit Custom Page</label>
+                    </div>
+                    <div class="form-group float-right switcher">
+                        <input type="hidden" name="edit-custom-page" value="0" />
+                        <input type="checkbox" name="edit-custom-page" id="chck-edit-custom-page" value="1" <?php echo ($user_data['permission']['edit-custom-page'] == 1) ? 'checked': '';?>>
+                        <label for="chck-edit-custom-page" class="check-trail"><span class="check-handler"></span></label>
+                    </div>
+                    <div class="clearfix"></div>
+                    <hr>
+                    <div class="float-left">
+                        <label for="edit-terms-pages" class="main-label">Edit Terms Pages</label>
+                    </div>
+                    <div class="form-group float-right switcher">
+                        <input type="hidden" name="edit-terms-pages" value="0" />
+                        <input type="checkbox" name="edit-terms-pages" id="chck-edit-terms-pages" value="1" <?php echo ($user_data['permission']['edit-terms-pages'] == 1) ? 'checked': '';?>>
+                        <label for="chck-edit-terms-pages" class="check-trail"><span class="check-handler"></span></label>
+                    </div>
+                    <div class="clearfix"></div>
+                    <hr>
+                    <div class="float-left">
+                        <label for="manage_terms_pages" class="main-label">Manage Terms Pages</label>
+                    </div>
+                    <div class="form-group float-right switcher">
+                        <input type="hidden" name="manage_terms_pages" value="0" />
+                        <input type="checkbox" name="manage_terms_pages" id="chck-manage_terms_pages" value="1" <?php echo ($user_data['permission']['manage_terms_pages'] == 1) ? 'checked': '';?>>
+                        <label for="chck-manage_terms_pages" class="check-trail"><span class="check-handler"></span></label>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="card-title">Reports</h6>
+                    <div class="float-left">
+                        <label for="manage-reports" class="main-label">Manage Reports</label>
+                    </div>
+                    <div class="form-group float-right switcher">
+                        <input type="hidden" name="manage-reports" value="0" />
+                        <input type="checkbox" name="manage-reports" id="chck-manage-reports" value="1" <?php echo ($user_data['permission']['manage-reports'] == 1) ? 'checked': '';?>>
+                        <label for="chck-manage-reports" class="check-trail"><span class="check-handler"></span></label>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="card-title">Store</h6>
+                    <div class="float-left">
+                        <label for="store-settings" class="main-label">Store Settings</label>
+                    </div>
+                    <div class="form-group float-right switcher">
+                        <input type="hidden" name="store-settings" value="0" />
+                        <input type="checkbox" name="store-settings" id="chck-store-settings" value="1" <?php echo ($user_data['permission']['store-settings'] == 1) ? 'checked': '';?>>
+                        <label for="chck-store-settings" class="check-trail"><span class="check-handler"></span></label>
+                    </div>
+                    <div class="clearfix"></div>
+                    <hr>
+                    <div class="float-left">
+                        <label for="manage-products" class="main-label">Manage Products</label>
+                    </div>
+                    <div class="form-group float-right switcher">
+                        <input type="hidden" name="manage-products" value="0" />
+                        <input type="checkbox" name="manage-products" id="chck-manage-products" value="1" <?php echo ($user_data['permission']['manage-products'] == 1) ? 'checked': '';?>>
+                        <label for="chck-manage-products" class="check-trail"><span class="check-handler"></span></label>
+                    </div>
+                    <div class="clearfix"></div>
+                    <hr>
+                    <div class="float-left">
+                        <label for="manage-orders" class="main-label">Manage Orders</label>
+                    </div>
+                    <div class="form-group float-right switcher">
+                        <input type="hidden" name="manage-orders" value="0" />
+                        <input type="checkbox" name="manage-orders" id="chck-manage-orders" value="1" <?php echo ($user_data['permission']['manage-orders'] == 1) ? 'checked': '';?>>
+                        <label for="chck-manage-orders" class="check-trail"><span class="check-handler"></span></label>
+                    </div>
+                    <div class="clearfix"></div>
+                    <hr>
+                    <div class="float-left">
+                        <label for="manage-reviews" class="main-label">Manage Reviews</label>
+                    </div>
+                    <div class="form-group float-right switcher">
+                        <input type="hidden" name="manage-reviews" value="0" />
+                        <input type="checkbox" name="manage-reviews" id="chck-manage-reviews" value="1" <?php echo ($user_data['permission']['manage-reviews'] == 1) ? 'checked': '';?>>
+                        <label for="chck-manage-reviews" class="check-trail"><span class="check-handler"></span></label>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-3">
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="card-title">Manage Features</h6>
+                    <div class="float-left">
+                        <label for="site-features" class="main-label">Enable / Disable Features</label>
+                    </div>
+                    <div class="form-group float-right switcher">
+                        <input type="hidden" name="site-features" value="0" />
+                        <input type="checkbox" name="site-features" id="chck-site-features" value="1" <?php echo ($user_data['permission']['site-features'] == 1) ? 'checked': '';?>>
+                        <label for="chck-site-features" class="check-trail"><span class="check-handler"></span></label>
+                    </div>
+                    <div class="clearfix"></div>
+                    <hr>
+                    <div class="float-left">
+                        <label for="manage-apps" class="main-label">Applications</label>
+                    </div>
+                    <div class="form-group float-right switcher">
+                        <input type="hidden" name="manage-apps" value="0" />
+                        <input type="checkbox" name="manage-apps" id="chck-manage-apps" value="1" <?php echo ($user_data['permission']['manage-apps'] == 1) ? 'checked': '';?>>
+                        <label for="chck-manage-apps" class="check-trail"><span class="check-handler"></span></label>
+                    </div>
+                    <div class="clearfix"></div>
+                    <hr>
+                    <div class="float-left">
+                        <label for="manage-pages" class="main-label">Pages</label>
+                    </div>
+                    <div class="form-group float-right switcher">
+                        <input type="hidden" name="manage-pages" value="0" />
+                        <input type="checkbox" name="manage-pages" id="chck-manage-pages" value="1" <?php echo ($user_data['permission']['manage-pages'] == 1) ? 'checked': '';?>>
+                        <label for="chck-manage-pages" class="check-trail"><span class="check-handler"></span></label>
+                    </div>
+                    <div class="clearfix"></div>
+                    <hr>
+                    <div class="float-left">
+                        <label for="manage-groups" class="main-label">Groups</label>
+                    </div>
+                    <div class="form-group float-right switcher">
+                        <input type="hidden" name="manage-groups" value="0" />
+                        <input type="checkbox" name="manage-groups" id="chck-manage-groups" value="1" <?php echo ($user_data['permission']['manage-groups'] == 1) ? 'checked': '';?>>
+                        <label for="chck-manage-groups" class="check-trail"><span class="check-handler"></span></label>
+                    </div>
+                    <div class="clearfix"></div>
+                    <hr>
+                    <div class="float-left">
+                        <label for="manage-posts" class="main-label">Posts</label>
+                    </div>
+                    <div class="form-group float-right switcher">
+                        <input type="hidden" name="manage-posts" value="0" />
+                        <input type="checkbox" name="manage-posts" id="chck-manage-posts" value="1" <?php echo ($user_data['permission']['manage-posts'] == 1) ? 'checked': '';?>>
+                        <label for="chck-manage-posts" class="check-trail"><span class="check-handler"></span></label>
+                    </div>
+                    <div class="clearfix"></div>
+                    <hr>
+                    <div class="float-left">
+                        <label for="manage-fund" class="main-label">Fundings</label>
+                    </div>
+                    <div class="form-group float-right switcher">
+                        <input type="hidden" name="manage-fund" value="0" />
+                        <input type="checkbox" name="manage-fund" id="chck-manage-fund" value="1" <?php echo ($user_data['permission']['manage-fund'] == 1) ? 'checked': '';?>>
+                        <label for="chck-manage-fund" class="check-trail"><span class="check-handler"></span></label>
+                    </div>
+                    <div class="clearfix"></div>
+                    <hr>
+                    <div class="float-left">
+                        <label for="manage-jobs" class="main-label">Jobs</label>
+                    </div>
+                    <div class="form-group float-right switcher">
+                        <input type="hidden" name="manage-jobs" value="0" />
+                        <input type="checkbox" name="manage-jobs" id="chck-manage-jobs" value="1" <?php echo ($user_data['permission']['manage-jobs'] == 1) ? 'checked': '';?>>
+                        <label for="chck-manage-jobs" class="check-trail"><span class="check-handler"></span></label>
+                    </div>
+                    <div class="clearfix"></div>
+                    <hr>
+                    <div class="float-left">
+                        <label for="manage-offers" class="main-label">Offers</label>
+                    </div>
+                    <div class="form-group float-right switcher">
+                        <input type="hidden" name="manage-offers" value="0" />
+                        <input type="checkbox" name="manage-offers" id="chck-manage-offers" value="1" <?php echo ($user_data['permission']['manage-offers'] == 1) ? 'checked': '';?>>
+                        <label for="chck-manage-offers" class="check-trail"><span class="check-handler"></span></label>
+                    </div>
+                    <div class="clearfix"></div>
+                    <hr>
+                    <div class="float-left">
+                        <label for="manage-articles" class="main-label">Articles (Blog)</label>
+                    </div>
+                    <div class="form-group float-right switcher">
+                        <input type="hidden" name="manage-articles" value="0" />
+                        <input type="checkbox" name="manage-articles" id="chck-manage-articles" value="1" <?php echo ($user_data['permission']['manage-articles'] == 1) ? 'checked': '';?>>
+                        <label for="chck-manage-articles" class="check-trail"><span class="check-handler"></span></label>
+                    </div>
+                    <div class="clearfix"></div>
+                    <hr>
+                    <div class="float-left">
+                        <label for="manage-events" class="main-label">Events</label>
+                    </div>
+                    <div class="form-group float-right switcher">
+                        <input type="hidden" name="manage-events" value="0" />
+                        <input type="checkbox" name="manage-events" id="chck-manage-events" value="1" <?php echo ($user_data['permission']['manage-events'] == 1) ? 'checked': '';?>>
+                        <label for="chck-manage-events" class="check-trail"><span class="check-handler"></span></label>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="card-title">Gifts</h6>
+                    <div class="float-left">
+                        <label for="manage-gifts" class="main-label">Manage Gifts</label>
+                    </div>
+                    <div class="form-group float-right switcher">
+                        <input type="hidden" name="manage-gifts" value="0" />
+                        <input type="checkbox" name="manage-gifts" id="chck-manage-gifts" value="1" <?php echo ($user_data['permission']['manage-gifts'] == 1) ? 'checked': '';?>>
+                        <label for="chck-manage-gifts" class="check-trail"><span class="check-handler"></span></label>
+                    </div>
+                    <div class="clearfix"></div>
+                    <hr>
+                    <div class="float-left">
+                        <label for="add-new-gift" class="main-label">Add New Gift</label>
+                    </div>
+                    <div class="form-group float-right switcher">
+                        <input type="hidden" name="add-new-gift" value="0" />
+                        <input type="checkbox" name="add-new-gift" id="chck-add-new-gift" value="1" <?php echo ($user_data['permission']['add-new-gift'] == 1) ? 'checked': '';?>>
+                        <label for="chck-add-new-gift" class="check-trail"><span class="check-handler"></span></label>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="card-title">Stickers</h6>
+                    <div class="float-left">
+                        <label for="manage-stickers" class="main-label">Manage Stickers</label>
+                    </div>
+                    <div class="form-group float-right switcher">
+                        <input type="hidden" name="manage-stickers" value="0" />
+                        <input type="checkbox" name="manage-stickers" id="chck-manage-stickers" value="1" <?php echo ($user_data['permission']['manage-stickers'] == 1) ? 'checked': '';?>>
+                        <label for="chck-manage-stickers" class="check-trail"><span class="check-handler"></span></label>
+                    </div>
+                    <div class="clearfix"></div>
+                    <hr>
+                    <div class="float-left">
+                        <label for="add-new-sticker" class="main-label">Add New sticker</label>
+                    </div>
+                    <div class="form-group float-right switcher">
+                        <input type="hidden" name="add-new-sticker" value="0" />
+                        <input type="checkbox" name="add-new-sticker" id="chck-add-new-sticker" value="1" <?php echo ($user_data['permission']['add-new-sticker'] == 1) ? 'checked': '';?>>
+                        <label for="chck-add-new-sticker" class="check-trail"><span class="check-handler"></span></label>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="card-title">Custom Fields</h6>
+                    <div class="float-left">
+                        <label for="manage-profile-fields" class="main-label">Custom Users Fields</label>
+                    </div>
+                    <div class="form-group float-right switcher">
+                        <input type="hidden" name="manage-profile-fields" value="0" />
+                        <input type="checkbox" name="manage-profile-fields" id="chck-manage-profile-fields" value="1" <?php echo ($user_data['permission']['manage-profile-fields'] == 1) ? 'checked': '';?>>
+                        <label for="chck-manage-profile-fields" class="check-trail"><span class="check-handler"></span></label>
+                    </div>
+                    <div class="clearfix"></div>
+                    <hr>
+                    <div class="float-left">
+                        <label for="pages-fields" class="main-label">Custom Pages Fields</label>
+                    </div>
+                    <div class="form-group float-right switcher">
+                        <input type="hidden" name="pages-fields" value="0" />
+                        <input type="checkbox" name="pages-fields" id="chck-pages-fields" value="1" <?php echo ($user_data['permission']['pages-fields'] == 1) ? 'checked': '';?>>
+                        <label for="chck-pages-fields" class="check-trail"><span class="check-handler"></span></label>
+                    </div>
+                    <div class="clearfix"></div>
+                    <hr>
+                    <div class="float-left">
+                        <label for="groups-fields" class="main-label">Custom Groups Fields</label>
+                    </div>
+                    <div class="form-group float-right switcher">
+                        <input type="hidden" name="groups-fields" value="0" />
+                        <input type="checkbox" name="groups-fields" id="chck-groups-fields" value="1" <?php echo ($user_data['permission']['groups-fields'] == 1) ? 'checked': '';?>>
+                        <label for="chck-groups-fields" class="check-trail"><span class="check-handler"></span></label>
+                    </div>
+                    <div class="clearfix"></div>
+                    <hr>
+                    <div class="float-left">
+                        <label for="products-fields" class="main-label">Custom Products Fields</label>
+                    </div>
+                    <div class="form-group float-right switcher">
+                        <input type="hidden" name="products-fields" value="0" />
+                        <input type="checkbox" name="products-fields" id="chck-products-fields" value="1" <?php echo ($user_data['permission']['products-fields'] == 1) ? 'checked': '';?>>
+                        <label for="chck-products-fields" class="check-trail"><span class="check-handler"></span></label>
+                    </div>
+                    <div class="clearfix"></div>
+                    <hr>
+                    <div class="float-left">
+                        <label for="add-new-profile-field" class="main-label">Add New Profile Field</label>
+                    </div>
+                    <div class="form-group float-right switcher">
+                        <input type="hidden" name="add-new-profile-field" value="0" />
+                        <input type="checkbox" name="add-new-profile-field" id="chck-add-new-profile-field" value="1" <?php echo ($user_data['permission']['add-new-profile-field'] == 1) ? 'checked': '';?>>
+                        <label for="chck-add-new-profile-field" class="check-trail"><span class="check-handler"></span></label>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="card-title">API Settings</h6>
+                    <div class="float-left">
+                        <label for="manage-api-access-keys" class="main-label">Manage API Server Key</label>
+                    </div>
+                    <div class="form-group float-right switcher">
+                        <input type="hidden" name="manage-api-access-keys" value="0" />
+                        <input type="checkbox" name="manage-api-access-keys" id="chck-manage-api-access-keys" value="1" <?php echo ($user_data['permission']['manage-api-access-keys'] == 1) ? 'checked': '';?>>
+                        <label for="chck-manage-api-access-keys" class="check-trail"><span class="check-handler"></span></label>
+                    </div>
+                    <div class="clearfix"></div>
+                    <hr>
+                    <div class="float-left">
+                        <label for="push-notifications-system" class="main-label">Push Notifications Settings</label>
+                    </div>
+                    <div class="form-group float-right switcher">
+                        <input type="hidden" name="push-notifications-system" value="0" />
+                        <input type="checkbox" name="push-notifications-system" id="chck-push-notifications-system" value="1" <?php echo ($user_data['permission']['push-notifications-system'] == 1) ? 'checked': '';?>>
+                        <label for="chck-push-notifications-system" class="check-trail"><span class="check-handler"></span></label>
+                    </div>
+                    <div class="clearfix"></div>
+                    <hr>
+                    <div class="float-left">
+                        <label for="verfiy-applications" class="main-label">Verify Applications</label>
+                    </div>
+                    <div class="form-group float-right switcher">
+                        <input type="hidden" name="verfiy-applications" value="0" />
+                        <input type="checkbox" name="verfiy-applications" id="chck-verfiy-applications" value="1" <?php echo ($user_data['permission']['verfiy-applications'] == 1) ? 'checked': '';?>>
+                        <label for="chck-verfiy-applications" class="check-trail"><span class="check-handler"></span></label>
+                    </div>
+                    <div class="clearfix"></div>
+                    <hr>
+                    <div class="float-left">
+                        <label for="manage-third-psites" class="main-label">3rd Party Scripts</label>
+                    </div>
+                    <div class="form-group float-right switcher">
+                        <input type="hidden" name="manage-third-psites" value="0" />
+                        <input type="checkbox" name="manage-third-psites" id="chck-manage-third-psites" value="1" <?php echo ($user_data['permission']['manage-third-psites'] == 1) ? 'checked': '';?>>
+                        <label for="chck-manage-third-psites" class="check-trail"><span class="check-handler"></span></label>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-3">
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="card-title">Forums</h6>
+                    <div class="float-left">
+                        <label for="manage-forum-sections" class="main-label">Manage Forums Sections</label>
+                    </div>
+                    <div class="form-group float-right switcher">
+                        <input type="hidden" name="manage-forum-sections" value="0" />
+                        <input type="checkbox" name="manage-forum-sections" id="chck-manage-forum-sections" value="1" <?php echo ($user_data['permission']['manage-forum-sections'] == 1) ? 'checked': '';?>>
+                        <label for="chck-manage-forum-sections" class="check-trail"><span class="check-handler"></span></label>
+                    </div>
+                    <div class="clearfix"></div>
+                    <hr>
+                    <div class="float-left">
+                        <label for="manage-forum-forums" class="main-label">Manage Forums</label>
+                    </div>
+                    <div class="form-group float-right switcher">
+                        <input type="hidden" name="manage-forum-forums" value="0" />
+                        <input type="checkbox" name="manage-forum-forums" id="chck-manage-forum-forums" value="1" <?php echo ($user_data['permission']['manage-forum-forums'] == 1) ? 'checked': '';?>>
+                        <label for="chck-manage-forum-forums" class="check-trail"><span class="check-handler"></span></label>
+                    </div>
+                    <div class="clearfix"></div>
+                    <hr>
+                    <div class="float-left">
+                        <label for="manage-forum-threads" class="main-label">Manage Threads</label>
+                    </div>
+                    <div class="form-group float-right switcher">
+                        <input type="hidden" name="manage-forum-threads" value="0" />
+                        <input type="checkbox" name="manage-forum-threads" id="chck-manage-forum-threads" value="1" <?php echo ($user_data['permission']['manage-forum-threads'] == 1) ? 'checked': '';?>>
+                        <label for="chck-manage-forum-threads" class="check-trail"><span class="check-handler"></span></label>
+                    </div>
+                    <div class="clearfix"></div>
+                    <hr>
+                    <div class="float-left">
+                        <label for="manage-forum-messages" class="main-label">Manage Replies</label>
+                    </div>
+                    <div class="form-group float-right switcher">
+                        <input type="hidden" name="manage-forum-messages" value="0" />
+                        <input type="checkbox" name="manage-forum-messages" id="chck-manage-forum-messages" value="1" <?php echo ($user_data['permission']['manage-forum-messages'] == 1) ? 'checked': '';?>>
+                        <label for="chck-manage-forum-messages" class="check-trail"><span class="check-handler"></span></label>
+                    </div>
+                    <div class="clearfix"></div>
+                    <hr>
+                    <div class="float-left">
+                        <label for="create-new-section" class="main-label">Create New Section</label>
+                    </div>
+                    <div class="form-group float-right switcher">
+                        <input type="hidden" name="create-new-section" value="0" />
+                        <input type="checkbox" name="create-new-section" id="chck-create-new-section" value="1" <?php echo ($user_data['permission']['create-new-section'] == 1) ? 'checked': '';?>>
+                        <label for="chck-create-new-section" class="check-trail"><span class="check-handler"></span></label>
+                    </div>
+                    <div class="clearfix"></div>
+                    <hr>
+                    <div class="float-left">
+                        <label for="create-new-forum" class="main-label">Create New Forum</label>
+                    </div>
+                    <div class="form-group float-right switcher">
+                        <input type="hidden" name="create-new-forum" value="0" />
+                        <input type="checkbox" name="create-new-forum" id="chck-create-new-forum" value="1" <?php echo ($user_data['permission']['create-new-forum'] == 1) ? 'checked': '';?>>
+                        <label for="chck-create-new-forum" class="check-trail"><span class="check-handler"></span></label>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="card-title">Languages</h6>
+                    <div class="float-left">
+                        <label for="add-language" class="main-label">Add New Language & Keys</label>
+                    </div>
+                    <div class="form-group float-right switcher">
+                        <input type="hidden" name="add-language" value="0" />
+                        <input type="checkbox" name="add-language" id="chck-add-language" value="1" <?php echo ($user_data['permission']['add-language'] == 1) ? 'checked': '';?>>
+                        <label for="chck-add-language" class="check-trail"><span class="check-handler"></span></label>
+                    </div>
+                    <div class="clearfix"></div>
+                    <hr>
+                    <div class="float-left">
+                        <label for="manage-languages" class="main-label">Manage Languages</label>
+                    </div>
+                    <div class="form-group float-right switcher">
+                        <input type="hidden" name="manage-languages" value="0" />
+                        <input type="checkbox" name="manage-languages" id="chck-manage-languages" value="1" <?php echo ($user_data['permission']['manage-languages'] == 1) ? 'checked': '';?>>
+                        <label for="chck-manage-languages" class="check-trail"><span class="check-handler"></span></label>
+                    </div>
+                    <div class="clearfix"></div>
+                    <hr>
+                    <div class="float-left">
+                        <label for="edit-lang" class="main-label">Edit Languages</label>
+                    </div>
+                    <div class="form-group float-right switcher">
+                        <input type="hidden" name="edit-lang" value="0" />
+                        <input type="checkbox" name="edit-lang" id="chck-edit-lang" value="1" <?php echo ($user_data['permission']['edit-lang'] == 1) ? 'checked': '';?>>
+                        <label for="chck-edit-lang" class="check-trail"><span class="check-handler"></span></label>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="card-title">Users</h6>
+                    <div class="float-left">
+                        <label for="manage-users" class="main-label">Manage Users</label>
+                    </div>
+                    <div class="form-group float-right switcher">
+                        <input type="hidden" name="manage-users" value="0" />
+                        <input type="checkbox" name="manage-users" id="chck-manage-users" value="1" <?php echo ($user_data['permission']['manage-users'] == 1) ? 'checked': '';?>>
+                        <label for="chck-manage-users" class="check-trail"><span class="check-handler"></span></label>
+                    </div>
+                    <div class="clearfix"></div>
+                    <hr>
+                    <div class="float-left">
+                        <label for="online-users" class="main-label">Online Users</label>
+                    </div>
+                    <div class="form-group float-right switcher">
+                        <input type="hidden" name="online-users" value="0" />
+                        <input type="checkbox" name="online-users" id="chck-online-users" value="1" <?php echo ($user_data['permission']['online-users'] == 1) ? 'checked': '';?>>
+                        <label for="chck-online-users" class="check-trail"><span class="check-handler"></span></label>
+                    </div>
+                    <div class="clearfix"></div>
+                    <hr>
+                    <div class="float-left">
+                        <label for="manage-stories" class="main-label">Manage User Stories / Status</label>
+                    </div>
+                    <div class="form-group float-right switcher">
+                        <input type="hidden" name="manage-stories" value="0" />
+                        <input type="checkbox" name="manage-stories" id="chck-manage-stories" value="1" <?php echo ($user_data['permission']['manage-stories'] == 1) ? 'checked': '';?>>
+                        <label for="chck-manage-stories" class="check-trail"><span class="check-handler"></span></label>
+                    </div>
+                    <div class="clearfix"></div>
+                    <hr>
+                    <div class="float-left">
+                        <label for="manage-verification-reqeusts" class="main-label">Manage Verification Requests</label>
+                    </div>
+                    <div class="form-group float-right switcher">
+                        <input type="hidden" name="manage-verification-reqeusts" value="0" />
+                        <input type="checkbox" name="manage-verification-reqeusts" id="chck-manage-verification-reqeusts" value="1" <?php echo ($user_data['permission']['manage-verification-reqeusts'] == 1) ? 'checked': '';?>>
+                        <label for="chck-manage-verification-reqeusts" class="check-trail"><span class="check-handler"></span></label>
+                    </div>
+                    <div class="clearfix"></div>
+                    <hr>
+                    <div class="float-left">
+                        <label for="manage-genders" class="main-label">Manage Genders</label>
+                    </div>
+                    <div class="form-group float-right switcher">
+                        <input type="hidden" name="manage-genders" value="0" />
+                        <input type="checkbox" name="manage-genders" id="chck-manage-genders" value="1" <?php echo ($user_data['permission']['manage-genders'] == 1) ? 'checked': '';?>>
+                        <label for="chck-manage-genders" class="check-trail"><span class="check-handler"></span></label>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="card-title">Affiliates System</h6>
+                    <div class="float-left">
+                        <label for="affiliates-settings" class="main-label">Affiliates Settings</label>
+                    </div>
+                    <div class="form-group float-right switcher">
+                        <input type="hidden" name="affiliates-settings" value="0" />
+                        <input type="checkbox" name="affiliates-settings" id="chck-affiliates-settings" value="1" <?php echo ($user_data['permission']['affiliates-settings'] == 1) ? 'checked': '';?>>
+                        <label for="chck-affiliates-settings" class="check-trail"><span class="check-handler"></span></label>
+                    </div>
+                    <div class="clearfix"></div>
+                    <hr>
+                    <div class="float-left">
+                        <label for="referrals-list" class="main-label">Referrals List</label>
+                    </div>
+                    <div class="form-group float-right switcher">
+                        <input type="hidden" name="referrals-list" value="0" />
+                        <input type="checkbox" name="referrals-list" id="chck-referrals-list" value="1" <?php echo ($user_data['permission']['referrals-list'] == 1) ? 'checked': '';?>>
+                        <label for="chck-referrals-list" class="check-trail"><span class="check-handler"></span></label>
+                    </div>
+                    <div class="clearfix"></div>
+                    <hr>
+                    <div class="float-left">
+                        <label for="payment-reqeuests" class="main-label">Payment Requests</label>
+                    </div>
+                    <div class="form-group float-right switcher">
+                        <input type="hidden" name="payment-reqeuests" value="0" />
+                        <input type="checkbox" name="payment-reqeuests" id="chck-payment-reqeuests" value="1" <?php echo ($user_data['permission']['payment-reqeuests'] == 1) ? 'checked': '';?>>
+                        <label for="chck-payment-reqeuests" class="check-trail"><span class="check-handler"></span></label>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="card-title">Payments & Ads</h6>
+                    <div class="float-left">
+                        <label for="payment-settings" class="main-label">Payment Configuration</label>
+                    </div>
+                    <div class="form-group float-right switcher">
+                        <input type="hidden" name="payment-settings" value="0" />
+                        <input type="checkbox" name="payment-settings" id="chck-payment-settings" value="1" <?php echo ($user_data['permission']['payment-settings'] == 1) ? 'checked': '';?>>
+                        <label for="chck-payment-settings" class="check-trail"><span class="check-handler"></span></label>
+                    </div>
+                    <div class="clearfix"></div>
+                    <hr>
+                    <div class="float-left">
+                        <label for="ads-settings" class="main-label">Advertisement Settings</label>
+                    </div>
+                    <div class="form-group float-right switcher">
+                        <input type="hidden" name="ads-settings" value="0" />
+                        <input type="checkbox" name="ads-settings" id="chck-ads-settings" value="1" <?php echo ($user_data['permission']['ads-settings'] == 1) ? 'checked': '';?>>
+                        <label for="chck-ads-settings" class="check-trail"><span class="check-handler"></span></label>
+                    </div>
+                    <div class="clearfix"></div>
+                    <hr>
+                    <div class="float-left">
+                        <label for="manage-currencies" class="main-label">Manage Currencies</label>
+                    </div>
+                    <div class="form-group float-right switcher">
+                        <input type="hidden" name="manage-currencies" value="0" />
+                        <input type="checkbox" name="manage-currencies" id="chck-manage-currencies" value="1" <?php echo ($user_data['permission']['manage-currencies'] == 1) ? 'checked': '';?>>
+                        <label for="chck-manage-currencies" class="check-trail"><span class="check-handler"></span></label>
+                    </div>
+                    <div class="clearfix"></div>
+                    <hr>
+                    <div class="float-left">
+                        <label for="manage-site-ads" class="main-label">Manage Site Advertisements</label>
+                    </div>
+                    <div class="form-group float-right switcher">
+                        <input type="hidden" name="manage-site-ads" value="0" />
+                        <input type="checkbox" name="manage-site-ads" id="chck-manage-site-ads" value="1" <?php echo ($user_data['permission']['manage-site-ads'] == 1) ? 'checked': '';?>>
+                        <label for="chck-manage-site-ads" class="check-trail"><span class="check-handler"></span></label>
+                    </div>
+                    <div class="clearfix"></div>
+                    <hr>
+                    <div class="float-left">
+                        <label for="manage-user-ads" class="main-label">Manage User Advertisements</label>
+                    </div>
+                    <div class="form-group float-right switcher">
+                        <input type="hidden" name="manage-user-ads" value="0" />
+                        <input type="checkbox" name="manage-user-ads" id="chck-manage-user-ads" value="1" <?php echo ($user_data['permission']['manage-user-ads'] == 1) ? 'checked': '';?>>
+                        <label for="chck-manage-user-ads" class="check-trail"><span class="check-handler"></span></label>
+                    </div>
+                    <div class="clearfix"></div>
+                    <hr>
+                    <div class="float-left">
+                        <label for="bank-receipts" class="main-label">Manage Bank Receipts</label>
+                    </div>
+                    <div class="form-group float-right switcher">
+                        <input type="hidden" name="bank-receipts" value="0" />
+                        <input type="checkbox" name="bank-receipts" id="chck-bank-receipts" value="1" <?php echo ($user_data['permission']['bank-receipts'] == 1) ? 'checked': '';?>>
+                        <label for="chck-bank-receipts" class="check-trail"><span class="check-handler"></span></label>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="card-title">Updates</h6>
+                    <div class="float-left">
+                        <label for="manage-updates" class="main-label">Updates & Bug Fixes</label>
+                    </div>
+                    <div class="form-group float-right switcher">
+                        <input type="hidden" name="manage-updates" value="0" />
+                        <input type="checkbox" name="manage-updates" id="chck-manage-updates" value="1" <?php echo ($user_data['permission']['manage-updates'] == 1) ? 'checked': '';?>>
+                        <label for="chck-manage-updates" class="check-trail"><span class="check-handler"></span></label>
+                    </div>
+                    <div class="clearfix"></div>
+                    <hr>
+                    <div class="float-left">
+                        <label for="changelog" class="main-label">Changelogs</label>
+                    </div>
+                    <div class="form-group float-right switcher">
+                        <input type="hidden" name="changelog" value="0" />
+                        <input type="checkbox" name="changelog" id="chck-changelog" value="1" <?php echo ($user_data['permission']['changelog'] == 1) ? 'checked': '';?>>
+                        <label for="chck-changelog" class="check-trail"><span class="check-handler"></span></label>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+        <?php }elseif($user_data['admin'] == 1){ ?>
+            <div class="col-lg-12 col-md-12">
+                <div class="alert alert-warning">Admin can manage everything</div>
+            </div>
+        <?php } ?>
+    </div>
+</div>
+<div class="modal fade" id="PermissionModal" tabindex="-1" role="dialog" aria-labelledby="exampleModal1Label" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModal1Label">Add as a  Moderator?</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="ModeratorModalAlert"></div>
+                <p class="permission_text">Are you sure you want to add as a  Moderator?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-secondary">Add</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(function() {
+        $('.switcher input[type=checkbox]').click(function () {
+            setToTrue = 0;
+            if ($(this).is(":checked") === true) {
+                setToTrue = 1;
+            }
+            var permission = $(this).attr('name');
+            var hash_id = $('input[name=hash_id]').val();
+            var objData = {};
+            objData['permission'] = permission;
+            objData['permission_val'] = setToTrue;
+            var user_id = '<?php echo (int)$user_data['id'];?>';
+            objData['user_id'] = user_id;
+            objData['hash_id'] = hash_id;
+            $.get( Wo_Ajax_Requests_File() + '?f=admin_setting&s=update_moderator_permission', objData);
+        });
+    });
+
+    function Wo_Permission(user_id,type = 'show',type2) {
+        if (type == 'hide') {
+            $('#PermissionModal').find('.btn-secondary').attr('onclick', "Wo_Permission('"+user_id+"','show','"+type2+"')");
+            text = 'Add as a normal user?';
+            text2 = 'Are you sure you want to add as a normal user?';
+            if (type2 == 'moderator') {
+                text = 'Add as a moderator?';
+                text2 = 'Are you sure you want to add as a moderator?';
+            }
+            if (type2 == 'admin') {
+                text = 'Add as an admin?';
+                text2 = 'Are you sure you want to add as an admin?';
+            }
+            $('#PermissionModal').find('.modal-title').html(text);
+            $('#PermissionModal').find('.permission_text').html(text2);
+            $('#PermissionModal').modal('show');
+            return false;
+        }
+        hash_id = $('#hash_id').val();
+        $.get(Wo_Ajax_Requests_File(),{f:'admin_setting', s:'permission', user_id: user_id, hash_id: hash_id,type: type2},function(data) {
+            location.reload();
+        });
+    }
+</script>

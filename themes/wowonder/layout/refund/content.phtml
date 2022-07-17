@@ -1,0 +1,103 @@
+<div class="page-margin">
+	<div class="row">
+		<div class="col-md-2 leftcol"><?php echo Wo_LoadPage("sidebar/left-sidebar"); ?></div>
+		<div class="col-md-7 middlecol">
+			<div class="page-margin wow_content mt-0">
+				<div class="wo_page_hdng pag_neg_padd pag_alone">
+					<div class="wo_page_hdng_innr">
+						<span><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="currentColor" d="M13 19C13 18.66 13.04 18.33 13.09 18H3V12H19V13C19.7 13 20.37 13.13 21 13.35V6C21 4.89 20.11 4 19 4H3C1.89 4 1 4.89 1 6V18C1 19.1 1.89 20 3 20H13.09C13.04 19.67 13 19.34 13 19M3 6H19V8H3V6M22.54 16.88L20.41 19L22.54 21.12L21.12 22.54L19 20.41L16.88 22.54L15.47 21.12L17.59 19L15.47 16.88L16.88 15.47L19 17.59L21.12 15.46L22.54 16.88Z"></path></svg></span> <?php echo $wo['lang']['request_refund'];?>
+					</div>
+				</div>
+			</div>
+
+            <div class="page-margin wow_content wow_sett_content">
+            	<?php if ($wo['is_requested'] == true) { ?>
+            		<div class="alert alert-warning"><?php echo $wo['lang']['request_review_text']; ?></div>
+            	<?php }else{ ?>
+
+				<form class="create-refund-form form-horizontal" method="post">
+					<?php if ($wo['config']['pro'] == 1) { ?>
+						<div class="wow_form_fields">
+							<label for="pro_type"><?php echo $wo['lang']['member_type'];?></label>
+							<select id="pro_type" name="pro_type">
+								<?php $pros = Wo_GetProPackages();
+								unset($pros['free']);
+								?>
+								<?php foreach ($pros as $key => $pro) {?>
+									<option value="<?php echo $key;?>" <?php echo ($pro['id'] == $wo['user']['pro_type']) ? 'selected' : ''; ?>><?php echo $pro['name'];?></option>
+								<?php } ?>
+							</select>
+						</div>
+					<?php } ?>
+
+					<div class="wow_form_fields">
+						<label for="description"><?php echo $wo['lang']['reason']; ?></label>
+						<textarea name="description" id="description" rows="3"></textarea>
+					</div>
+					<p><?php echo $wo['lang']['business_days'];?></p>
+					<div class="publisher-hidden-option">
+						<div id="progress">
+							<span id="percent">0%</span>
+							<div class="progress">
+								<div id="bar" class="progress-bar progress-bar-striped active"></div> 
+							</div>
+							<div class="clear"></div>
+						</div>
+					</div>
+					<div class="app-general-alert setting-update-alert"></div>
+					<input type="hidden" name="hash_id" value="<?php echo Wo_CreateSession();?>">
+					<div class="text-center">
+						<button class="btn btn-main btn-mat btn-mat-raised add_wow_loader" type="submit"><?php echo $wo['lang']['request_refund']; ?></button>
+					</div>
+				</form>
+			    <?php } ?>
+			</div>
+		</div>
+		<?php echo Wo_LoadPage('sidebar/content');?>
+	</div>
+</div>
+<?php if ($wo['is_requested'] == false) { ?>
+<script type="text/javascript">
+
+   $(function() {
+    var bar = $('#bar');
+    var percent = $('#percent');
+    var status = $('#status');
+    var publisher_button = $('#publisher-button');
+   
+     $('form.create-refund-form').ajaxForm({
+       url: Wo_Ajax_Requests_File() + '?f=refund_pro',
+       beforeSend: function() {
+         var percentVal = '0%';
+         bar.width(percentVal);
+         percent.html(percentVal);
+         $('form.create-refund-form').find('.add_wow_loader').addClass('btn-loading');
+   
+       },
+       uploadProgress: function (event, position, total, percentComplete) {
+           var percentVal = percentComplete + '%';
+           bar.width(percentVal);
+           $('#progress').slideDown(200);
+           if(percentComplete > 50) {
+             percent.addClass('white');
+           }
+           percent.html(percentVal);
+      },
+       success: function(data) {
+         if (data.status == 200) {
+         	$(".app-general-alert").html('<div class="alert alert-success">'+ data['message'] +'</div>');
+         	Wo_Delay(function(){
+	            window.location.href = data.url;
+	        },3000);
+            
+         } else {
+             $('.app-general-alert').html('<div class="alert alert-danger">' + data['message'] + '</div>');
+             $('.alert-danger').fadeIn(300);
+         }
+         $('form.create-refund-form').find('.add_wow_loader').removeClass('btn-loading');
+         $('#progress').slideUp(200);
+       }
+     });
+   });
+</script>
+<?php } ?>

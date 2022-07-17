@@ -1,0 +1,22 @@
+<tr class="setting-grouplist" id="GroupID_<?php echo $wo['grouplist']['id']?>" data-group-id="<?php echo $wo['grouplist']['id']?>" data_selected="<?php echo $wo['grouplist']['id']?>">
+   <td><input type="checkbox" id="check-data-<?php echo $wo['grouplist']['id']?>" class="delete-checkbox filled-in"><label for="check-data-<?php echo $wo['grouplist']['id']?>"></label></td>
+   <td><?php echo $wo['grouplist']['id']?></td>
+   <td>
+      <a href="<?php echo $wo['grouplist']['url']; ?>">
+      <img src="<?php echo $wo['grouplist']['avatar']; ?>" class="setting-avatar" alt="<?php echo $wo['grouplist']['avatar']?> Page Picture">
+      <?php echo $wo['grouplist']['group_name']; ?>
+      </a>
+   </td>
+   <td>
+      <a href="<?php echo $wo['grouplist']['owner']['url']; ?>">
+      <img src="<?php echo $wo['grouplist']['owner']['avatar']; ?>" class="setting-avatar" alt="<?php echo $wo['grouplist']['owner']['avatar']?> Profile Picture">
+      <?php echo $wo['grouplist']['owner']['name'];?>
+      </a>
+   </td>
+   <td><?php echo $wo['grouplist']['category'];?></td>
+   <td><?php echo $wo['grouplist']['members'];?></td>
+   <td>
+      <a target = "_blank" class="btn bg-info admn_table_btn" href="<?php echo Wo_SeoLink('index.php?link1=group-setting&group=' . $wo['grouplist']['group_name']) ?>">Edit</a>
+      <button onclick="Wo_DeleteGroup(<?php echo $wo['grouplist']['id']?>,'hide');" type="button" class="btn bg-danger admn_table_btn">Delete</button>
+   </td>
+</tr>

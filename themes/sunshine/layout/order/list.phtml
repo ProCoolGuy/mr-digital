@@ -1,0 +1,16 @@
+<div class="col-sm-3 ch_main_items">
+	<div class="prod_img">
+		<a href="<?php echo $wo['order']->product['url'] ?>" data-ajax="?link1=post&id=<?php echo $wo['order']->product['seo_id']?>">
+			<img src="<?php echo $wo['order']->product['images'][0]['image']?>">
+		</a>
+		<div><?php echo (!empty($wo['currencies'][$wo['order']->product['currency']]['symbol'])) ? $wo['currencies'][$wo['order']->product['currency']]['symbol'] : $wo['config']['classified_currency_s'];?><?php echo $wo['order']->product['price_format']?></div>
+	</div>
+    <div class="prod_info">
+        <h4><a href="<?php echo $wo['order']->product['url'] ?>" data-ajax="?link1=post&id=<?php echo $wo['order']->product['seo_id']?>"><?php echo $wo['order']->product['name'];?></a></h4>
+        <div class="price-wrap">
+			<div class="quantity">
+				Qty <?php echo $wo['order']->units ?>
+			</div>
+		</div>
+    </div>
+</div>

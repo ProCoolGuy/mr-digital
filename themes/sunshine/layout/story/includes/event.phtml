@@ -1,0 +1,33 @@
+<?php if(!empty($wo['story']['page_event_id'])) { ?>
+<div class="post-fetched-url wo_post_fetch_event">
+   <a href="<?php echo $wo['story']['event']['url'];?>">
+      <?php if (!empty($wo['story']['event']['cover'])) {?>
+      <div class="post-fetched-url-con">
+         <img src="<?php echo $wo['story']['event']['cover'];?>" class="<?php echo Wo_RightToLeft('pull-left');?>"/>
+         <div class="description">
+            <p>
+               <?php if (strlen($wo['story']['event']['description']) > 175):?>
+               <?php echo mb_substr($wo['story']['event']['description'],0,175,"UTF-8") . "..."; ?>
+               <?php else:?>
+               <?php echo $wo['story']['event']['description']; ?>
+               <?php endif;?>
+            </p>
+         </div>
+      </div>
+      <?php } ?>
+      <div class="fetched-url-text">
+         <h4><?php echo $wo['story']['event']['name'];?></h4>
+         <div class="url">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar">
+               <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+               <line x1="16" y1="2" x2="16" y2="6"></line>
+               <line x1="8" y1="2" x2="8" y2="6"></line>
+               <line x1="3" y1="10" x2="21" y2="10"></line>
+            </svg>
+            <?php echo $wo['story']['event']['start_date'];?> - <?php echo $wo['story']['event']['end_date'];?>
+         </div>
+      </div>
+      <div class="clear"></div>
+   </a>
+</div>
+<?php } ?>

@@ -1,0 +1,85 @@
+<div class="wo_settings_page wow_content wow_sett_content" style="box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);border-radius: 4px;">
+	<div class="wo_page_hdng pag_neg_padd">
+		<div class="wo_page_hdng_innr">
+			<span><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="currentColor" d="M22.7,19L13.6,9.9C14.5,7.6 14,4.9 12.1,3C10.1,1 7.1,0.6 4.7,1.7L9,6L6,9L1.6,4.7C0.4,7.1 0.9,10.1 2.9,12.1C4.8,14 7.5,14.5 9.8,13.6L18.9,22.7C19.3,23.1 19.9,23.1 20.3,22.7L22.6,20.4C23.1,20 23.1,19.3 22.7,19Z"></path></svg></span> <?php echo $wo['lang']['avatar_and_cover'];?>
+		</div>
+	</div>
+
+   <form  method="post" class="form-horizontal setting-profile-form" enctype="multipart/form-data">
+     <div class="setting-profile-alert setting-update-alert"></div>
+		
+		<div class="wow_cset_cover" title="<?php echo $wo['lang']['cover']; ?>">
+            <div class="wow_cset_cover_hdr">
+                <span class="btn btn-file" id="coverimage-holder" onclick="$('#cover').trigger('click'); return false;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M14,6L10.25,11L13.1,14.8L11.5,16C9.81,13.75 7,10 7,10L1,18H23L14,6Z" /></svg>
+                </span>
+                <input type="file" class="hidden" id="cover" accept="image/x-png, image/gif, image/jpeg" name="cover">
+            </div>
+			<div class="avatar-read" id="cover-form"><p></p></div>
+		</div>
+		<div class="wow_cset_avtr">
+            <div class="wow_cset_avtr_hdr">
+                <span class="btn btn-file" id="avatarimage-holder" onclick="$('#avatar').trigger('click'); return false;" title="<?php echo $wo['lang']['avatar']; ?>">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M4,4H7L9,2H15L17,4H20A2,2 0 0,1 22,6V18A2,2 0 0,1 20,20H4A2,2 0 0,1 2,18V6A2,2 0 0,1 4,4M12,7A5,5 0 0,0 7,12A5,5 0 0,0 12,17A5,5 0 0,0 17,12A5,5 0 0,0 12,7M12,9A3,3 0 0,1 15,12A3,3 0 0,1 12,15A3,3 0 0,1 9,12A3,3 0 0,1 12,9Z" /></svg>
+                </span>
+                <input type="file" class="hidden" id="avatar" accept="image/x-png, image/gif, image/jpeg" name="avatar">
+            </div>
+			<div class="avatar-read" id="photo-form"><p></p></div>
+		</div>
+
+		<div class="text-center">
+			<button class="btn btn-main btn-mat btn-mat-raised add_wow_loader" type="submit"><?php echo $wo['lang']['save']; ?></button>
+		</div>
+         <input type="hidden" name="page_id" id="page-id" value="<?php echo $wo['setting']['page_id'];?>">
+         <input type="hidden" name="hash_id" value="<?php echo Wo_CreateSession();?>">
+   </form>
+</div>
+
+<script type="text/javascript">
+$(document).ready(function() {
+	$("#cover").on('change', function() {
+	//Get count of selected files
+	$("#coverimage-holder").html("<img src='" + window.URL.createObjectURL(this.files[0]) + "' alt='Picture'>");
+	});
+});
+
+$(document).ready(function() {
+	$("#avatar").on('change', function() {
+	//Get count of selected files
+	$("#avatarimage-holder").html("<img src='" + window.URL.createObjectURL(this.files[0]) + "' alt='Picture'>");
+	});
+});
+
+$(function() {
+  $("#cover").change(function() {
+            var filename = $(this).val().replace(/C:\\fakepath\\/i, '');
+            $("#cover-form p").html(filename);
+            $("#cover-form").fadeIn(200);
+        });
+  $('form.setting-profile-form').ajaxForm({
+    url: Wo_Ajax_Requests_File() + '?f=pages&s=update_images_setting',
+    beforeSend: function() {
+      $('.setting-profile-form').find('.add_wow_loader').addClass('btn-loading');
+    },
+    success: function(data) {
+      if (data.status == 200) {
+        scrollToTop();
+        if (data.avatar) {
+          var page_id = $('form.setting-profile-form').find('#page-id').val();
+          $('[id^=updatepageImage-' + page_id + ']').fadeOut(300, function () { $('[id^=updatepageImage-' + page_id + ']').attr("src", data.avatar)}).fadeIn(300);
+        }
+        if (data.cover) {
+          $('[id^=cover-image]').fadeOut(300, function () { $('[id^=cover-image]').attr("src", data.cover)}).fadeIn(300);
+        }
+        $('.setting-profile-alert').html('<div class="alert alert-success">' + data.message + '</div>');
+        $('.alert-success').fadeIn('fast', function() {
+          $(this).delay(2500).slideUp(500, function() {
+            $(this).remove();
+          });
+        });
+      } 
+      $('.setting-profile-form').find('.add_wow_loader').removeClass('btn-loading');
+    }
+  });
+});
+</script>

@@ -1,0 +1,520 @@
+<div class="modal fade sun_modal" id="verify_code" role="dialog">
+	<div class="modal-dialog modal-sm">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></span></button>
+				<h4 class="modal-title" id="two_factor_title">
+					<?php 
+						if ($wo['config']['two_factor_type'] == 'both') {
+							echo $wo['lang']['confirmation_message_email_sent'];
+						}
+						elseif ($wo['config']['two_factor_type'] == 'email') {
+							echo $wo['lang']['confirmation_email_sent'];
+						}
+						elseif ($wo['config']['two_factor_type'] == 'phone') {
+							echo $wo['lang']['confirmation_message_sent'];
+						}
+					?>
+				</h4>
+			</div>
+			<form id="confirmation_code_form" class="confirmation_code_form" method="POST">
+				<div class="modal-body">
+					<div id="confirmation_code_form_alert"></div>
+					<span class="verfy_sett_email_phone_ico"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M21,13.34C20.37,13.12 19.7,13 19,13A6,6 0 0,0 13,19C13,19.34 13.03,19.67 13.08,20H3A2,2 0 0,1 1,18V6C1,4.89 1.89,4 3,4H19A2,2 0 0,1 21,6V13.34M23.5,17L18.5,22L15,18.5L16.5,17L18.5,19L22,15.5L23.5,17M3,6V8L11,13L19,8V6L11,11L3,6Z" /></svg></span>
+					<p id="two_factor_desc">
+						<?php 
+							if ($wo['config']['two_factor_type'] == 'both') {
+								echo $wo['lang']['confirmation_email_message_text'];
+							}
+							elseif ($wo['config']['two_factor_type'] == 'email') {
+								echo $wo['lang']['confirmation_email_text'];
+							}
+							elseif ($wo['config']['two_factor_type'] == 'phone') {
+								echo $wo['lang']['confirmation_message_text'];
+							}
+						?>
+					</p>
+					<div class="form-group verfy_sett_email_phone">
+						<input type="text" class="form-control" name="code" placeholder="<?php echo $wo['lang']['confirmation_code']; ?>">
+					</div>
+				</div>
+				<div class="modal-footer">
+					<div class="ball-pulse"><div></div><div></div><div></div></div>
+					<button id="confirmation_code_form_btn" type="submit" class="btn btn-main"><?php echo $wo['lang']['send']; ?></button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade sun_modal" id="verify_email_phone" role="dialog">
+	<div class="modal-dialog modal-sm">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></span></button>
+				<h4 class="modal-title" id="verify_email_phone_title">
+					<?php 
+						if ($wo['config']['sms_or_email'] == 'mail') {
+							echo $wo['lang']['confirmation_message_email_sent'];
+						}
+						elseif ($wo['config']['sms_or_email'] == 'sms') {
+							echo $wo['lang']['confirmation_message_sent'];
+						}
+					?>
+				</h4>
+			</div>
+			<form id="verify_email_phone_form" class="verify_email_phone_form" method="POST">
+				<div class="modal-body">
+					<div id="verify_email_phone_form_alert"></div>
+					<span class="verfy_sett_email_phone_ico"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M17,19V5H7V19H17M17,1A2,2 0 0,1 19,3V21A2,2 0 0,1 17,23H7C5.89,23 5,22.1 5,21V3C5,1.89 5.89,1 7,1H17M9,7H15V9H9V7M9,11H13V13H9V11Z" /></svg></span>
+					<p id="verify_email_phone_desc">
+						<?php 
+							if ($wo['config']['sms_or_email'] == 'mail') {
+								echo $wo['lang']['confirmation_email_text'];
+							}
+							elseif ($wo['config']['sms_or_email'] == 'sms') {
+								echo $wo['lang']['confirmation_message_text'];
+							}
+						?>
+					</p>
+					<div class="form-group verfy_sett_email_phone">
+						<input type="text" class="form-control" name="code" placeholder="<?php echo $wo['lang']['confirmation_code']; ?>">
+					</div>
+				</div>
+				<div class="modal-footer">
+					<div class="ball-pulse"><div></div><div></div><div></div></div>
+					<button id="verify_email_phone_form_btn" type="submit" class="btn btn-main"><?php echo $wo['lang']['send']; ?></button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+
+<?php
+$user_id            = $wo['user']['user_id'];
+$wo['is_admin']     = Wo_IsAdmin();
+$wo['is_moderoter'] = Wo_IsModerator();
+
+$wo['setting']['admin'] = false;
+if (isset($_GET['user']) && !empty($_GET['user']) && ($wo['is_admin'] === true || $wo['is_moderoter'] === true)) {
+    if (Wo_UserExists($_GET['user']) === false) {
+        header("Location: " . $wo['config']['site_url']);
+        exit();
+    }
+    $user_id                = Wo_UserIdFromUsername($_GET['user']);
+    $wo['setting']['admin'] = true;
+}
+$wo['setting'] = Wo_UserData($user_id);
+if ($wo['is_moderoter']) {
+  if ($wo['setting']['admin'] == 1) {
+       header("Location: " . $wo['config']['site_url']);
+       exit();
+  }
+}
+$wo['setting']['fileds'] = Wo_UserFieldsData($user_id);
+$wo['setting_page'] = 'general-setting';
+$pages_array = array(
+   'general-setting',
+   'profile-setting',
+   'privacy-setting',
+   'change-password-setting',
+   'social-links',
+   'design-setting',
+   'avatar-setting',
+   'email-setting',
+   'verification',
+   'blocked-users',
+   'transaction_log',
+   'my_points',
+   'manage-sessions',
+   'notifications-settings',
+   'two-factor',
+   'my_info',
+   'invitation_links',
+   'experience',
+   'certifications',
+   'projects',
+   'tiers',
+);
+if ($wo['setting']['user_id'] == $wo['user']['user_id']) {
+  $pages_array = array(
+   'general-setting',
+   'profile-setting',
+   'privacy-setting',
+   'change-password-setting',
+   'social-links',
+   'delete-account',
+   'design-setting',
+   'avatar-setting',
+   'email-setting',
+   'verification',
+   'blocked-users',
+   'transaction_log',
+   'my_points',
+   'manage-sessions',
+   'notifications-settings',
+   'two-factor',
+   'my_info',
+   'invitation_links',
+   'experience',
+   'certifications',
+   'projects',
+   'tiers',
+   );
+}
+if ($wo['config']['store_system'] == 'on') {
+  $pages_array[] = 'addresses';
+}
+if ($wo['config']['affiliate_system'] == 1) {
+  $pages_array[] = 'affiliates';
+  
+}
+if ($wo['config']['affiliate_system'] == 1 || $wo['config']['point_allow_withdrawal'] == 1 || $wo['config']['funding_system'] == 1) {
+	$pages_array[] = 'payments';
+}
+if (!empty($_GET['page'])) {
+   if (in_array($_GET['page'], $pages_array)) {
+      $wo['setting_page'] = $_GET['page'];
+   }
+   if ($wo['config']['deleteAccount'] != 1 && $wo['setting_page'] == 'delete-account') {
+   	$wo['setting_page'] = 'general-setting';
+   }
+}
+$wo['user_setting'] = '';
+if (!empty($_GET['user'])) {
+    $wo['user_setting'] = 'user=' . $_GET['user']. '&';
+}
+if ($wo['setting_page'] == 'invitation_links') {
+	$wo['available_links'] = Wo_GetAvailableLinks($wo['setting']['user_id']);
+	if ($wo['config']['user_links_limit'] > 0) {
+		$wo['generated_links'] = $wo['config']['user_links_limit'] - $wo['available_links'];
+	}
+	else{
+		$wo['generated_links'] = Wo_GetGeneratedLinks($wo['setting']['user_id']);
+	}
+	$wo['used_links'] = Wo_GetUsedLinks($wo['setting']['user_id']);
+}
+if ($wo['setting_page'] == 'addresses' && $wo['config']['store_system'] == 'on') {
+	$wo['address_html'] = '';
+    $wo['addresses'] = $db->where('user_id',$wo['setting']['user_id'])->orderBy('id','DESC')->get(T_USER_ADDRESS);
+    if (!empty($wo['addresses'])) {
+        foreach ($wo['addresses'] as $key => $wo['address']) {
+            $wo['address_html'] .= Wo_LoadPage("setting/includes/addresses_list");
+        }
+    }
+}
+if ($wo['setting_page'] == 'tiers' && $wo['config']['website_mode'] == 'patreon') {
+	$wo['tiers_html'] = '';
+    $wo['tiers'] = $db->where('user_id',$wo['setting']['user_id'])->orderBy('id','DESC')->get(T_USER_TIERS);
+    if (!empty($wo['tiers'])) {
+        foreach ($wo['tiers'] as $key => $wo['tier']) {
+            $wo['tiers_html'] .= Wo_LoadPage("setting/includes/tiers_list");
+        }
+    }
+}
+if ($wo['setting_page'] == 'experience') {
+	$wo['experience_html'] = '';
+    $wo['experiences'] = $db->where('user_id',$wo['setting']['user_id'])->orderBy('id','DESC')->get(T_USER_EXPERIENCE);
+    if (!empty($wo['experiences'])) {
+        foreach ($wo['experiences'] as $key => $wo['experience']) {
+            $wo['experience_html'] .= Wo_LoadPage("setting/includes/experience_list");
+        }
+    }
+}
+if ($wo['setting_page'] == 'certifications') {
+	$wo['certification_html'] = '';
+    $wo['certifications'] = $db->where('user_id',$wo['setting']['user_id'])->orderBy('id','DESC')->get(T_USER_CERTIFICATION);
+    if (!empty($wo['certifications'])) {
+        foreach ($wo['certifications'] as $key => $wo['certification']) {
+            $wo['certification_html'] .= Wo_LoadPage("setting/includes/certification_list");
+        }
+    }
+}
+if ($wo['setting_page'] == 'projects') {
+	$wo['projects_html'] = '';
+    $wo['projects'] = $db->where('user_id',$wo['setting']['user_id'])->orderBy('id','DESC')->get(T_USER_PROJECTS);
+    if (!empty($wo['projects'])) {
+        foreach ($wo['projects'] as $key => $wo['project']) {
+            $wo['projects_html'] .= Wo_LoadPage("setting/includes/project_list");
+        }
+    }
+}
+?>
+<div class="page-margin">
+	<div class="row setting-panel" style="position:relative;">
+		<div class="col-md-2 leftcol"><?php echo Wo_LoadPage("sidebar/left-sidebar"); ?></div>
+		<div class="col-md-7 singlecol">
+			<div class="sun_setting_header">
+				<div class="ss_innr">
+					<h3><?php echo $wo['lang']['user_setting'];?></h3>
+					<div class="sun_set_avatr">
+						<a href="<?php echo $wo['setting']['url'];?>" data-ajax="?link1=timeline&u=<?php echo $wo['setting']['username'];?>">
+							<img src="<?php echo $wo['setting']['avatar'];?>" alt="<?php echo $wo['setting']['name'];?>" />
+							<?php echo $wo['setting']['name'];?>
+						</a>
+					</div>
+				</div>
+				<div class="sun_sett_circle-1"></div>
+				<div class="sun_sett_circle-2"></div>
+				<div class="sun_sett_circle-3"></div>
+			</div>
+			<div class="row sun_setting_body">
+				<div class="col-md-8 col-sm-8"><?php echo Wo_LoadPage("setting/" . $wo['setting_page']); ?></div>
+				<div class="col-md-4 col-sm-4"><?php echo Wo_LoadPage('setting/user-setting-sidebar');?></div>
+			</div>
+		</div>
+	</div>
+</div>
+<?php if ($wo['setting_page'] == 'experience') { ?>
+<!-- experience -->
+<div class="modal fade sun_modal" id="delete-experience" tabindex="-1" role="dialog" aria-labelledby="delete-experience" aria-hidden="true" data-id="0">
+  <div class="modal-dialog mat_box" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></span></button>
+        <h5 class="modal-title"> <?php echo $wo['lang']['delete_your_experience']; ?></h5>
+      </div>
+      <div class="modal-body">
+        <?php echo $wo['lang']['are_you_delete_your_experience']; ?>
+      </div>  
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger btn-mat" data-dismiss="modal"><?php echo $wo['lang']['delete']; ?></button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade sun_modal" id="add_experience_modal" role="dialog" data-keyboard="false" style="overflow-y: auto;">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></span></button>
+        <h4 class="modal-title"><?php echo $wo['lang']['add_new_experience'] ?></h4>
+      </div>
+      <form class="form form-horizontal add_experience_form" method="post" action="#">
+        <div class="modal-body twocheckout_modal">
+          <div class="modal_add_experience_modal_alert"></div>
+          <div class="clear"></div>
+          <div class="sun_input col-lg-6">
+            <input id="experience_title" name="title" type="text" class="form-control input-md" autocomplete="off" placeholder="<?php echo $wo['lang']['title']; ?>">
+            <label class="plr15" for="title"><?php echo $wo['lang']['title']; ?></label>  
+            <span class="help-block checking"></span>  
+          </div>
+          <div class="sun_input col-lg-6">
+            <input id="experience_company_name" name="company_name" type="text" class="form-control input-md" autocomplete="off" placeholder="<?php echo $wo['lang']['company_name']; ?>">
+            <label class="plr15" for="company_name"><?php echo $wo['lang']['company_name']; ?></label>  
+            <span class="help-block checking"></span>  
+          </div>
+          <div class="sun_input col-lg-6">
+            <select id="experience_employment_type" name="employment_type" class="form-control">
+              <?php foreach ($wo['employment_type'] as $key => $value) { ?>
+                <option value="<?php echo $key;?>"><?php echo $wo['lang'][$value];?></option>
+              <?php } ?>
+            </select>
+            <label class="plr15" for="employment_type"><?php echo $wo['lang']['employment_type']; ?></label>
+          </div>
+          <div class="sun_input col-lg-6">
+            <input id="experience_location" name="location" type="text" class="form-control input-md" autocomplete="off" placeholder="<?php echo $wo['lang']['location']; ?>">
+            <label class="plr15" for="location"><?php echo $wo['lang']['location']; ?></label>  
+            <span class="help-block checking"></span>  
+          </div>
+          <div class="sun_input col-lg-6">
+            <label class="plr15" for="experience_start"><?php echo $wo['lang']['start_date']; ?></label>
+            <input type="text" class="form-control experience_start" id="experience_start" name="experience_start">
+          </div>
+          <div class="sun_input col-lg-6">
+            <label class="plr15" for="experience_end"><?php echo $wo['lang']['end_date']; ?>:</label>  
+            <input type="text" class="form-control experience_end" name="experience_end" id="experience_end">
+          </div>
+          <div class="sun_input col-lg-6">
+            <input id="experience_headline" name="headline" type="text" class="form-control input-md" autocomplete="off" placeholder="<?php echo $wo['lang']['headline']; ?>">
+            <label class="plr15" for="headline"><?php echo $wo['lang']['headline']; ?></label>  
+            <span class="help-block checking"></span>  
+          </div>
+          <div class="sun_input col-lg-6">
+            <input id="experience_industry" name="industry" type="text" class="form-control input-md" autocomplete="off" placeholder="<?php echo $wo['lang']['industry']; ?>">
+            <label class="plr15" for="industry"><?php echo $wo['lang']['industry']; ?></label>  
+            <span class="help-block checking"></span>  
+          </div>
+          <div class="sun_input col-lg-12">
+            <input id="experience_link" name="link" type="text" class="form-control input-md" autocomplete="off" placeholder="<?php echo $wo['lang']['link']; ?>">
+            <label class="plr15" for="link"><?php echo $wo['lang']['link']; ?></label>  
+            <span class="help-block checking"></span>  
+          </div>
+          <div class="sun_input col-lg-12">
+            <textarea name="description" id="experience_description" class="form-control" rows="5"></textarea>
+            <label class="plr15" for="description"><?php echo $wo['lang']['description']; ?></label>  
+            <span class="help-block checking"></span>  
+          </div>
+          <div class="form-group col-lg-12">
+            <label class="col-md-12" for="image"><?php echo $wo['lang']['image'] ?>:</label>  
+            <div class="col-md-12">
+              <div class="select_ev_covr" id="select_experience_image">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M5,3A2,2 0 0,0 3,5V19A2,2 0 0,0 5,21H14.09C14.03,20.67 14,20.34 14,20C14,19.32 14.12,18.64 14.35,18H5L8.5,13.5L11,16.5L14.5,12L16.73,14.97C17.7,14.34 18.84,14 20,14C20.34,14 20.67,14.03 21,14.09V5C21,3.89 20.1,3 19,3H5M19,16V19H16V21H19V24H21V21H24V19H21V16H19Z" /></svg>
+                <?php echo $wo['lang']['select_image'] ?>    
+              </div>
+            </div>
+          </div>
+          <div class="clear"></div>
+        </div>
+        <input type="file" name="image" class="hidden" id="experience_image">
+        <div class="clear"></div>
+        <div class="modal-footer">
+          <div class="ball-pulse"><div></div><div></div><div></div></div>
+          <button type="submit" class="btn btn-main btn-mat"><?php echo $wo['lang']['add']; ?></button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<div class="full_edit_experience_modal"></div>
+<!-- experience -->
+<?php } ?>
+<?php if ($wo['setting_page'] == 'certifications') { ?>
+<!-- certification -->
+<div class="modal fade sun_modal" id="delete-certification" tabindex="-1" role="dialog" aria-labelledby="delete-certification" aria-hidden="true" data-id="0">
+  <div class="modal-dialog mat_box" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></span></button>
+        <h5 class="modal-title"> <?php echo $wo['lang']['delete_your_certification']; ?></h5>
+      </div>
+      <div class="modal-body">
+        <?php echo $wo['lang']['are_you_delete_your_certification']; ?>
+      </div>  
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger btn-mat" data-dismiss="modal"><?php echo $wo['lang']['delete']; ?></button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade sun_modal" id="add_certification_modal" role="dialog" data-keyboard="false" style="overflow-y: auto;">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></span></button>
+        <h4 class="modal-title"><?php echo $wo['lang']['add_new_certification'] ?></h4>
+      </div>
+      <form class="form form-horizontal add_certification_form" method="post" action="#">
+        <div class="modal-body twocheckout_modal">
+          <div class="modal_add_certification_modal_alert"></div>
+          <div class="clear"></div>
+          <div class="sun_input col-lg-6">
+            <input id="certification_name" name="name" type="text" class="form-control input-md" autocomplete="off" placeholder="<?php echo $wo['lang']['name']; ?>">
+            <label class="plr15" for="name"><?php echo $wo['lang']['name']; ?></label>  
+            <span class="help-block checking"></span>  
+          </div>
+          <div class="sun_input col-lg-6">
+            <input id="certification_issuing_organization" name="issuing_organization" type="text" class="form-control input-md" autocomplete="off" placeholder="<?php echo $wo['lang']['issuing_organization']; ?>">
+            <label class="plr15" for="issuing_organization"><?php echo $wo['lang']['issuing_organization']; ?></label>  
+            <span class="help-block checking"></span>  
+          </div>
+          <div class="sun_input col-lg-6">
+            <input id="certification_credential_id" name="credential_id" type="text" class="form-control input-md" autocomplete="off" placeholder="<?php echo $wo['lang']['credential_id']; ?>">
+            <label class="plr15" for="credential_id"><?php echo $wo['lang']['credential_id']; ?></label>  
+            <span class="help-block checking"></span>  
+          </div>
+          <div class="sun_input col-lg-6">
+            <input id="certification_credential_url" name="credential_url" type="text" class="form-control input-md" autocomplete="off" placeholder="<?php echo $wo['lang']['credential_url']; ?>">
+            <label class="plr15" for="credential_url"><?php echo $wo['lang']['credential_url']; ?></label>  
+            <span class="help-block checking"></span>  
+          </div>
+          <div class="sun_input col-lg-6">
+            <label class="plr15" for="certification_start"><?php echo $wo['lang']['issue_date']; ?></label>
+            <input type="text" class="form-control certification_start" id="certification_start" name="certification_start">
+          </div>
+          <div class="sun_input col-lg-6">
+            <label class="plr15" for="certification_end"><?php echo $wo['lang']['expiration_date']; ?>:</label>  
+            <input type="text" class="form-control certification_end" name="certification_end" id="certification_end">
+          </div>
+          <div class="sun_input col-lg-6">
+            <label class="plr15"><?php echo $wo['lang']['pdf_file']; ?></label>  
+            <input type="file" class="form-control" name="pdf" accept="application/pdf">
+          </div>
+          <div class="clear"></div>
+        </div>
+        <div class="clear"></div>
+        <div class="modal-footer">
+          <div class="ball-pulse"><div></div><div></div><div></div></div>
+          <button type="submit" class="btn btn-main btn-mat"><?php echo $wo['lang']['add']; ?></button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<div class="full_edit_certifications_modal"></div>
+<!-- certification -->
+<?php } ?>
+<?php if ($wo['setting_page'] == 'projects') { ?>
+<!-- projects -->
+<div class="modal fade sun_modal" id="delete-project" tabindex="-1" role="dialog" aria-labelledby="delete-project" aria-hidden="true" data-id="0">
+  <div class="modal-dialog mat_box" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></span></button>
+        <h5 class="modal-title"> <?php echo $wo['lang']['delete_your_project']; ?></h5>
+      </div>
+      <div class="modal-body">
+        <?php echo $wo['lang']['are_you_delete_your_project']; ?>
+      </div>  
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger btn-mat" data-dismiss="modal"><?php echo $wo['lang']['delete']; ?></button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade sun_modal" id="add_project_modal" role="dialog" data-keyboard="false" style="overflow-y: auto;">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></span></button>
+        <h4 class="modal-title"><?php echo $wo['lang']['add_new_project'] ?></h4>
+      </div>
+      <form class="form form-horizontal add_project_form" method="post" action="#">
+        <div class="modal-body twocheckout_modal">
+          <div class="modal_add_project_modal_alert"></div>
+          <div class="clear"></div>
+          <div class="sun_input col-lg-12">
+            <input name="name" type="text" class="form-control input-md" autocomplete="off" placeholder="<?php echo $wo['lang']['name']; ?>">
+            <label class="plr15" for="name"><?php echo $wo['lang']['project_name']; ?></label>  
+            <span class="help-block checking"></span>  
+          </div>
+          <div class="sun_input col-lg-6">
+            <label class="plr15" for="project_start"><?php echo $wo['lang']['start_date']; ?></label>
+            <input type="text" class="form-control project_start" name="project_start">
+          </div>
+          <div class="sun_input col-lg-6">
+            <label class="plr15" for="project_end"><?php echo $wo['lang']['end_date']; ?></label>  
+            <input type="text" class="form-control project_end" name="project_end">
+          </div>
+          <div class="sun_input col-lg-6">
+            <input name="associated_with" type="text" class="form-control input-md" autocomplete="off" placeholder="<?php echo $wo['lang']['associated_with']; ?>">
+            <label class="plr15" for="associated_with"><?php echo $wo['lang']['associated_with']; ?></label>  
+            <span class="help-block checking"></span>  
+          </div>
+          <div class="sun_input col-lg-6">
+            <input name="project_url" type="text" class="form-control input-md" autocomplete="off" placeholder="<?php echo $wo['lang']['project_url']; ?>">
+            <label class="plr15" for="project_url"><?php echo $wo['lang']['project_url']; ?></label>  
+            <span class="help-block checking"></span>  
+          </div>
+          <div class="sun_input col-lg-12">
+            <textarea name="description" class="form-control" rows="5"></textarea>
+            <label class="plr15" for="description"><?php echo $wo['lang']['description']; ?></label>  
+            <span class="help-block checking"></span>  
+          </div>
+          <div class="clear"></div>
+        </div>
+        <div class="clear"></div>
+        <div class="modal-footer">
+          <div class="ball-pulse"><div></div><div></div><div></div></div>
+          <button type="submit" class="btn btn-main btn-mat"><?php echo $wo['lang']['add']; ?></button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<div class="full_edit_projects_modal"></div>
+<!-- projects -->
+<?php } ?>
+<?php if ($wo['setting_page'] == 'addresses') { ?>
+<div class="full_edit_addresses_modal"></div>
+<?php } ?>

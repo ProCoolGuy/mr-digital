@@ -1,0 +1,76 @@
+<div class="container-fluid">
+    <div>
+        <h3>Create New Section</h3>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="#">Home</a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a href="#">Manage Features</a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a href="#">Forums</a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">Create New Section</li>
+            </ol>
+        </nav>
+    </div>
+    <!-- Vertical Layout -->
+    <div class="row">
+        <div class="col-lg-6 col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="card-title">Create New Section</h6>
+                    <div class="alert alert-info">You can create a section in forums, a section is used to create forums in sections.</div>
+                    <div class="newsection-alert"></div>
+                    <div class="newsection-error-alert"></div>
+                    <form class="newsection" method="POST">
+                        <div class="form-group form-float">
+                            <div class="form-line">
+                                <label class="form-label">Name</label>
+                                <input type="text" id="name" name="name" class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-group form-float">
+                            <div class="form-line">
+                                <label class="form-label">Description</label>
+                                <textarea name="description" id="description" class="form-control" cols="30" rows="3"></textarea>
+                            </div>
+                        </div>
+                        <input type="hidden" name="hash_id" value="<?php echo Wo_CreateSession();?>">
+                        <button type="submit" class="btn btn-primary m-t-15 waves-effect">Create Section</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+    <!-- #END# Vertical Layout -->
+<script>
+
+$(function() {
+    var form_new_section = $('form.newsection');
+    form_new_section.ajaxForm({
+        url: Wo_Ajax_Requests_File()  +  '?f=new-forum-section&hash=' + $('.main_session').val(),
+        beforeSend: function() {
+            form_new_section.find('button').text('Please wait..');
+        },
+        success: function(data) {
+            if (data.status == 200) {
+                $("html, body").animate({ scrollTop: 0 }, "slow");
+                $('.newsection-alert').html('<div class="alert alert-success"><i class="fa fa-check"></i> New section created successfully.</div>');
+                setTimeout(function () {
+                    $('.newsection-alert').empty();
+                }, 2000);
+            } else {
+                $('.newsection-alert').html('<div class="alert alert-danger">'+data['message']+'</div>');
+                setTimeout(function () {
+                    $('.newsection-alert').empty();
+                }, 2000);
+            } 
+            form_new_section.find('button').text('Create Section');
+        }
+    });
+});
+</script>

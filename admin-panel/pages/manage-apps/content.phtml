@@ -1,0 +1,290 @@
+<?php
+$page           = (!empty($_GET['page-id']) && is_numeric($_GET['page-id'])) ? $_GET['page-id'] : 1;
+$filter_keyword = (!empty($_GET['query'])) ? Wo_Secure($_GET['query']) : '';
+$db->pageLimit  = 50;
+$link = '';
+
+if (!empty($filter_keyword)) {
+  $link .= '&query='.$filter_keyword;
+  $sql   = "(
+    `app_name`     LIKE '%$filter_keyword%' OR 
+    `app_website_url`        LIKE '%$filter_keyword%' OR 
+    `app_description`   LIKE '%$filter_keyword%' OR 
+    `app_callback_url`   LIKE '%$filter_keyword%' OR 
+    `app_id` LIKE '%$filter_keyword%' OR 
+    `app_secret`    LIKE '%$filter_keyword%'
+  )";
+
+  $db->where($sql);
+}
+$sort_link = $link;
+$sort_array = array('DESC_i' => array('id' , 'DESC'),
+                    'ASC_i'  => array('id' , 'ASC'),
+                    'DESC_n' => array('app_name' , 'DESC'),
+                    'ASC_n'  => array('app_name' , 'ASC'));
+if (!empty($_GET['sort']) && in_array($_GET['sort'], array_keys($sort_array))) {
+  $link .= "&sort=".Wo_Secure($_GET['sort']);
+  $db->orderBy($sort_array[$_GET['sort']][0],$sort_array[$_GET['sort']][1]);
+}
+else{
+    $_GET['sort'] = 'DESC_i';
+    $db->orderBy('id', 'DESC');
+} 
+$apps = $db->objectbuilder()->paginate(T_APPS, $page);
+?>
+<div class="container-fluid">
+    <div>
+        <h3>Manage Apps</h3>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="#">Home</a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a href="#">Manage Features</a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">Manage Apps</li>
+            </ol>
+        </nav>
+    </div>
+    <!-- Vertical Layout -->
+    <div class="row">
+        <div class="col-lg-12 col-md-12">
+            <div class="card">
+                <div class="card-body">
+                  <h6 class="card-title">Manage Apps</h6>
+                   <input type="hidden" id="hash_id" name="hash_id" value="<?php echo Wo_CreateSession();?>">
+                   <div class="row">
+                      <div class="col-md-12">
+                         <div class="site-settings-alert"></div>
+                      </div>
+                      <div class="col-md-9" style="margin-bottom:0;">
+                        <form method="get" action="<?php echo Wo_LoadAdminLinkSettings('manage-apps'); ?>">
+                          <div class="row">
+                            <div class="col-md-4">
+                              <div class="form-group form-float">
+                                  <div class="form-line">
+                                    <label class="form-label search-form">
+                                        Search for app
+                                      </label>
+                                      <input type="text" name="query" id="query" class="form-control" value="<?php echo($filter_keyword); ?>">
+                                  </div>
+                              </div>
+                            </div>
+                            <div class="col-md-1">
+                              <label>&nbsp;</label>
+                               <button class="btn btn-info">Search</button>
+                            </div>
+                          </div>
+                          <div class="clearfix"></div>
+                        </form>
+                      </div>
+                    </div>
+                    <div class="clearfix"></div>
+                   <div class="table-responsive1">
+                        <table class="table table-bordered table-striped table-hover">
+                            <thead>
+                                <tr>
+                                  <th><input type="checkbox" id="check-all" class="filled-in check-all" ><label for="check-all"></label></th>
+                                      <th>ID 
+                                  <?php if (!empty($_GET['sort']) && $_GET['sort'] == 'DESC_i') { ?>
+                                      <svg onclick="location.href = '<?php echo(Wo_LoadAdminLinkSettings('manage-apps?page-id=1').$sort_link."&sort=ASC_i") ?>'" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#000000" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-up cursor-p"><line x1="12" y1="19" x2="12" y2="5"></line><polyline points="5 12 12 5 19 12"></polyline></svg>
+                                  <?php }else{ ?>
+                                      <svg onclick="location.href = '<?php echo(Wo_LoadAdminLinkSettings('manage-apps?page-id=1').$sort_link."&sort=DESC_i") ?>'" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#000000" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-down cursor-p"><line x1="12" y1="5" x2="12" y2="19"></line><polyline points="19 12 12 19 5 12"></polyline></svg>
+                                  <?php } ?></th>
+                                      <th>Avatar</th>
+					                  <th>Name 
+                                  <?php if (!empty($_GET['sort']) && $_GET['sort'] == 'DESC_n') { ?>
+                                      <svg onclick="location.href = '<?php echo(Wo_LoadAdminLinkSettings('manage-apps?page-id=1').$sort_link."&sort=ASC_n") ?>'" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#000000" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-up cursor-p"><line x1="12" y1="19" x2="12" y2="5"></line><polyline points="5 12 12 5 19 12"></polyline></svg>
+                                  <?php }else{ ?>
+                                      <svg onclick="location.href = '<?php echo(Wo_LoadAdminLinkSettings('manage-apps?page-id=1').$sort_link."&sort=DESC_n") ?>'" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#000000" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-down cursor-p"><line x1="12" y1="5" x2="12" y2="19"></line><polyline points="19 12 12 19 5 12"></polyline></svg>
+                                  <?php } ?></th>
+					                  <th>Website</th>
+					                  <th>Callback url</th>
+                                      <th>Description</th>
+                                      <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                               <?php 
+				               foreach ($apps as $value) {
+                        $wo['app'] = Wo_GetApp($value->id);
+				                  echo Wo_LoadAdminPage('manage-apps/list');
+				                }
+				               ?>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="wo-admincp-feturepager">
+                      <div class="pull-left">
+                        <span>
+                          <?php echo "Showing $page out of " . $db->totalPages; ?>
+                        </span>
+                      </div>
+                      <div class="pull-right">
+                        <nav>
+                          <ul class="pagination">
+                            <li>
+                              <a href="<?php echo Wo_LoadAdminLinkSettings('manage-apps?page-id=1').$link; ?>" data-ajax="?path=manage-apps&page-id=1<?php echo($link); ?>" class="waves-effect" title='First Page'>
+                                  <i class="material-icons">first_page</i>
+                              </a>
+                            </li>
+                            <?php if ($page > 1) {  ?>
+                              <li>
+                                  <a href="<?php echo Wo_LoadAdminLinkSettings('manage-apps?page-id=' . ($page - 1)).$link; ?>" data-ajax="?path=manage-apps&page-id=<?php echo($page - 1) ?><?php echo($link); ?>" class="waves-effect" title='Previous Page'>
+                                      <i class="material-icons">chevron_left</i>
+                                  </a>
+                              </li>
+                            <?php  } ?>
+
+                            <?php 
+                              $nums       = 0;
+                              $nums_pages = ($page > 4) ? ($page - 4) : $page;
+
+                              for ($i=$nums_pages; $i <= $db->totalPages; $i++) { 
+                                if ($nums < 20) {
+                            ?>
+                              <li class="<?php echo ($page == $i) ? 'active' : ''; ?>">
+                                <a href="<?php echo Wo_LoadAdminLinkSettings('manage-apps?page-id=' . ($i)).$link; ?>" data-ajax="?path=manage-apps&page-id=<?php echo($i) ?><?php echo($link); ?>" class="waves-effect">
+                                  <?php echo $i ?>   
+                                </a>
+                              </li>
+
+                            <?php } $nums++; }?>
+
+                            <?php if ($db->totalPages > $page) { ?>
+                              <li>
+                                  <a href="<?php echo Wo_LoadAdminLinkSettings('manage-apps?page-id=' . ($page + 1)).$link; ?>" data-ajax="?path=manage-apps&page-id=<?php echo($page + 1) ?><?php echo($link); ?>" class="waves-effect" title="Next Page">
+                                      <i class="material-icons">chevron_right</i>
+                                  </a>
+                              </li>
+                            <?php } ?>
+                            <li>
+                              <a href="<?php echo Wo_LoadAdminLinkSettings('manage-apps?page-id=' . ($db->totalPages)).$link; ?>" data-ajax="?path=manage-apps&page-id=<?php echo($db->totalPages) ?><?php echo($link); ?>" class="waves-effect" title='Last Page'>
+                                  <i class="material-icons">last_page</i>
+                              </a>
+                            </li>
+                          </ul>
+                        </nav>
+                      </div>
+                      <div class="clearfix"></div>
+                      <div class="row">
+                          <div class="col-lg-3 col-md-3">
+                              <span>&nbsp;</span>
+                              <button type="button" class="btn btn-info waves-effect delete-selected d-block" disabled>Delete Selected<span></span></button>
+                          </div>
+                      </div>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+    <!-- #END# Vertical Layout -->
+<!-- <div class="modal fade" id="delete-app">
+   <div class="modal-dialog">
+      <div class="modal-content modal-col-red">
+         <div class="modal-header">
+            <h4 class="modal-title"><i class="fa fa-exclamation-circle"></i>
+               Delete
+            </h4>
+         </div>
+         <div class="modal-body">
+            <p>Are you sure you want to delete this app?</p>
+         </div>
+         <div class="modal-footer">
+            <button  type="button" onclick="Wo_DeleteApp($('#delete-app').attr('data-app-ident'))" class="btn btn-link">DELETE</button>
+            <button  type="button" class="btn btn-link" data-dismiss="modal">CANCEL</button>
+         </div>
+      </div>
+   </div>
+</div> -->
+<div class="modal fade" id="DeleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModal1Label" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModal1Label">Delete app?</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to delete this app?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="SelectedDeleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModal1Label" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModal1Label">Delete app?</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Are you sure that you want to remove the selected app?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="DeleteSelected()" data-dismiss="modal">Submit</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+// jQuery(document).ready(function($) {
+//    $(document).on('click', ".delete-app", function(event) {
+//       $("#delete-app").attr('data-app-ident', $(this).attr('id')).modal('show');
+
+//   });
+// });
+$('.check-all').on('click', function(event) {
+      $('input:checkbox').not(this).prop('checked', this.checked);
+  });
+  $('.delete-checkbox, .check-all').change(function(event) {
+      $('.delete-selected').attr('disabled', false);
+      $('.delete-selected').find('span').text(' (' + $('.delete-checkbox:checked').length + ')');
+  });
+
+  $('.delete-selected').on('click', function(event) {
+      event.preventDefault();
+      $('#SelectedDeleteModal').modal('show');
+  });
+  function DeleteSelected() {
+      data = new Array();
+      $('td input:checked').parents('tr').each(function () {
+          data.push($(this).attr('data_selected'));
+      });
+      $('.delete-selected').attr('disabled', true);
+      $('.delete-selected').text('Please wait..');
+      $.post(Wo_Ajax_Requests_File()+"?f=admin_setting&s=remove_multi_app", {ids: data}, function () {
+          $.each( data, function( index, value ){
+              $("#AppID_"+value).remove();
+          });
+          $('.delete-selected').text('Delete Selected');
+      });
+  }
+function Wo_DeleteApp(id,type = 'show') {
+  if (!id) {
+   return false;
+  }
+  if (type == 'hide') {
+    $('#DeleteModal').find('.btn-primary').attr('onclick', "Wo_DeleteApp('"+id+"')");
+    $('#DeleteModal').modal('show');
+    return false;
+  }
+ $('#AppID_' + id).fadeOut(300, function() {
+     $(this).remove();
+   });
+ $("#delete-app").modal('hide');
+$.get(Wo_Ajax_Requests_File(),{f:'delete-app',id: id});
+  
+}
+</script>

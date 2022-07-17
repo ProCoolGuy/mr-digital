@@ -1,0 +1,68 @@
+<div class="wow_content wow_sett_content">
+	<div class="wo_page_hdng pag_neg_padd">
+		<div class="wo_page_hdng_innr">
+			<span><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="currentColor" d="M22.7,19L13.6,9.9C14.5,7.6 14,4.9 12.1,3C10.1,1 7.1,0.6 4.7,1.7L9,6L6,9L1.6,4.7C0.4,7.1 0.9,10.1 2.9,12.1C4.8,14 7.5,14.5 9.8,13.6L18.9,22.7C19.3,23.1 19.9,23.1 20.3,22.7L22.6,20.4C23.1,20 23.1,19.3 22.7,19Z"></path></svg></span> <?php echo $wo['lang']['privacy_setting'];?>
+		</div>
+	</div>
+	<form  method="post" class="form-horizontal setting-information-form">
+		<div class="setting-information-alert setting-update-alert"></div>
+		
+		<div class="form-group">
+            <label class="col-md-5" for="privacy"><?php echo $wo['lang']['group_type'];?> </label>
+            <div class="col-md-5">
+				<div class="wow_form_fields mt-0">
+					<select id="privacy" name="privacy" class="form-control">
+						<?php 
+							$selected_privacy_yes   = ($wo['setting']['privacy'] == 1)   ? ' selected' : '';
+							$selected_privacy_no  = ($wo['setting']['privacy'] == 2)   ? ' selected' : '';
+						?>
+						<option value="1" <?php echo $selected_privacy_yes; ?>><?php echo $wo['lang']['public'];?> </option>
+						<option value="2" <?php echo $selected_privacy_no; ?>><?php echo $wo['lang']['private'];?> </option>
+					</select>
+				</div>
+            </div>
+		</div>
+		<div class="form-group">
+            <label class="col-md-5" for="join_privacy"><?php echo $wo['lang']['confirm_request_group_privacy_label'];?></label>
+            <div class="col-md-5">
+				<div class="wow_form_fields mt-0">
+					<select id="join_privacy" name="join_privacy">
+						<?php 
+							$selected_followp_yes   = ($wo['setting']['join_privacy'] == 1)   ? ' selected' : '';
+							$selected_followp_no  = ($wo['setting']['join_privacy'] == 2)   ? ' selected' : '';
+						?>
+						<option value="1" <?php echo $selected_followp_yes; ?>><?php echo $wo['lang']['no'];?></option>
+						<option value="2" <?php echo $selected_followp_no; ?>><?php echo $wo['lang']['yes'];?></option>
+					</select>
+				</div>
+            </div>
+		</div>
+		<div class="text-center">
+            <button class="btn btn-main btn-mat btn-mat-raised add_wow_loader" type="submit"><?php echo $wo['lang']['save']; ?></button>
+		</div>
+		<input type="hidden" name="group_id" value="<?php echo $wo['setting']['id'];?>">
+		<input type="hidden" name="hash_id" value="<?php echo Wo_CreateSession();?>">
+	</form>
+</div>
+<script type="text/javascript">
+$(function() {
+  $('form.setting-information-form').ajaxForm({
+    url: Wo_Ajax_Requests_File() + '?f=groups&s=update_privacy_setting',
+    beforeSend: function() {
+      $('.setting-information-form').find('.add_wow_loader').addClass('btn-loading');
+    },
+    success: function(data) {
+      if (data.status == 200) {
+        scrollToTop();
+        $('.setting-information-alert').html('<div class="alert alert-success">' + data.message + '</div>');
+        $('.alert-success').fadeIn('fast', function() {
+          $(this).delay(2500).slideUp(500, function() {
+            $(this).remove();
+          });
+        });
+      }
+      $('.setting-information-form').find('.add_wow_loader').removeClass('btn-loading');
+    }
+  });
+});
+</script>

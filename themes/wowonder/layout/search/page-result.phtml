@@ -1,0 +1,33 @@
+<div class="col-xs-12 col-sm-6" data-id="<?php echo $wo['result']['id']; ?>" data-search-type="<?php echo $wo['result']['type']; ?>">
+<div class="page_list row boosted_pages">
+	<div class="col-xs-2 col-md-2 no-padding-left">
+		<a href="<?php echo $wo['result']['url']. $wo['marker'];?>ref=se" data-ajax="?link1=timeline&u=<?php echo $wo['result']['username']?>&ref=se">
+			<div class="avatar">
+				<img src="<?php echo $wo['result']['avatar'];?>" alt="<?php echo $wo['result']['name']; ?> Profile Picture" />
+			</div>
+		</a>
+	</div>
+	<div class="col-xs-6 col-md-6">
+		<a href="<?php echo $wo['result']['url']. $wo['marker'];?>ref=se" data-ajax="?link1=timeline&u=<?php echo $wo['result']['username']?>&ref=se">
+			<span class="page_title"><?php echo $wo['result']['name']; ?></span>
+		</a>
+		<div class="page_info">
+			<ul>
+				<li>
+					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" class="feather"><path fill="currentColor" d="M5.5,7A1.5,1.5 0 0,1 4,5.5A1.5,1.5 0 0,1 5.5,4A1.5,1.5 0 0,1 7,5.5A1.5,1.5 0 0,1 5.5,7M21.41,11.58L12.41,2.58C12.05,2.22 11.55,2 11,2H4C2.89,2 2,2.89 2,4V11C2,11.55 2.22,12.05 2.59,12.41L11.58,21.41C11.95,21.77 12.45,22 13,22C13.55,22 14.05,21.77 14.41,21.41L21.41,14.41C21.78,14.05 22,13.55 22,13C22,12.44 21.77,11.94 21.41,11.58Z" /></svg> <?php echo $wo['result']['category']; ?>
+				</li>
+				<?php if (!empty($wo['result']['page_sub_category'])) { ?>
+				<li>
+					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" class="feather"><path fill="currentColor" d="M5.5,7A1.5,1.5 0 0,1 4,5.5A1.5,1.5 0 0,1 5.5,4A1.5,1.5 0 0,1 7,5.5A1.5,1.5 0 0,1 5.5,7M21.41,11.58L12.41,2.58C12.05,2.22 11.55,2 11,2H4C2.89,2 2,2.89 2,4V11C2,11.55 2.22,12.05 2.59,12.41L11.58,21.41C11.95,21.77 12.45,22 13,22C13.55,22 14.05,21.77 14.41,21.41L21.41,14.41C21.78,14.05 22,13.55 22,13C22,12.44 21.77,11.94 21.41,11.58Z" /></svg> <?php echo $wo['result']['page_sub_category']; ?>
+				</li>
+				<?php } ?>
+			</ul>
+		</div>
+	</div>
+	<div class="col-xs-4 col-md-4">
+		<div class="text-right">
+			<?php echo Wo_GetLikeButton($wo['result']['page_id']);?>
+		</div>
+	</div>
+</div>
+</div>

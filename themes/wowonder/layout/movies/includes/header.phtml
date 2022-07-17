@@ -1,0 +1,20 @@
+<li>
+	<a href="javascript:void();" data-toggle="collapse" data-target="#movie-genre">
+		<?php echo $wo['lang']['genre']; ?> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down" color="#384047"><polyline points="6 9 12 15 18 9"></polyline></svg>
+	</a>
+	<ul class="collapse" id="movie-genre">
+		<?php foreach ($wo['film-genres'] as $g_key => $genre): ?>
+			<li><a href="<?php echo Wo_SeoLink('index.php?link1=movies-genre&genre='.$g_key); ?>"><?php echo $genre; ?></a></li>
+		<?php endforeach;?>
+	</ul>
+</li>
+<li>
+	<a href="javascript:void();" data-toggle="collapse" data-target="#movie-country">
+		<?php echo $wo['lang']['country']; ?> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down" color="#384047"><polyline points="6 9 12 15 18 9"></polyline></svg>
+	</a>
+	<ul class="collapse" id="movie-country">
+		<?php foreach ($wo['countries'] as $c_key => $country): ?>
+			<li><a href="<?php echo Wo_SeoLink('index.php?link1=movies-country&country='.$c_key); ?>"><?php echo $country;?></a></li>
+		<?php endforeach; ?>
+	</ul>
+</li>

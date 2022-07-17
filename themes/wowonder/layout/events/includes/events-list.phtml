@@ -1,0 +1,24 @@
+<div class="col-md-6 events-list-wrapper" data-event="<?php echo($wo['event']['id']);?>">
+	<div class="events-list-cover">
+		<a href="<?php echo $wo['event']['url']; ?>" class="event_cover" data-ajax="?link1=show-event&eid=<?php echo($wo['event']['id']);?>">
+			<img src="<?php echo $wo['event']['cover']; ?>" class="events-list-cover-img">
+			<span><?php echo $wo['event']['start_date'];?></span>
+			<div>
+				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M12,11.5A2.5,2.5 0 0,1 9.5,9A2.5,2.5 0 0,1 12,6.5A2.5,2.5 0 0,1 14.5,9A2.5,2.5 0 0,1 12,11.5M12,2A7,7 0 0,0 5,9C5,14.25 12,22 12,22C12,22 19,14.25 19,9A7,7 0 0,0 12,2Z" /></svg> <?php echo $wo['event']['location'];?>
+			</div>
+		</a>
+		<div class="event-l-info">
+			<h3 class="events-list-name">
+				<a href="<?php echo $wo['event']['url']; ?>" data-ajax="?link1=show-event&eid=<?php echo($wo['event']['id']);?>"><?php echo $wo['event']['name']; ?></a>
+			</h3>
+			<div class="event-l-btns">
+				<?php echo Wo_GetGoingButton($wo['event']['id']);?>
+				<?php echo Wo_GetInterestedButton($wo['event']['id']);?>
+				<?php if (Wo_IsAdmin() || $wo['event']['user_id'] == $wo['user']['id']){ ?>
+					<span><a href="<?php echo Wo_SeoLink('index.php?link1=edit-event&eid='.$wo['event']['id']); ?>" class="btn btn-default btn-mat"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18,2.9 17.35,2.9 16.96,3.29L15.12,5.12L18.87,8.87M3,17.25V21H6.75L17.81,9.93L14.06,6.18L3,17.25Z" /></svg> <?php echo $wo['lang']['edit']; ?></a></span>
+				<?php } ?>
+			</div>
+		</div>
+	</div>
+	<div class="clear"></div>
+</div>

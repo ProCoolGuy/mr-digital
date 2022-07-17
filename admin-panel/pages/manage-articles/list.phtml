@@ -1,0 +1,27 @@
+<tr class="setting-blog" id="BlogID_<?php echo $wo['blog']['id']?>" data-blog-id="<?php echo $wo['blog']['id']?>" data_selected="<?php echo $wo['blog']['id'] ?>">
+  <td><input type="checkbox" id="check-data-<?php echo $wo['blog']['id']?>" class="delete-checkbox filled-in"><label for="check-data-<?php echo $wo['blog']['id']?>"></label></td>
+   <td><?php echo $wo['blog']['id']?></td>
+   <td>
+      <a href="<?php echo $wo['blog']['url']; ?>">LINK</a>
+   </td>
+   <td>
+      <a href="<?php echo $wo['blog']['author']['url']; ?>">
+        <img src="<?php echo $wo['blog']['author']['avatar']; ?>" class="setting-avatar" alt="<?php echo $wo['blog']['author']['name']?> Avatar Picture">
+         <?php echo $wo['blog']['author']['name']; ?>
+      </a>
+   </td>
+   <td>
+     <div class="ajax-time" title="<?php echo date('c',$wo['blog']['posted']); ?>">
+         <?php echo Wo_Time_Elapsed_String($wo['blog']['posted']);?>
+     </div>
+   </td>
+   <?php if ($wo['config']['blog_approval'] == 1) { ?>
+    <td><?php echo ($wo['blog']['active'] == '1') ? '<span class="label label-success">' . $wo['lang']['active'] . '</span>': '<span class="label label-danger">' . $wo['lang']['pending'] . '</span>';?></td>
+   <?php } ?>
+   <td>
+      <button onclick="Wo_DeleteBlog(<?php echo $wo['blog']['id']?>,'hide');" type="button" class="btn bg-danger admn_table_btn">Delete</button>
+      <?php if ($wo['blog']['active'] == '0') { ?>
+        <button onclick="Wo_AdminApprovePost(<?php echo $wo['blog']['id'] ?>,'hide');" type="button" class="btn bg-success admn_table_btn">Approve</button>
+        <?php } ?>
+   </td>
+</tr>

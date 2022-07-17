@@ -1,0 +1,33 @@
+<div class="col-md-6" data-fund-id="<?php echo $wo['fund']['id']; ?>">
+	<div class="fundings">
+		<div class="avatar">
+			<a href="<?php echo $wo['config']['site_url'].'/show_fund/'. $wo['fund']['hashed_id']; ?>" data-ajax="?link1=show_fund&id=<?php echo $wo['fund']['hashed_id']; ?>"><img src="<?php echo $wo['fund']['image']; ?>" alt="<?php echo $wo['fund']['title']; ?>"></a>
+		</div>
+		<div class="fundings_desc">
+			<h3><a href="<?php echo $wo['config']['site_url'].'/show_fund/'. $wo['fund']['hashed_id']; ?>" data-ajax="?link1=show_fund&id=<?php echo($wo['fund']['hashed_id']) ?>"><?php echo $wo['fund']['title']; ?></a></h3>
+		 	<div class="fundings_desc_meta">
+			 	<div class="postMeta--author-avatar">
+				 	<a href="<?php echo $wo['fund']['user_data']['url']?>">
+						<img src="<?php echo $wo['fund']['user_data']['avatar']?>" alt="User Image">
+					</a>
+				</div>
+				<div class="postMeta--author-text">
+					<a href="<?php echo $wo['fund']['user_data']['url']; ?>" data-ajax="?link1=timeline&u=<?php echo $wo['fund']['user_data']['username']; ?>"><?php echo $wo['fund']['user_data']['name']; ?></a>
+					<span class="middot">·</span>
+					<time><?php echo date("d M Y",$wo['fund']['time']); ?></time>
+				</div>
+		 	</div>
+			<!--<p class="desc">
+				<?php 
+				$desc = str_replace('<br>', '', $wo['fund']['description']);
+				echo $desc = mb_substr($desc, 0, 190, "UTF-8") . ".."; ?>
+			</p>-->
+		</div>
+		<div class="fundings_footer">
+			<p><?php echo $wo['config']['currency_symbol_array'][$wo['config']['currency']].$wo['fund']['raised']; ?>  <?php echo $wo['lang']['raised_of']; ?> <?php echo $wo['config']['currency_symbol_array'][$wo['config']['currency']].$wo['fund']['amount']; ?></p>
+			<div class="progress">
+				<div class="progress-bar" role="progressbar" style="width: <?php echo $wo['fund']['bar']; ?>%" aria-valuenow="<?php echo $wo['fund']['bar']; ?>" aria-valuemin="0" aria-valuemax="<?php echo($wo['fund']['amount']) ?>"></div>
+			</div>
+		</div>
+	</div>
+</div>

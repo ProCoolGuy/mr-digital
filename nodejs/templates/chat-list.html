@@ -1,0 +1,103 @@
+<div class="messages-wrapper {{#if onwer}} pull-right {{else}} pull-left {{/if}} messages-text"
+	id="messageId_{{chatmsgId}}" data-message-id="{{chatmsgId}}">
+	{{#unless onwer }}
+	<a href="{{username}}" data-ajax="?link1=timeline&u={{username}}">
+		<img class="user-avatar-left" src="{{avatar}}" alt="Profile Picture">
+	</a>
+	{{/unless}}
+	<div class="message {{#if onwer}} outgoing pull-right {{else}} incoming pull-left {{/if}}"
+		onclick="Wo_ShowMessageOptions({{chatmsgId}});" {{#unless wowonderTheme}} style="background: {{backgroundColor}}; color:{{color}};" {{/unless}}>
+		
+		{{#if chatTxt}}
+			{{#if onwer }}
+			<p class="message-text" dir="auto" style="background: {{backgroundColor}}; color:{{color}};">
+				{{#if hasHTML}}
+					{{{chatTxt}}}
+				{{else}}
+					{{chatTxt}}
+				{{/if}}
+			<div class="deleteMessage" onclick="Wo_DeleteChatMessage({{chatmsgId}});">
+				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+					stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+					class="feather feather-trash">
+					<polyline points="3 6 5 6 21 6"></polyline>
+					<path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+				</svg>
+			</div>
+			</p>
+			{{else}}
+			<p class="message-text" dir="auto" style="background: {{backgroundColor}}; color:{{color}};">
+				{{#if hasHTML}}
+					{{{chatTxt}}}
+				{{else}}
+					{{chatTxt}}
+				{{/if}}
+			<div class="deleteMessage right" onclick="Wo_DeleteChatMessage({{chatmsgId}});">
+				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+					stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+					class="feather feather-trash">
+					<polyline points="3 6 5 6 21 6"></polyline>
+					<path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+				</svg>
+			</div>
+			</p>
+			{{/if}}
+		{{/if}}
+
+		<div class="clear"></div>
+		<div class="message-media" style="background: {{backgroundColor}}">
+			{{#if mediaHTML}}
+			<div class="message-media">
+				<div class="clear"></div>
+				{{{mediaHTML}}}
+				{{!-- <div class="message-media">
+                <div class="clear"></div>
+                <a href={{media_link}}>{{{media_data}}}</a>
+            </div> --}}
+			</div>
+			{{/if}}
+			{{!-- $media = array('type' => 'chatMessage', 'storyId' => $wo['chatMessage']['id'], 'filename' => $wo['chatMessage']['media'], 'name' => $wo['chatMessage']['mediaFileName']); 
+					echo Wo_DisplaySharedFile($media, 'chat');    --}}
+			{{!-- <?php if (!empty($wo['chatMessage']['stickers'])): ?> --}}
+			{{!-- <?php if (strpos('.mp4', $wo['chatMessage']['stickers'])) { ?> --}}
+			{{!-- <video autoplay loop><source src="<?php echo $wo['chatMessage']['stickers']; ?>" type="video/mp4"></video> --}}
+
+			{{#if productId}}
+			{{!-- <div class="wo_market">
+				<div class="market_bottom">
+					<div class="products">
+						<div class="product" id="product-{{productId}}>" data-id="{{productId}}">
+							<div class="product_info">
+								<div class="product-image">
+									<a href="{{productUrl}}"><img src="{{imageOrg}}"></a>
+								</div>
+								<div class="produc_info">
+									<div class="product-title">
+										<a href="{{productUrl}}" title="{{productName}}">{{productName}}</a>
+									</div>
+									<div class="product-by">
+										<a
+											href="Wo_SeoLink('index.php?link1=products&c_id=' + {{productCategory}})">{{productCategory}}</a>
+									</div>
+									<div class="product-price">
+										{{productSymbol}}{{productPrice}}
+									</div>
+								</div>
+								<div class="clear"></div>
+							</div>
+							<div class="clear"></div>
+						</div>
+					</div>
+				</div>
+			</div> --}}
+			{{/if}}
+			</div>
+		</div>
+
+		<div class="clear"></div>
+		{{#if onwer}}
+		<div class="message-seen text-right message-details"></div>
+		<div class="clear"></div>
+		{{/if}}
+		<div class="message-typing message-details"></div>
+	</div>

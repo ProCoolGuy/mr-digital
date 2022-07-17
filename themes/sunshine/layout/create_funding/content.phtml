@@ -1,0 +1,123 @@
+<div class="page-margin">
+	<div class="row">
+		<div class="col-md-2 leftcol"><?php echo Wo_LoadPage("sidebar/left-sidebar"); ?></div>
+		<div class="col-md-10 singlecol wo-create-forms">
+			<h3 class="wo_create_form_cover blog">
+				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-dollar-sign"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+				<?php echo $wo['lang']['create_new_funding'];?>
+				<span class="<?php echo Wo_RightToLeft('pull-right');?>">
+					<a data-ajax="?link1=my_funding" href="<?php echo Wo_SeoLink('index.php?link1=my_funding');?>">
+						<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-left"><polyline points="15 18 9 12 15 6"></polyline></svg><?php echo $wo['lang']['my_funding'];?>
+					</a>
+				</span>
+				<div class="clear"></div>
+			</h3>
+		  
+			<div class="wo_settings_page">
+				<form class="form form-horizontal create-article-form" method="post" id="insert-funding" action="#">
+					<div class="setting-panel row">
+						<div class="form-group col-lg-12">
+							<label class="col-md-12" for="new-blog-title"><?php echo $wo['lang']['title'] ?></label>
+							<div class="col-md-12">
+								<input id="blog_title" name="title" id="new-blog-title" type="text" class="form-control input-md"> 
+							</div>
+						</div>
+						<div class="form-group col-lg-12">
+							<label class="col-md-12" for="new-blog-desc"><?php echo $wo['lang']['description'] ?></label>
+							<div class="col-md-12">
+								<textarea name="description" id="new-blog-desc" type="text" class="form-control input-md"></textarea>
+							</div>
+						</div>
+						<div class="form-group col-lg-12">
+							<label class="col-md-12" for="amount"><?php echo $wo['lang']['amount'] ?></label>
+							<div class="col-md-12">
+								<input id="amount" name="amount" type="text" class="form-control input-md" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"> 
+							</div>
+						</div>
+						<div class="form-group th-alert">
+							<div class="col-md-12">
+								<div class="main prv-img pointer" id="select-img" data-block="thumdrop-zone">
+									<div class="thumbnail-rendderer">
+										<div>
+											<h4 class="bold"><?php echo $wo['lang']['drop_img_here']; ?></h4>
+											<div class="error-text-renderer"></div>
+											<div>
+												<span><?php echo $wo['lang']['or']; ?></span>
+												<p><?php echo $wo['lang']['browse_to_upload']; ?></p>
+											</div>
+										</div> 
+									</div>
+								</div>
+							</div>
+						</div>
+						<input type="file" class="hidden" id="thumbnail" name="image" accept="image/*">
+					</div>
+					
+					<div class="setting-update-alert" id="funding-alert"></div>
+
+					<div class="form-group last-sett-btn modal-footer">
+						<div class="ball-pulse"><div></div><div></div><div></div></div>
+						<button type="submit" class="btn btn-main setting-panel-mdbtn">
+							<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-plus"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg> 
+							<?php echo $wo['lang']['publish']; ?>
+						</button>
+					</div>
+					<input type="hidden" name="hash_id" value="<?php echo Wo_CreateSession();?>">
+				</form>
+			</div>
+		</div>
+	</div>
+	<!-- .row -->
+</div>
+<script>
+jQuery(document).ready(function($) {
+    var thumb_drop_block = $("[data-block='thumdrop-zone']");
+    if (typeof(window.FileReader) == 'undefined') {
+      thumb_drop_block.find('.thumbnail-rendderer div').text('Drag drop is not supported in your browser!');
+    }
+    else{
+      thumb_drop_block[0].ondragover = function() {
+          thumb_drop_block.addClass('hover');
+          return false;
+      };
+          
+      thumb_drop_block[0].ondragleave = function() {
+          thumb_drop_block.removeClass('hover');
+          return false;
+      };
+
+      thumb_drop_block[0].ondrop = function(event) {
+          event.preventDefault();
+          thumb_drop_block.removeClass('hover');
+          var file = event.dataTransfer.files;
+          $("#thumbnail").prop('files', file);
+          $(".prv-img").html("<img src='" + window.URL.createObjectURL(event.dataTransfer.files[0]) + "' alt='Picture'>")
+      };
+    }
+
+    $("#select-img").click(function(event) {
+      $("#thumbnail").click()
+    });
+
+    $("#thumbnail").change(function(event) {
+      $(".prv-img").html("<img src='" + window.URL.createObjectURL(this.files[0]) + "' alt='Picture'>")
+    });
+
+
+    $('#insert-funding').ajaxForm({
+      url: Wo_Ajax_Requests_File() + '?f=funding&s=insert_funding',
+      beforeSend: function() {
+        $('.wo_settings_page').find('.last-sett-btn .ball-pulse').fadeIn(100);
+      },
+      success: function(data) {
+        if (data['status'] == 200) {
+          $("#funding-alert").html('<div class="alert alert-success">'+ data['message'] +'</div>');
+          window.location = data.url;
+        } else if (data['message']) {
+          $("#funding-alert").html('<div class="alert alert-danger">' + data['message'] + '</div>');
+        } 
+        $('.wo_settings_page').find('.last-sett-btn .ball-pulse').fadeOut(100);
+      }});
+ });
+
+</script> 

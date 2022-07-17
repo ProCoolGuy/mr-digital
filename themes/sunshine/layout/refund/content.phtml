@@ -1,0 +1,114 @@
+<div class="page-margin">
+	<div class="row">
+		<div class="col-md-2 leftcol"><?php echo Wo_LoadPage("sidebar/left-sidebar"); ?></div>
+		<div class="col-md-7 middlecol wo-create-forms">
+            <div class="wo_settings_page">
+				<div class="sun_head_onboard shortpwidth album">
+					<img class="sho_img" src="<?php echo $wo['config']['theme_url'];?>/img/cads/refund.svg" alt="<?php echo $wo['lang']['request_refund'] ?>" />
+					<div class="sun_head_onboard_innr">
+						<h2><?php echo $wo['lang']['request_refund'];?></h2>
+					</div>
+				</div>
+			<?php if ($wo['is_requested'] == true) { ?>
+            		<div class="alert alert-warning"><?php echo $wo['lang']['request_review_text']; ?></div>
+            	<?php }else{ ?>
+				<form class="create-refund-form form-horizontal" method="post">
+					<div class="setting-panel no-padding-both row">
+						<?php if ($wo['config']['pro'] == 1) { ?>
+
+							<div class="form-group col-lg-12">
+								<label class="col-md-12" for="pro_type"><?php echo $wo['lang']['member_type'];?></label>  
+								<div class="col-md-12">
+									<select id="pro_type" name="pro_type" class="form-control">
+										<?php $pros = Wo_GetProPackages();
+										unset($pros['free']);
+										?>
+										<?php foreach ($pros as $key => $pro) {?>
+											<option value="<?php echo $key;?>" <?php echo ($pro['id'] == $wo['user']['pro_type']) ? 'selected' : ''; ?>><?php echo $pro['name'];?></option>
+										<?php } ?>
+									</select>
+								</div>
+							</div>
+					<?php } ?>
+
+					<div class="form-group col-lg-12">
+						<label class="col-md-12" for="description"><?php echo $wo['lang']['reason'];?></label>  
+						<div class="col-md-12">
+							<textarea name="description" id="description" rows="3" class="form-control"></textarea>
+						</div>
+					</div>
+
+						<div class="publisher-hidden-option">
+							<div id="progress">
+								<span id="percent">0%</span>
+								<div class="progress">
+									<div id="bar" class="progress-bar progress-bar-striped active"></div> 
+								</div>
+								<div class="clear"></div>
+							</div>
+						</div>
+					</div>
+					
+					<div class="app-general-alert setting-update-alert"></div>
+					
+					<input type="hidden" name="hash_id" value="<?php echo Wo_CreateSession();?>">
+					
+					<div class="form-group last-sett-btn modal-footer">
+						<div class="ball-pulse"><div></div><div></div><div></div></div>
+						<button type="submit" class="btn btn-main setting-panel-mdbtn"><?php echo $wo['lang']['request_refund'];?></button>
+					</div>
+				</form>
+				<?php } ?>
+			</div>
+		</div>
+		<!-- .col-md-8 -->
+		<?php echo Wo_LoadPage('sidebar/content');?>
+	</div>
+	<!-- .row -->
+</div>
+<!-- .page-margin -->
+<?php if ($wo['is_requested'] == false) { ?>
+<script type="text/javascript">
+
+   $(function() {
+    var bar = $('#bar');
+    var percent = $('#percent');
+    var status = $('#status');
+    var publisher_button = $('#publisher-button');
+   
+     $('form.create-refund-form').ajaxForm({
+       url: Wo_Ajax_Requests_File() + '?f=refund_pro',
+       beforeSend: function() {
+        var percentVal = '0%';
+         bar.width(percentVal);
+         percent.html(percentVal);
+         $('.wo_settings_page').find('.last-sett-btn .ball-pulse').fadeIn(100);
+   
+       },
+       uploadProgress: function (event, position, total, percentComplete) {
+           var percentVal = percentComplete + '%';
+           bar.width(percentVal);
+           $('#progress').slideDown(200);
+           if(percentComplete > 50) {
+             percent.addClass('white');
+           }
+           percent.html(percentVal);
+      },
+       success: function(data) {
+         if (data.status == 200) {
+         	$(".app-general-alert").html('<div class="alert alert-success">'+ data['message'] +'</div>');
+         	Wo_Delay(function(){
+	            window.location.href = data.url;
+	        },3000);
+            
+         } else {
+             $('.app-general-alert').html('<div class="alert alert-danger">' + data['message'] + '</div>');
+             $('.alert-danger').fadeIn(300);
+         }
+         $('.wo_settings_page').find('.last-sett-btn .ball-pulse').fadeOut(100);
+         $('#progress').slideUp(200);
+       }
+     });
+   });
+</script>
+<?php } ?>

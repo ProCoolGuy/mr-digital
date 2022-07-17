@@ -1,0 +1,206 @@
+<?php 
+
+$langs = Wo_LangsNamesFromDB();
+
+if (empty($_GET['id']) || !in_array($_GET['id'], $langs)) {
+    header("Location: " . Wo_SeoLink('index.php?link1=admin-cp'));
+    exit();
+}
+$lang_name = Wo_Secure($_GET['id']);
+$page = isset($_GET['page-id']) ? $_GET['page-id'] : 1;
+$filter_keyword = (!empty($_GET['query'])) ? Wo_Secure($_GET['query']) : '';
+$db->pageLimit = 50;
+$link = '';
+if (!empty($filter_keyword)) {
+    $link = '&query='.$filter_keyword;
+    $sql   = " (lang_key LIKE '%$filter_keyword%' OR ".$lang_name." LIKE '%$filter_keyword%') ";
+    $db->where($sql);
+} 
+$langs    = $db->objectbuilder()->paginate(T_LANGS, $page,array('lang_key',Wo_Secure($_GET['id'])));
+$langs = ToArray($langs);
+if ($db->totalPages != 0) {
+    if (($page > $db->totalPages) && !empty($_GET['page-id'])) {
+        header("Location: " . Wo_LoadAdminLinkSettings('manage-languages'));
+        exit();
+    }
+}
+
+?>
+<div class="container-fluid">
+    <div>
+        <h3>Manage Languages</h3>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="#">Home</a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a href="#">Languages</a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">Manage Languages</li>
+            </ol>
+        </nav>
+    </div>
+    <!-- Vertical Layout -->
+    <div class="row">
+        <div class="col-lg-12 col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="card-title">Manage & Edit Languages</h6>
+                    <div class="row">
+                       <div class="col-md-6" style="margin-bottom:0;">
+                            <form method="get" action="<?php echo Wo_LoadAdminLinkSettings("edit-lang"); ?>">
+                              <div class="row">
+                                <div class="col-md-8">
+                                    <div class="form-group form-float">
+                                        <div class="form-line">
+                                            <label class="form-label search-form">Search for Keyword</label>
+                                            <input type="text" name="query" id="query" class="form-control" value="<?php echo(!empty($filter_keyword) ? $filter_keyword : '') ?>">
+                                            <input type="hidden" name="id" value="<?php echo($lang_name) ?>">
+                                            <input type="hidden" name="page-id" value="1">
+                                            
+                                        </div>
+                                    </div>
+                                  </div>
+                                  <div class="col-md-1">
+                                    <label>&nbsp;</label>
+                                <div></div>
+                                     <button class="btn btn-info">Search</button>
+                                  </div>
+                              </div>
+
+                              <div class="clearfix"></div>
+                           </form>
+                       </div>
+                   </div>
+                   <div class="table-responsive1">
+                        <table class="table table-bordered table-striped table-hover">
+                            <thead>
+                                <tr>
+                                	<th>ID</th>
+                                    <th>Key Name</th>
+                                    <th>Value</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php
+					            //$langs = Wo_LangsFromDB($_GET['id']);
+					            if (count($langs) > 0) {
+					            	$count = 1;
+					                foreach ($langs as $key => $wo['langs']) {
+                                        $wo['lang_key'] = $wo['langs']['lang_key'];
+					                	$wo['langs'] = $wo['langs'][$lang_name];
+					                	$wo['lang_id'] = $count++;
+					                    echo Wo_LoadAdminPage('edit-lang/list');
+					                }
+					            }  
+					            ?>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="pull-left">
+                        <?php echo "Showing $page out of " . $db->totalPages; ?>
+                    </div>
+                    <div class="pull-right">
+                        <nav>
+                            <ul class="pagination">
+                                <li>
+                                    <a href="<?php echo Wo_LoadAdminLinkSettings("edit-lang?id=".$lang_name."&page-id=1").$link; ?>" data-ajax="?path=edit-lang&id=<?php echo($lang_name); ?>&page-id=1<?php echo($link); ?>" class="waves-effect" title='First Page'>
+                                        <i class="material-icons">first_page</i>
+                                    </a>
+                                </li>
+                                <?php if ($page > 1) {  ?>
+                                <li>
+                                    <a href="<?php echo Wo_LoadAdminLinkSettings("edit-lang?id=".$lang_name."&page-id=" . ($page - 1)).$link; ?>" data-ajax="?path=edit-lang&id=<?php echo($lang_name); ?>&page-id=<?php echo($page - 1) ?><?php echo($link); ?>" class="waves-effect" title='Previous Page'>
+                                        <i class="material-icons">chevron_left</i>
+                                    </a>
+                                </li>
+                                <?php  } ?>
+                                <?php 
+                                $nums = 0;
+                                $nums_pages = ($page > 4) ? ($page - 4) : $page;
+                                for ($i=$nums_pages; $i <= $db->totalPages; $i++) { 
+                                    if ($nums < 20) {
+                                    ?>
+                                    <li class="<?php echo ($page == $i) ? 'active' : ''; ?>"><a href="<?php echo Wo_LoadAdminLinkSettings("edit-lang?id=".$lang_name."&page-id=" . ($i)).$link; ?>" data-ajax="?path=edit-lang&id=<?php echo($lang_name); ?>&page-id=<?php echo($i) ?><?php echo($link); ?>" class="waves-effect"><?php echo $i ?></a></li>
+                                    <?php
+                                    }
+                                    $nums++;
+                                }
+                                ?>
+                                <?php if ($db->totalPages > $page) { ?>
+                                <li>
+                                    <a href="<?php echo Wo_LoadAdminLinkSettings("edit-lang?id=".$lang_name."&page-id=" . ($page + 1)).$link; ?>" data-ajax="?path=edit-lang&id=<?php echo($lang_name); ?>&page-id=<?php echo($page + 1) ?><?php echo($link); ?>" class="waves-effect" title="Next Page">
+                                        <i class="material-icons">chevron_right</i>
+                                    </a>
+                                </li>
+                                <?php } ?>
+                                <li>
+                                    <a href="<?php echo Wo_LoadAdminLinkSettings("edit-lang?id=".$lang_name."&page-id=" . ($db->totalPages)).$link; ?>" data-ajax="?path=edit-lang&id=<?php echo($lang_name); ?>&page-id=<?php echo($db->totalPages) ?><?php echo($link); ?>" class="waves-effect" title='Last Page'>
+                                        <i class="material-icons">last_page</i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+    <!-- #END# Vertical Layout -->
+<script>
+$('.btn-lang').on('click', function(event) {
+	$('.modal-body form .data').html('<div class="preloader pl-size-xl "><div class="spinner-layer pl-teal"><div class="circle-clipper left"><div class="circle"></div></div><div class="circle-clipper right"><div class="circle"></div></div></div></div>');
+	var lang_id = $(this).attr('data-id');
+	$.get(Wo_Ajax_Requests_File() + '?f=get_lang_key', {id: lang_id, lang_name: '<?php echo $_GET['id']; ?>'}, function(data, textStatus, xhr) {
+		$('.modal-title').html('Edit key: ' + lang_id);
+		$('#id_of_key').val(lang_id);
+		$('.modal-body form .data').html(data.html);
+	});
+});
+$(function () {
+	//$('table').DataTable();
+	var form_lang_settings = $('form.edit-key-settings');
+    form_lang_settings.ajaxForm({
+        url: Wo_Ajax_Requests_File() + '?f=admin_setting&s=update_lang_key&hash=' + $('.main_session').val(),
+        beforeSend: function() {
+            $('.btn-save').text('Please wait..');
+        },
+        success: function(data) {
+            if (data.status == 200) {
+            	$('.btn-save').text('SAVE CHANGES');
+            	var value_to_use = $('[data-editable=1]').val();
+            	var id_of_key = $('#id_of_key').val();
+            	$('#edit_' + id_of_key).text(value_to_use);
+            	$('#defaultModal').modal('hide');
+            }
+        }
+    });
+});
+function Wo_SubmitLangForm() {
+	$('.edit-key-settings').submit();
+}
+</script>
+<div class="modal fade" id="defaultModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content ">
+            <div class="modal-header">
+                <h4 class="modal-title" id="defaultModalLabel"></h4>
+            </div>
+            <div class="modal-body">
+                <div class="edit-lang-settings-alert"></div>
+                <form class="edit-key-settings" method="POST">
+                	<div class="data"></div>
+                	<input type="hidden" name="hash_id" value="<?php echo Wo_CreateSession();?>">
+                	<input type="hidden" name="id_of_key" id="id_of_key" value="">
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-success" onclick="Wo_SubmitLangForm()" data-dismiss="modal">SAVE CHANGES</button>
+            </div>
+        </div>
+    </div>
+</div>

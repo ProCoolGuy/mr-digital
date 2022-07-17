@@ -1,0 +1,13 @@
+<div class="recipient-chat-user groups-list" id="group_tab_<?php echo $wo['group']['group_id'];?>" data-chat-group="<?php echo $wo['group']['group_id'];?>">
+	<div class="user-info" onclick="Wo_OpenChatTab(0,<?php echo $wo['group']['group_id'];?>);" <?php if (!empty($wo['group']['last_message'])): ?>title="<?php echo $wo['group']['last_message']['user_data']['name']; ?>: <?php echo Wo_Time_Elapsed_String($wo['group']['last_message']['time']); ?>"<?php else: ?>title="<?php echo $wo['lang']['never']; ?>"<?php endif; ?>>
+		<img src="<?php echo $wo['group']['avatar'];?>"/>
+		<span class="chat-user-text" id="chat-tab-id"><?php echo $wo['group']['group_name']; ?></span>
+		<div class="wow_chat_list-right">
+			<?php if (is_array($wo['group']['last_seen']) && in_array($wo['group']['group_id'], $wo['group']['last_seen'])): ?>
+				<svg xmlns="http://www.w3.org/2000/svg" width="9" height="9" viewBox="0 0 24 24" ><path fill="#60d465" d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z" /></svg>
+			<?php endif;?>
+			<span class="chat-loading-icon"></span>
+		</div>
+	</div>
+</div>
+<div class="clear"></div>

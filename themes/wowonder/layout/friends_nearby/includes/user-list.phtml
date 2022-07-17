@@ -1,0 +1,33 @@
+<div class="user-data col-md-3 col-sm-4 nearby_user_wrapper_prnt" id="<?php echo $wo['UsersList']['user_data']['id']; ?>">
+	<div class="fndfrnd_user_wrapper">
+		<div class="avatar">
+			<img src="<?php echo $wo['UsersList']['user_data']['avatar'];?>" alt="<?php echo $wo['UsersList']['user_data']['name']; ?>" />
+			<div class="user-follow-button">
+				<?php echo Wo_GetFollowButton($wo['UsersList']['user_data']['user_id']);?>
+			</div>
+			<div class="fndfrnd_user_wrapper_bg">
+				<h4 class="user_wrapper_link">
+					<span class="user-popover" data-id="<?php echo $wo['UsersList']['user_data']['id'];?>" data-type="<?php echo $wo['UsersList']['user_data']['type'];?>">
+						<a href="<?php echo $wo['UsersList']['user_data']['url'];?>" data-ajax="?link1=timeline&u=<?php echo $wo['UsersList']['user_data']['username'];?>"><?php echo $wo['UsersList']['user_data']['name']; ?></a>
+					</span>
+				</h4>
+				<ul class="list-unstyled sun_friends_fetrs">
+					<li>
+						<span><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M16,13C15.71,13 15.38,13 15.03,13.05C16.19,13.89 17,15 17,16.5V19H23V16.5C23,14.17 18.33,13 16,13M8,13C5.67,13 1,14.17 1,16.5V19H15V16.5C15,14.17 10.33,13 8,13M8,11A3,3 0 0,0 11,8A3,3 0 0,0 8,5A3,3 0 0,0 5,8A3,3 0 0,0 8,11M16,11A3,3 0 0,0 19,8A3,3 0 0,0 16,5A3,3 0 0,0 13,8A3,3 0 0,0 16,11Z" /></svg></span>
+						<div><p><?php echo $wo['UsersList']['user_data']['details']['followers_count'];?> <?php echo $wo['lang']['followers']; ?></p></div>
+					</li>
+					<li>
+						<span><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M21,6V8H3V6H21M3,18H12V16H3V18M3,13H21V11H3V13Z" /></svg></span>
+						<div><p><?php echo $wo['UsersList']['user_data']['details']['post_count'];?> <?php echo $wo['lang']['posts']; ?></p></div>
+					</li>
+					<?php if (!empty($wo['UsersList']['user_geoinfo']) && (!empty($wo['user']['lat']) && !empty($wo['user']['lng'])) && ($wo['UsersList']['distance'] > 0)): ?>
+						<li title="<?php echo $wo['lang']['show_location']; ?>" onclick="Wo_ShowUserLocationMap('<?php echo $wo['UsersList']['user_geoinfo']?>');">
+							<span><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M12,11.5A2.5,2.5 0 0,1 9.5,9A2.5,2.5 0 0,1 12,6.5A2.5,2.5 0 0,1 14.5,9A2.5,2.5 0 0,1 12,11.5M12,2A7,7 0 0,0 5,9C5,14.25 12,22 12,22C12,22 19,14.25 19,9A7,7 0 0,0 12,2Z" /></svg></span>
+							<div><p><?php echo $wo['lang']['close_to_u']; ?> <?php echo number_format($wo['UsersList']['distance'],3); ?>/k</p></div>
+						</li>
+					<?php endif; ?>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>

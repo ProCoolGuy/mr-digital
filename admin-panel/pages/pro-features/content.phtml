@@ -1,0 +1,43 @@
+<div class="container-fluid">
+    <div>
+        <h3>Pro Features</h3>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="#">Home</a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a href="#">Pro System</a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">Pro Features</li>
+            </ol>
+        </nav>
+    </div>
+    <!-- Vertical Layout -->
+    <div class="row">
+        
+        <div class="clearfix"></div>
+        
+    </div>
+    <!-- #END# Vertical Layout -->
+<script>
+$(function() {
+   var form_site_settings = $('form.pro-settings');
+    form_site_settings.ajaxForm({
+        url: Wo_Ajax_Requests_File() + '?f=admin_setting&s=update_general_setting',
+        beforeSend: function() {
+            form_site_settings.find('.waves-effect').text('Please wait..');
+        },
+        success: function(data) {
+            if (data.status == 200) {
+                form_site_settings.find('.waves-effect').text('Save');
+                $("html, body").animate({ scrollTop: 0 }, "slow");
+                $('.pro-settings-alert').html('<div class="alert alert-success"><i class="fa fa-check"></i> Settings updated successfully</div>');
+                setTimeout(function () {
+                    $('.pro-settings-alert').empty();
+                }, 2000);
+            }
+        }
+    });
+});
+</script>

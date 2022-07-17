@@ -1,0 +1,57 @@
+<tr class="user-list" id="UserID_<?php echo $wo['userlist']['user_id']?>" data-user-id="<?php echo $wo['userlist']['user_id']?>" data_selected="<?php echo $wo['userlist']['user_id']?>">
+   <td><input type="checkbox" id="check-data-<?php echo $wo['userlist']['user_id']?>" class="delete-checkbox filled-in"><label for="check-data-<?php echo $wo['userlist']['user_id']?>"></label></td>
+   <td><?php echo $wo['userlist']['user_id']?></td>
+   <td>
+      <a href="<?php echo $wo['userlist']['url']; ?>">
+      <img src="<?php echo $wo['userlist']['avatar']; ?>" class="setting-avatar rounded-circle" alt="<?php echo $wo['userlist']['avatar']?> Profile Picture">
+      <?php echo $wo['userlist']['name']; ?>
+      </a>
+   </td>
+   <td>
+      <?php if (strtolower($wo['userlist']['src']) == 'facebook') { ?>
+         <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" class="mr-1"><path fill="#1877f2" d="M12 2.04C6.5 2.04 2 6.53 2 12.06C2 17.06 5.66 21.21 10.44 21.96V14.96H7.9V12.06H10.44V9.85C10.44 7.34 11.93 5.96 14.22 5.96C15.31 5.96 16.45 6.15 16.45 6.15V8.62H15.19C13.95 8.62 13.56 9.39 13.56 10.18V12.06H16.34L15.89 14.96H13.56V21.96A10 10 0 0 0 22 12.06C22 6.53 17.5 2.04 12 2.04Z" /></svg>
+      <?php }elseif (strtolower($wo['userlist']['src']) == 'google') { ?>
+         <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" class="mr-1"><path fill="#4285f4" d="M21.35,11.1H12.18V13.83H18.69C18.36,17.64 15.19,19.27 12.19,19.27C8.36,19.27 5,16.25 5,12C5,7.9 8.2,4.73 12.2,4.73C15.29,4.73 17.1,6.7 17.1,6.7L19,4.72C19,4.72 16.56,2 12.1,2C6.42,2 2.03,6.8 2.03,12C2.03,17.05 6.16,22 12.25,22C17.6,22 21.5,18.33 21.5,12.91C21.5,11.76 21.35,11.1 21.35,11.1V11.1Z" /></svg>
+      <?php }elseif (strtolower($wo['userlist']['src']) == 'vkontakte') { ?>
+         <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" class="mr-1"><path fill="#2787F5" d="M15.07 2H8.93C3.33 2 2 3.33 2 8.93V15.07C2 20.67 3.33 22 8.93 22H15.07C20.67 22 22 20.67 22 15.07V8.93C22 3.33 20.67 2 15.07 2M18.15 16.27H16.69C16.14 16.27 15.97 15.82 15 14.83C14.12 14 13.74 13.88 13.53 13.88C13.24 13.88 13.15 13.96 13.15 14.38V15.69C13.15 16.04 13.04 16.26 12.11 16.26C10.57 16.26 8.86 15.32 7.66 13.59C5.85 11.05 5.36 9.13 5.36 8.75C5.36 8.54 5.43 8.34 5.85 8.34H7.32C7.69 8.34 7.83 8.5 7.97 8.9C8.69 11 9.89 12.8 10.38 12.8C10.57 12.8 10.65 12.71 10.65 12.25V10.1C10.6 9.12 10.07 9.03 10.07 8.68C10.07 8.5 10.21 8.34 10.44 8.34H12.73C13.04 8.34 13.15 8.5 13.15 8.88V11.77C13.15 12.08 13.28 12.19 13.38 12.19C13.56 12.19 13.72 12.08 14.05 11.74C15.1 10.57 15.85 8.76 15.85 8.76C15.95 8.55 16.11 8.35 16.5 8.35H17.93C18.37 8.35 18.47 8.58 18.37 8.89C18.19 9.74 16.41 12.25 16.43 12.25C16.27 12.5 16.21 12.61 16.43 12.9C16.58 13.11 17.09 13.55 17.43 13.94C18.05 14.65 18.53 15.24 18.66 15.65C18.77 16.06 18.57 16.27 18.15 16.27Z" /></svg>
+      <?php }elseif (strtolower($wo['userlist']['src']) == 'twitter') { ?>
+         <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" class="mr-1"><path fill="#1da1f2" d="M22.46,6C21.69,6.35 20.86,6.58 20,6.69C20.88,6.16 21.56,5.32 21.88,4.31C21.05,4.81 20.13,5.16 19.16,5.36C18.37,4.5 17.26,4 16,4C13.65,4 11.73,5.92 11.73,8.29C11.73,8.63 11.77,8.96 11.84,9.27C8.28,9.09 5.11,7.38 3,4.79C2.63,5.42 2.42,6.16 2.42,6.94C2.42,8.43 3.17,9.75 4.33,10.5C3.62,10.5 2.96,10.3 2.38,10C2.38,10 2.38,10 2.38,10.03C2.38,12.11 3.86,13.85 5.82,14.24C5.46,14.34 5.08,14.39 4.69,14.39C4.42,14.39 4.15,14.36 3.89,14.31C4.43,16 6,17.26 7.89,17.29C6.43,18.45 4.58,19.13 2.56,19.13C2.22,19.13 1.88,19.11 1.54,19.07C3.44,20.29 5.7,21 8.12,21C16,21 20.33,14.46 20.33,8.79C20.33,8.6 20.33,8.42 20.32,8.23C21.16,7.63 21.88,6.87 22.46,6Z" /></svg>
+      <?php }elseif (strtolower($wo['userlist']['src']) == 'linkedIn') { ?>
+         <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" class="mr-1"><path fill="#0a66c2" d="M19 3A2 2 0 0 1 21 5V19A2 2 0 0 1 19 21H5A2 2 0 0 1 3 19V5A2 2 0 0 1 5 3H19M18.5 18.5V13.2A3.26 3.26 0 0 0 15.24 9.94C14.39 9.94 13.4 10.46 12.92 11.24V10.13H10.13V18.5H12.92V13.57C12.92 12.8 13.54 12.17 14.31 12.17A1.4 1.4 0 0 1 15.71 13.57V18.5H18.5M6.88 8.56A1.68 1.68 0 0 0 8.56 6.88C8.56 5.95 7.81 5.19 6.88 5.19A1.69 1.69 0 0 0 5.19 6.88C5.19 7.81 5.95 8.56 6.88 8.56M8.27 18.5V10.13H5.5V18.5H8.27Z" /></svg>
+      <?php }elseif (strtolower($wo['userlist']['src']) == 'instagram') { ?>
+         <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" class="mr-1"><path fill="#d14668" d="M12 2c2.717 0 3.056.01 4.122.06 1.065.05 1.79.217 2.428.465.66.254 1.216.598 1.772 1.153a4.908 4.908 0 0 1 1.153 1.772c.247.637.415 1.363.465 2.428.047 1.066.06 1.405.06 4.122 0 2.717-.01 3.056-.06 4.122-.05 1.065-.218 1.79-.465 2.428a4.883 4.883 0 0 1-1.153 1.772 4.915 4.915 0 0 1-1.772 1.153c-.637.247-1.363.415-2.428.465-1.066.047-1.405.06-4.122.06-2.717 0-3.056-.01-4.122-.06-1.065-.05-1.79-.218-2.428-.465a4.89 4.89 0 0 1-1.772-1.153 4.904 4.904 0 0 1-1.153-1.772c-.248-.637-.415-1.363-.465-2.428C2.013 15.056 2 14.717 2 12c0-2.717.01-3.056.06-4.122.05-1.066.217-1.79.465-2.428a4.88 4.88 0 0 1 1.153-1.772A4.897 4.897 0 0 1 5.45 2.525c.638-.248 1.362-.415 2.428-.465C8.944 2.013 9.283 2 12 2zm0 5a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm6.5-.25a1.25 1.25 0 0 0-2.5 0 1.25 1.25 0 0 0 2.5 0zM12 9a3 3 0 1 1 0 6 3 3 0 0 1 0-6z"></path></svg>
+      <?php }elseif (strtolower($wo['userlist']['src']) == 'site') { ?>
+         <img class="mr-1" width="22" src="<?php echo $wo['config']['theme_url'];?>/img/icon.<?php echo $wo['config']['logo_extension'];?>" alt="logo">
+      <?php }else{ ?>
+         <?php echo $wo['userlist']['src']?>
+      <?php } ?>
+   </td>
+   <td><?php echo $wo['userlist']['email']?></td>
+   <td><?php echo $wo['userlist']['ip_address']?></td>
+   <td><?php echo (Wo_UserActive($wo['userlist']['username']) === true) ? '<span class="label label-success">' . $wo['lang']['active'] . '</span>': '<span class="label label-danger">' . $wo['lang']['pending'] . '</span>';?></td>
+   <td>
+      <div class="dropdown" style="display: inline;">
+         <svg style="cursor: pointer;" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-sliders dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><line x1="4" y1="21" x2="4" y2="14"></line><line x1="4" y1="10" x2="4" y2="3"></line><line x1="12" y1="21" x2="12" y2="12"></line><line x1="12" y1="8" x2="12" y2="3"></line><line x1="20" y1="21" x2="20" y2="16"></line><line x1="20" y1="12" x2="20" y2="3"></line><line x1="1" y1="14" x2="7" y2="14"></line><line x1="9" y1="8" x2="15" y2="8"></line><line x1="17" y1="16" x2="23" y2="16"></line></svg>
+         <div class="dropdown-menu dropdown-menu-right" role="menu">
+            <?php if ($wo['config']['connectivitySystem'] == 0) { ?>
+            <a class="dropdown-item" href="javascript:void(0)" onclick="getUserId(<?php echo $wo['userlist']['user_id']?>);" data-toggle="modal" data-target="#FollowersForm">Add Followers</a>
+            <?php } ?>
+            <a class="dropdown-item" target="_blank" href="<?php echo Wo_SeoLink('index.php?link1=setting&user=' . $wo['userlist']['username'] . '&page=general-setting') ?>">Edit</a>
+            <a class="dropdown-item" href="javascript:void(0)" onclick="Wo_DeleteUser(<?php echo $wo['userlist']['user_id']?>,'hide');">Delete</a>
+            <a class="dropdown-item" href="javascript:void(0)" onclick="Wo_DeleteUserPosts(<?php echo $wo['userlist']['user_id']?>,'hide');">Delete Posts</a>
+            <a class="dropdown-item" href="javascript:void(0)" onclick="Wo_DeleteUserArticles(<?php echo $wo['userlist']['user_id']?>,'hide');">Delete Articles</a>
+            <a class="dropdown-item" href="javascript:void(0)" onclick="Wo_DeleteUserStories(<?php echo $wo['userlist']['user_id']?>,'hide');">Delete Stories</a>
+            <a class="dropdown-item" href="javascript:void(0)" onclick="Wo_DeleteUserMessages(<?php echo $wo['userlist']['user_id']?>,'hide');">Delete Messages</a>
+            <a class="dropdown-item" href="javascript:void(0)" onclick="Wo_DeleteUserNotifications(<?php echo $wo['userlist']['user_id']?>,'hide');">Delete Notifications</a>
+            <?php if ($wo['userlist']['user_id'] != $wo['user']['user_id']) { ?>
+               <?php if ($wo['userlist']['banned'] == 1) { ?>
+               <a class="dropdown-item" href="javascript:void(0)" onclick="Wo_UnBanUser(<?php echo $wo['userlist']['user_id']?>,'hide');">Unban User</a>
+               <?php }else{ ?>
+               <a class="dropdown-item" href="javascript:void(0)" onclick="Wo_BanUser(<?php echo $wo['userlist']['user_id']?>,'hide');">Ban User</a>
+               <?php } ?>
+            <?php } ?>
+            <a class="dropdown-item" href="<?php echo Wo_LoadAdminLinkSettings('manage-permissions?user_id='.$wo['userlist']['user_id']); ?>">Manage Permissions</a>
+         </div>
+      </div>
+   </td>
+</tr>

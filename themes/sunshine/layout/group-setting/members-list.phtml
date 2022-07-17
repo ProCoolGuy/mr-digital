@@ -1,0 +1,38 @@
+<div class="profile-style" id="member-<?php echo $wo['member']['user_id'] ?>">
+   <a href="<?php echo $wo['member']['url'];?>" data-ajax="?link1=timeline&u=<?php echo $wo['member']['username']?>">
+      <div class="avatar <?php echo Wo_RightToLeft('pull-left');?>">
+         <img src="<?php echo $wo['member']['avatar'];?>" alt="<?php echo $wo['member']['name']; ?> Profile Picture" />
+      </div>
+      <?php echo $wo['member']['name']; ?>
+      <?php if($wo['member']['verified'] == 1) { ?>
+         <span class="verified-color">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" class="feather feather-check-circle" title="<?php echo $wo['lang']['verified_user'];?>" data-toggle="tooltip"><path d="M23,12L20.56,9.22L20.9,5.54L17.29,4.72L15.4,1.54L12,3L8.6,1.54L6.71,4.72L3.1,5.53L3.44,9.21L1,12L3.44,14.78L3.1,18.47L6.71,19.29L8.6,22.47L12,21L15.4,22.46L17.29,19.28L20.9,18.46L20.56,14.78L23,12M10,17L6,13L7.41,11.59L10,14.17L16.59,7.58L18,9L10,17Z" /></svg>
+         </span>
+      <?php } ?>
+   </a>
+   <div class="page-website">
+      <?php echo Wo_UserStatus($wo['member']['user_id'],$wo['member']['lastseen']); ?>
+   </div>
+   <div>
+   <?php if ($wo['setting']['user_id'] == $wo['user']['user_id']): ?>
+      <span onclick="Wo_DeleteJoinedUser(<?php echo $wo['member']['user_id']?>, <?php echo $wo['setting']['id']?>);" class="btn btn-default btn-sm"><i class="fa fa-remove"></i> 
+      <?php echo $wo['lang']['remove']; ?></span>
+   <?php elseif($wo['setting']['user_id'] != $wo['member']['user_id']): ?>
+      <span onclick="Wo_DeleteJoinedUser(<?php echo $wo['member']['user_id']?>, <?php echo $wo['setting']['id']?>);" class="btn btn-default btn-sm"><i class="fa fa-remove"></i> 
+      <?php echo $wo['lang']['remove']; ?></span>
+   <?php endif; ?>
+
+   <?php if ($wo['setting']['user_id'] != $wo['member']['user_id']): ?> 
+      
+      <span onclick="Wo_AddGroupUserAdmin(<?php echo $wo['member']['user_id']?>, <?php echo $wo['setting']['id']?>,this);" class="btn btn-default btn-sm">
+      <?php if (Wo_IsGroupUserExists($wo['member']['user_id'],$wo['setting']['id'])): ?>
+         <span><i class="fa fa-times-circle-o"></i></span> 
+      <?php else: ?>
+         <span><i class="fa fa-plus-square-o"></i></span>
+      <?php endif; ?>
+      <?php echo $wo['lang']['admin']; ?>
+      </span>
+      <span class="btn btn-default btn-sm" id="privileges_admin_<?php echo($wo['member']['user_id']) ?>" style="<?php echo Wo_IsGroupUserExists($wo['member']['user_id'],$wo['setting']['id']) ? '' : 'display: none;'; ?>"><a href="<?php echo Wo_SeoLink('index.php?link1=group-setting&group=' . $wo['setting']['group_name'] . '&link3=group-members');?>?name=<?php echo $wo['member']['username']?>"  data-ajax="?link1=group-setting&group=<?php echo $wo['setting']['group_name'];?>&link3=group-members&name=<?php echo $wo['member']['username']?>"><?php echo $wo['lang']['privileges'];?></a></span>
+   <?php endif;?>
+   </div>
+</div>

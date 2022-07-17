@@ -1,0 +1,531 @@
+<div class="container-fluid">
+    <div>
+        <h3>Manage Website Features</h3>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="#">Home</a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a href="#">Settings</a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">Manage Website Features</li>
+            </ol>
+        </nav>
+    </div>
+    <!-- Vertical Layout -->
+    <div class="row">
+        <div class="col-lg-7 col-md-7">
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="card-title">Manage Website Features</h6>
+                    <div class="site-settings-alert"></div>
+                    <form class="site-settings" method="POST">
+                        <div class="float-left">
+                            <label for="afternoon_system" class="main-label">Greeting System</label>
+                            <br><small class="admin-info">Shows good afternoon, morning and evening messages on home page.</small>
+                        </div>
+                        <div class="form-group float-right switcher">
+                            <input type="hidden" name="afternoon_system" value="0" />
+                            <input type="checkbox" name="afternoon_system" id="chck-afternoon_system" value="1" <?php echo ($wo['config']['afternoon_system'] == 1) ? 'checked': '';?> <?php echo(EnableForMode('afternoon_system')) ?>>
+                            <label for="chck-afternoon_system" class="check-trail <?php echo(EnableForMode('afternoon_system',true)) ?>" <?php echo(EnableForMode('afternoon_system',false,true)) ?>><span class="check-handler"></span></label>
+                        </div>
+                        <div class="clearfix"></div>
+                        <hr>
+
+                        <div class="float-left">
+                            <label for="poke_system" class="main-label">Poke System</label>
+                            <br><small class="admin-info">Gives the ability for users to poke each other.</small>
+                        </div>
+                        <div class="form-group float-right switcher">
+                            <input type="hidden" name="poke_system" value="0" />
+                            <input type="checkbox" name="poke_system" id="chck-poke_system" value="1" <?php echo ($wo['config']['poke_system'] == 1) ? 'checked': '';?> <?php echo(EnableForMode('poke_system')) ?>>
+                            <label for="chck-poke_system" class="check-trail <?php echo(EnableForMode('poke_system',true)) ?>" <?php echo(EnableForMode('poke_system',false,true)) ?>><span class="check-handler"></span></label>
+                        </div>
+                        <div class="clearfix"></div>
+                        <hr>
+                        
+                        <div class="float-left">
+                            <label for="games" class="main-label">Games System</label>
+                            <br><small class="admin-info">Allow users to play games, you can add games from <a href="<?php echo Wo_LoadAdminLinkSettings('add-new-game'); ?>">Add New Game</a>.</small>
+                        </div>
+                        <div class="form-group float-right switcher">
+                            <input type="hidden" name="games" value="0" />
+                            <input type="checkbox" name="games" id="chck-games" value="1" <?php echo ($wo['config']['games'] == 1) ? 'checked': '';?> <?php echo(EnableForMode('games')) ?>>
+                            <label for="chck-games" class="check-trail <?php echo(EnableForMode('games',true)) ?>" <?php echo(EnableForMode('games',false,true)) ?>><span class="check-handler"></span></label>
+                        </div>
+                        <div class="clearfix"></div>
+                        <hr>
+                        
+                        <div class="float-left">
+                            <label for="pages" class="main-label">Pages System</label>
+                            <br><small class="admin-info">Allow users to create fan pages.</small>
+                        </div>
+                        <div class="form-group float-right switcher">
+                            <input type="hidden" name="pages" value="0" />
+                            <input type="checkbox" name="pages" id="chck-pages" value="1" <?php echo ($wo['config']['pages'] == 1) ? 'checked': '';?> <?php echo(EnableForMode('pages')) ?>>
+                            <label for="chck-pages" class="check-trail <?php echo(EnableForMode('pages',true)) ?>" <?php echo(EnableForMode('pages',false,true)) ?>><span class="check-handler"></span></label>
+                        </div>
+                        <div class="clearfix"></div><br>
+                        <div class="float-left">
+                            <label for="nearby_business_system" class="main-label">Nearby Businesses</label>
+                            <br><small class="admin-info">Allow users to find nearby businesses (pages).</small>
+                        </div>
+                        <div class="form-group float-right switcher">
+                            <input type="hidden" name="nearby_business_system" value="0" />
+                            <input type="checkbox" name="nearby_business_system" id="chck-nearby_business_system" value="1" <?php echo ($wo['config']['nearby_business_system'] == 1) ? 'checked': '';?> <?php echo(EnableForMode('nearby_business_system')) ?>>
+                            <label for="chck-nearby_business_system" class="check-trail <?php echo(EnableForMode('nearby_business_system',true)) ?>" <?php echo(EnableForMode('nearby_business_system',false,true)) ?>><span class="check-handler"></span></label>
+                        </div>
+                        <div class="clearfix"></div>
+                        <hr>
+
+                        <div class="float-left">
+                            <label for="groups" class="main-label">Groups System</label>
+                            <br><small class="admin-info">Allow users to create groups.</small>
+                        </div>
+                        <div class="form-group float-right switcher">
+                            <input type="hidden" name="groups" value="0" />
+                            <input type="checkbox" name="groups" id="chck-groups" value="1" <?php echo ($wo['config']['groups'] == 1) ? 'checked': '';?> <?php echo(EnableForMode('groups')) ?>>
+                            <label for="chck-groups" class="check-trail <?php echo(EnableForMode('groups',true)) ?>" <?php echo(EnableForMode('groups',false,true)) ?>><span class="check-handler"></span></label>
+                        </div>
+                        <div class="clearfix"></div>
+                        <hr>
+
+                        <div class="float-left">
+                            <label for="classified" class="main-label">Classified System (MarketPlace)</label>
+                            <br><small class="admin-info">Allow users to sell and list their products.</small>
+                        </div>
+                        <div class="form-group float-right switcher">
+                            <input type="hidden" name="classified" value="0" />
+                            <input type="checkbox" name="classified" id="chck-classified" value="1" <?php echo ($wo['config']['classified'] == 1) ? 'checked': '';?> <?php echo(EnableForMode('classified')) ?>>
+                            <label for="chck-classified" class="check-trail <?php echo(EnableForMode('classified',true)) ?>" <?php echo(EnableForMode('classified',false,true)) ?>><span class="check-handler"></span></label>
+                        </div>
+                        <div class="clearfix"></div><br>
+
+                         <div class="float-left">
+                            <label for="offer_system" class="main-label">Offer System (MarketPlace)</label>
+                            <br><small class="admin-info">Allow pages to create offers and discounts for their products.</small>
+                        </div>
+                        <div class="form-group float-right switcher">
+                            <input type="hidden" name="offer_system" value="0" />
+                            <input type="checkbox" name="offer_system" id="chck-offer_system" value="1" <?php echo ($wo['config']['offer_system'] == 1) ? 'checked': '';?> <?php echo(EnableForMode('offer_system')) ?>>
+                            <label for="chck-offer_system" class="check-trail <?php echo(EnableForMode('offer_system',true)) ?>" <?php echo(EnableForMode('offer_system',false,true)) ?>><span class="check-handler"></span></label>
+                        </div>
+                        <div class="clearfix"></div><br>
+                        <div class="float-left">
+                            <label for="nearby_shop_system" class="main-label">Nearby Shops</label>
+                            <br><small class="admin-info">Show nearby shops and products.</small>
+                        </div>
+                        <div class="form-group float-right switcher">
+                            <input type="hidden" name="nearby_shop_system" value="0" />
+                            <input type="checkbox" name="nearby_shop_system" id="chck-nearby_shop_system" value="1" <?php echo ($wo['config']['nearby_shop_system'] == 1) ? 'checked': '';?> <?php echo(EnableForMode('nearby_shop_system')) ?>>
+                            <label for="chck-nearby_shop_system" class="check-trail <?php echo(EnableForMode('nearby_shop_system',true)) ?>" <?php echo(EnableForMode('nearby_shop_system',false,true)) ?>><span class="check-handler"></span></label>
+                        </div>
+                        <div class="clearfix"></div><br>
+
+                        <label for="product_visibility">MarketPlace Visibility</label>
+                        <select class="form-control show-tick" id="product_visibility" name="product_visibility">
+                          <option value="1" <?php echo ($wo['config']['product_visibility'] == '1')   ? ' selected' : '';?> >Registered Users Only</option>
+                          <option value="0" <?php echo ($wo['config']['product_visibility'] == '0')   ? ' selected' : '';?> >All Users</option>
+                        </select>
+                        <small class="admin-info">Who can view and access marketplace?</small>
+                        <hr>
+
+                        <div class="float-left">
+                            <label for="blogs" class="main-label">Blogs System</label>
+                            <br><small class="admin-info">Allow users to create blogs.</small>
+                        </div>
+                        <div class="form-group float-right switcher">
+                            <input type="hidden" name="blogs" value="0" />
+                            <input type="checkbox" name="blogs" id="chck-blogs" value="1" <?php echo ($wo['config']['blogs'] == 1) ? 'checked': '';?> <?php echo(EnableForMode('blogs')) ?>>
+                            <label for="chck-blogs" class="check-trail <?php echo(EnableForMode('blogs',true)) ?>" <?php echo(EnableForMode('blogs',false,true)) ?>><span class="check-handler"></span></label>
+                        </div>
+                        <div class="clearfix"></div><br>
+
+                        <div class="float-left">
+                            <label for="blog_approval" class="main-label">Blog Approval System</label>
+                            <br><small class="admin-info">Send blog posts to admin for reviewing before publishing.</small>
+                        </div>
+                        <div class="form-group float-right switcher">
+                            <input type="hidden" name="blog_approval" value="0" />
+                            <input type="checkbox" name="blog_approval" id="chck-blog_approval" value="1" <?php echo ($wo['config']['blog_approval'] == 1) ? 'checked': '';?> <?php echo(EnableForMode('blog_approval')) ?>>
+                            <label for="chck-blog_approval" class="check-trail <?php echo(EnableForMode('blog_approval',true)) ?>" <?php echo(EnableForMode('blog_approval',false,true)) ?>><span class="check-handler"></span></label>
+                        </div>
+                        <div class="clearfix"></div><br>
+
+                        <label for="can_blogs">Who Can Post Blogs?</label>
+                        <select class="form-control show-tick" id="can_blogs" name="can_blogs">
+                            <option value="0" <?php echo ($wo['config']['can_blogs'] == '0')   ? ' selected' : '';?> >Admins Only</option>
+                            <option value="1" <?php echo ($wo['config']['can_blogs'] == '1')   ? ' selected' : '';?> >Users Only</option>
+                        </select>
+                        <small class="admin-info">Who can create and post blog articles?</small>
+                        <div class="clearfix"></div>
+                        <hr>
+
+                        <div class="float-left">
+                            <label for="events" class="main-label">Events System</label>
+                            <br><small class="admin-info">Allow users to create events.</small>
+                        </div>
+                        <div class="form-group float-right switcher">
+                            <input type="hidden" name="events" value="0" />
+                            <input type="checkbox" name="events" id="chck-events" value="1" <?php echo ($wo['config']['events'] == 1) ? 'checked': '';?> <?php echo(EnableForMode('events')) ?>>
+                            <label for="chck-events" class="check-trail <?php echo(EnableForMode('events',true)) ?>" <?php echo(EnableForMode('events',false,true)) ?>><span class="check-handler"></span></label>
+                        </div>
+                        <div class="clearfix"></div><br>
+
+                        <label for="events_visibility">Events Visibility</label>
+                        <select class="form-control show-tick" id="events_visibility" name="events_visibility">
+                          <option value="0" <?php echo ($wo['config']['events_visibility'] == '0')   ? ' selected' : '';?> >Registered Users Only</option>
+                          <option value="1" <?php echo ($wo['config']['events_visibility'] == '1')   ? ' selected' : '';?> >All Users</option>
+                        </select>
+                        <small class="admin-info">Who can view and access events?</small>
+                        <div class="clearfix"></div>
+                        <hr>
+
+                        <div class="float-left">
+                            <label for="forum" class="main-label">Forums System</label>
+                            <br><small class="admin-info">Allow users to create forums.</small>
+                        </div>
+                        <div class="form-group float-right switcher">
+                            <input type="hidden" name="forum" value="0" />
+                            <input type="checkbox" name="forum" id="chck-forum" value="1" <?php echo ($wo['config']['forum'] == 1) ? 'checked': '';?> <?php echo(EnableForMode('forum')) ?>>
+                            <label for="chck-forum" class="check-trail <?php echo(EnableForMode('forum',true)) ?>" <?php echo(EnableForMode('forum',false,true)) ?>><span class="check-handler"></span></label>
+                        </div>
+                        <div class="clearfix"></div><br>
+
+                        <label for="forum_visibility">Forums Visibility</label>
+                        <select class="form-control show-tick" id="forum_visibility" name="forum_visibility">
+                          <option value="1" <?php echo ($wo['config']['forum_visibility'] == '1')   ? ' selected' : '';?> >Registered Users Only</option>
+                          <option value="0" <?php echo ($wo['config']['forum_visibility'] == '0')   ? ' selected' : '';?> >All Users</option>
+                        </select>
+                        <small class="admin-info">Who can view and access forums?</small>
+                        <div class="clearfix"></div>
+                        <hr>
+
+                        <div class="float-left">
+                            <label for="movies" class="main-label">Movies System</label>
+                            <br><small class="admin-info">Allow users to watch movies, movies can be added only by admins, you can manage movies from <a href="<?php echo Wo_LoadAdminLinkSettings('add-new-movies'); ?>">Manage Movies</a>.</small>
+                        </div>
+                        <div class="form-group float-right switcher">
+                            <input type="hidden" name="movies" value="0" />
+                            <input type="checkbox" name="movies" id="chck-movies" value="1" <?php echo ($wo['config']['movies'] == 1) ? 'checked': '';?> <?php echo(EnableForMode('movies')) ?>>
+                            <label for="chck-movies" class="check-trail <?php echo(EnableForMode('movies',true)) ?>" <?php echo(EnableForMode('movies',false,true)) ?>><span class="check-handler"></span></label>
+                        </div>
+                        <div class="clearfix"></div>
+                        <hr>
+
+                        <div class="float-left">
+                            <label for="user_status" class="main-label">Story / Status System</label>
+                            <br><small class="admin-info">Allow users to create stories & status that expire after 24 hours.</small>
+                        </div>
+                        <div class="form-group float-right switcher">
+                            <input type="hidden" name="user_status" value="0" />
+                            <input type="checkbox" name="user_status" id="chck-user_status" value="1" <?php echo ($wo['config']['user_status'] == 1) ? 'checked': '';?> <?php echo(EnableForMode('user_status')) ?>>
+                            <label for="chck-user_status" class="check-trail <?php echo(EnableForMode('user_status',true)) ?>" <?php echo(EnableForMode('user_status',false,true)) ?>><span class="check-handler"></span></label>
+                        </div>
+                        <div class="clearfix"></div>
+                        <hr>
+
+                        <div class="float-left">
+                            <label for="stickers" class="main-label">GIF System</label>
+                            <br><small class="admin-info">Allow users to share gif images in posts, comments, and chats.</small>
+                        </div>
+                        <div class="form-group float-right switcher">
+                            <input type="hidden" name="stickers" value="0" />
+                            <input type="checkbox" name="stickers" id="chck-stickers" value="1" <?php echo ($wo['config']['stickers'] == 1) ? 'checked': '';?> <?php echo(EnableForMode('stickers')) ?>>
+                            <label for="chck-stickers" class="check-trail <?php echo(EnableForMode('stickers',true)) ?>" <?php echo(EnableForMode('stickers',false,true)) ?>><span class="check-handler"></span></label>
+                        </div>
+                        <div class="clearfix"></div><br>
+
+                        <div class="float-left">
+                            <label for="stickers_system" class="main-label">Stickers System</label>
+                            <br><small class="admin-info">Allow users to send and post stickers. You can manage, edit and add stickers from <a href="<?php echo Wo_LoadAdminLinkSettings('add-new-sticker'); ?>">Add New Sticker</a>. </small>
+                        </div>
+                        <div class="form-group float-right switcher">
+                            <input type="hidden" name="stickers_system" value="0" />
+                            <input type="checkbox" name="stickers_system" id="chck-stickers_system" value="1" <?php echo ($wo['config']['stickers_system'] == 1) ? 'checked': '';?> <?php echo(EnableForMode('stickers_system')) ?>>
+                            <label for="chck-stickers_system" class="check-trail <?php echo(EnableForMode('stickers_system',true)) ?>" <?php echo(EnableForMode('stickers_system',false,true)) ?>><span class="check-handler"></span></label>
+                        </div>
+                        <div class="clearfix"></div>
+                        <hr>
+
+                        <div class="float-left">
+                            <label for="find_friends" class="main-label">Nearby Friends System</label>
+                            <br><small class="admin-info">Allow users to search nearby users.</small>
+                        </div>
+                        <div class="form-group float-right switcher">
+                            <input type="hidden" name="find_friends" value="0" />
+                            <input type="checkbox" name="find_friends" id="chck-find_friends" value="1" <?php echo ($wo['config']['find_friends'] == 1) ? 'checked': '';?> <?php echo(EnableForMode('find_friends')) ?>>
+                            <label for="chck-find_friends" class="check-trail <?php echo(EnableForMode('find_friends',true)) ?>" <?php echo(EnableForMode('find_friends',false,true)) ?>><span class="check-handler"></span></label>
+                        </div>
+                        <div class="clearfix"></div>
+                        <hr>
+
+                        <div class="float-left">
+                            <label for="gift_system" class="main-label">GIFT System</label>
+                            <br><small class="admin-info">Allow users to send gifts. You can manage, add and edit gifts from <a href="<?php echo Wo_LoadAdminLinkSettings('add-new-gift'); ?>">Add New Sticker</a>.</small>
+                        </div>
+                        <div class="form-group float-right switcher">
+                            <input type="hidden" name="gift_system" value="0" />
+                            <input type="checkbox" name="gift_system" id="chck-gift_system" value="1" <?php echo ($wo['config']['gift_system'] == 1) ? 'checked': '';?> <?php echo(EnableForMode('gift_system')) ?>>
+                            <label for="chck-gift_system" class="check-trail <?php echo(EnableForMode('gift_system',true)) ?>" <?php echo(EnableForMode('gift_system',false,true)) ?>><span class="check-handler"></span></label>
+                        </div>
+                        <div class="clearfix"></div>
+                        <hr>
+
+                        <div class="float-left">
+                            <label for="job_system" class="main-label">Jobs System</label>
+                            <br><small class="admin-info">Allow pages to create jobs, users can apply and get hired.</small>
+                        </div>
+                        <div class="form-group float-right switcher">
+                            <input type="hidden" name="job_system" value="0" />
+                            <input type="checkbox" name="job_system" id="chck-job_system" value="1" <?php echo ($wo['config']['job_system'] == 1) ? 'checked': '';?> <?php echo(EnableForMode('job_system')) ?>>
+                            <label for="chck-job_system" class="check-trail <?php echo(EnableForMode('job_system',true)) ?>" <?php echo(EnableForMode('job_system',false,true)) ?>><span class="check-handler"></span></label>
+                        </div>
+                        <div class="clearfix"></div>
+                        <hr>
+
+                        <div class="float-left">
+                            <label for="common_things" class="main-label">Common Things Page</label>
+                            <br><small class="admin-info">Allow users to find common things between them.</small>
+                        </div>
+                        <div class="form-group float-right switcher">
+                            <input type="hidden" name="common_things" value="0" />
+                            <input type="checkbox" name="common_things" id="chck-common_things" value="1" <?php echo ($wo['config']['common_things'] == 1) ? 'checked': '';?> <?php echo(EnableForMode('common_things')) ?>>
+                            <label for="chck-common_things" class="check-trail <?php echo(EnableForMode('common_things',true)) ?>" <?php echo(EnableForMode('common_things',false,true)) ?>><span class="check-handler"></span></label>
+                        </div>
+                        <div class="clearfix"></div>
+                        <hr>
+                        <div class="float-left">
+                            <label for="weather_widget" class="main-label">Weather Widget</label>
+                            <br><small class="admin-info"><a href="https://openweathermap.org/">Please register to this site and use the key</a></small>
+                        </div>
+                        <div class="form-group float-right switcher">
+                            <input type="hidden" name="weather_widget" value="0" />
+                            <input type="checkbox" name="weather_widget" id="chck-weather_widget" value="1" <?php echo ($wo['config']['weather_widget'] == 1) ? 'checked': '';?> <?php echo(EnableForMode('weather_widget')) ?>>
+                            <label for="chck-weather_widget" class="check-trail <?php echo(EnableForMode('weather_widget',true)) ?>" <?php echo(EnableForMode('weather_widget',false,true)) ?>><span class="check-handler"></span></label>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="form-group form-float">
+                            <div class="form-line">
+                                <label class="form-label">Weather APP ID</label>
+                                <input type="text" name="weather_key" class="form-control" value="<?php echo $wo['config']['weather_key']?>">
+                                <small class="admin-info">Use the APP ID from openweathermap.org</small>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+
+                        <!-- <label for="weather_widget">Weather Widget</label>
+                        <div class="form-group">
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="weather_widget" id="weather_widget-enabled" value="1" <?php echo ($wo['config']['weather_widget'] == 1) ? 'checked': '';?> <?php echo(EnableForMode('poke_system')) ?>>
+                                <label  class="form-check-label" for="weather_widget-enabled">Enabled</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="weather_widget" id="weather_widget-disabled" value="0" <?php echo ($wo['config']['weather_widget'] == 0) ? 'checked': '';?> <?php echo(EnableForMode('poke_system')) ?>>
+                                <label  class="form-check-label" for="weather_widget-disabled" class="m-l-20">Disabled</label>
+                            </div>
+                        </div> -->
+                        <!-- <div class="form-group form-float">
+                            <div class="form-line">
+                                <label class="form-label">Openweathermap Weather App Id</label>
+                                <input type="text" id="weather_key" name="weather_key" class="form-control" value="<?php echo $wo['config']['weather_key']?>">
+                            </div>
+                        </div> -->
+                        <!-- 
+                        <div class="form-group form-float">
+                            <div class="form-line">
+                                <label class="form-label">Yahoo Weather Consumer Key</label>
+                                <input type="text" id="yahoo_consumer_key" name="yahoo_consumer_key" class="form-control" value="<?php echo $wo['config']['yahoo_consumer_key']?>">
+                            </div>
+                        </div>
+                        <div class="form-group form-float">
+                            <div class="form-line">
+                                <label class="form-label">Yahoo Weather Consumer Secret</label>
+                                <input type="text" id="yahoo_consumer_secret" name="yahoo_consumer_secret" class="form-control" value="<?php echo $wo['config']['yahoo_consumer_secret']?>">
+                            </div>
+                        </div> -->
+                        
+                        <input type="hidden" name="hash_id" value="<?php echo Wo_CreateSession();?>">
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-5 col-md-5">
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="card-title">Point & Level Configuration</h6>
+                    <form class="site-settings2" method="POST">
+                        <div class="float-left">
+                            <label for="point_level_system" class="main-label">Points & Level System</label>
+                            <br><small class="admin-info">Gives the ability for users to earn points from <br>liking, sharing, commenting and posting.</small>
+                        </div>
+                        <div class="form-group float-right switcher">
+                            <input type="hidden" name="point_level_system" value="0" />
+                            <input type="checkbox" name="point_level_system" id="chck-point_level_system" value="1" <?php echo ($wo['config']['point_level_system'] == 1) ? 'checked': '';?> <?php echo(EnableForMode('point_level_system')) ?>>
+                            <label for="chck-point_level_system" class="check-trail <?php echo(EnableForMode('point_level_system',true)) ?>" <?php echo(EnableForMode('point_level_system',false,true)) ?>><span class="check-handler"></span></label>
+                        </div>
+                        <div class="clearfix"></div>
+                        <hr>
+
+                        <div class="float-left">
+                            <label for="point_allow_withdrawal" class="main-label">Withdrawal Earned Points</label>
+                            <br><small class="admin-info">Allow users to transfer earned points<br> into money and withdrawal.</small>
+                        </div>
+                        <div class="form-group float-right switcher">
+                            <input type="hidden" name="point_allow_withdrawal" value="0" />
+                            <input type="checkbox" name="point_allow_withdrawal" id="chck-point_allow_withdrawal" value="1" <?php echo ($wo['config']['point_allow_withdrawal'] == 1) ? 'checked': '';?> <?php echo(EnableForMode('point_allow_withdrawal')) ?>>
+                            <label for="chck-point_allow_withdrawal" class="check-trail <?php echo(EnableForMode('point_allow_withdrawal',true)) ?>" <?php echo(EnableForMode('point_allow_withdrawal',false,true)) ?>><span class="check-handler"></span></label>
+                        </div>
+                        <div class="clearfix"></div>
+                        <hr>
+
+                        <div class="form-group form-float">
+                            <div class="form-line">
+                                <label class="form-label">$1.00 = ? Point</label>
+                                <input type="text" name="dollar_to_point_cost" class="form-control" value="<?php echo $wo['config']['dollar_to_point_cost']?>">
+                                <small class="admin-info">How much does 1 dollar equal in points?</small>
+                            </div>
+                        </div>
+                        <hr>
+                         <div class="form-group form-float">
+                            <div class="form-line">
+                                <label class="form-label">Free User Daily Limit</label>
+                                <input type="text" name="free_day_limit" class="form-control" value="<?php echo $wo['config']['free_day_limit']?>">
+                                <small class="admin-info">How many points can a free user earn in a day?</small>
+                            </div>
+                        </div>
+                        <div class="form-group form-float">
+                            <div class="form-line">
+                                <label class="form-label">Pro User Daily Limit</label>
+                                <input type="text" name="pro_day_limit" class="form-control" value="<?php echo $wo['config']['pro_day_limit']?>">
+                                <small class="admin-info">How many points can a pro user earn in a day?</small>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="form-group form-float">
+                            <div class="form-line">
+                                <label class="form-label">Comments</label>
+                                <input type="text" name="comments_point" class="form-control" value="<?php echo $wo['config']['comments_point']?>">
+                                <small class="admin-info">How many points does a user earn by creating comments?</small>
+                            </div>
+                        </div>
+                        <div class="form-group form-float">
+                            <div class="form-line">
+                                <label class="form-label">Likes</label>
+                                <input type="text" name="likes_point" class="form-control" value="<?php echo $wo['config']['likes_point']?>">
+                                 <small class="admin-info">How many points does a user earn by liking posts?</small>
+                            </div>
+                        </div>
+                        <div class="form-group form-float">
+                            <div class="form-line">
+                                <label class="form-label">DisLikes</label>
+                                <input type="text" name="dislikes_point" class="form-control" value="<?php echo $wo['config']['dislikes_point']?>">
+                                <small class="admin-info">How many points does a user earn by disliking posts?</small>
+                            </div>
+                        </div>
+                        <div class="form-group form-float">
+                            <div class="form-line">
+                                <label class="form-label">Wonders</label>
+                                <input type="text" name="wonders_point" class="form-control" value="<?php echo $wo['config']['wonders_point']?>">
+                                <small class="admin-info">How many points does a user earn by wondering posts?</small>
+                            </div>
+                        </div>
+                        <div class="form-group form-float">
+                            <div class="form-line">
+                                <label class="form-label">Reaction</label>
+                                <input type="text" name="reaction_point" class="form-control" value="<?php echo $wo['config']['reaction_point']?>">
+                                <small class="admin-info">How many points does a user earn by reacting to posts?</small>
+                            </div>
+                        </div>
+                        <div class="form-group form-float">
+                            <div class="form-line">
+                                <label class="form-label">Create New Post</label>
+                                <input type="text" name="createpost_point" class="form-control" value="<?php echo $wo['config']['createpost_point']?>">
+                                <small class="admin-info">How many points does a user earn by creating new posts?</small>
+                            </div>
+                        </div>
+                        <div class="form-group form-float">
+                            <div class="form-line">
+                                <label class="form-label">Create A Blog</label>
+                                <input type="text" name="createblog_point" class="form-control" value="<?php echo $wo['config']['createblog_point']?>">
+                                <small class="admin-info">How many points does a user earn by creating new articles?</small>
+                            </div>
+                        </div>
+                       
+                        <input type="hidden" name="hash_id" value="<?php echo Wo_CreateSession();?>">
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <div class="clearfix"></div>
+    </div>
+    <!-- #END# Vertical Layout -->
+<script>
+$(function() {
+    $('.switcher input[type=checkbox]').click(function () {
+        setToTrue = 0;
+        if ($(this).is(":checked") === true) {
+            setToTrue = 1;
+        }
+        var configName = $(this).attr('name');
+        var hash_id = $('input[name=hash_id]').val();
+        var objData = {};
+        objData[configName] = setToTrue;
+        objData['hash_id'] = hash_id;
+        $.post( Wo_Ajax_Requests_File() + '?f=admin_setting&s=update_general_setting', objData);
+    });
+
+    var setTimeOutColor = setTimeout(function (){});
+    $('select').on('change', function() {
+         clearTimeout(setTimeOutColor);
+        var thisElement = $(this);
+        var configName = thisElement.attr('name');
+        var hash_id = $('input[name=hash_id]').val();
+        var objData = {};
+        objData[configName] = this.value;
+        objData['hash_id'] = hash_id;
+        thisElement.addClass('warning');
+        $.post( Wo_Ajax_Requests_File() + '?f=admin_setting&s=update_general_setting', objData, function (data) {
+            if (data.status == 200) {
+                thisElement.removeClass('warning');
+                thisElement.addClass('success');
+            } else {
+                thisElement.addClass('error');
+            }
+            var setTimeOutColor = setTimeout(function () {
+                thisElement.removeClass('success');
+                thisElement.removeClass('warning');
+                thisElement.removeClass('error');
+            }, 2000);
+        });
+    });
+    $('input[type=text], input[type=number], textarea').on('keyup', delay(function() {
+            clearTimeout(setTimeOutColor);
+            var thisElement = $(this);
+            var configName = thisElement.attr('name');
+            var hash_id = $('input[name=hash_id]').val();
+            var objData = {};
+            objData[configName] = this.value;
+            objData['hash_id'] = hash_id;
+            thisElement.addClass('warning');
+            $.post( Wo_Ajax_Requests_File() + '?f=admin_setting&s=update_general_setting', objData, function (data) {
+                if (data.status == 200) {
+                    thisElement.removeClass('warning');
+                    thisElement.addClass('success');
+                } else {
+                    thisElement.addClass('error');
+                }
+                var setTimeOutColor = setTimeout(function () {
+                    thisElement.removeClass('success');
+                    thisElement.removeClass('warning');
+                    thisElement.removeClass('error');
+                }, 2000);
+                //thisElement.focus();
+            });
+    }, 500));
+});
+
+</script>

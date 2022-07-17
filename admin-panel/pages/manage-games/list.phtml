@@ -1,0 +1,21 @@
+<tr class="setting-gamelist" id="GameID_<?php echo $wo['gamelist']['id']?>" data-game-id="<?php echo $wo['gamelist']['id']?>" data_selected="<?php echo $wo['gamelist']['id'] ?>">
+  <td><input type="checkbox" id="check-data-<?php echo $wo['gamelist']['id']?>" class="delete-checkbox filled-in"><label for="check-data-<?php echo $wo['gamelist']['id']?>"></label></td>
+   <td><?php echo $wo['gamelist']['id']?></td>
+   <td>
+      <a href="<?php echo $wo['gamelist']['url']; ?>">
+      <img src="<?php echo $wo['gamelist']['game_avatar']; ?>" class="setting-avatar" alt="<?php echo $wo['gamelist']['name']?> Game Picture">
+      <?php echo $wo['gamelist']['name']; ?>
+      </a>
+   </td>
+   <td>
+     <?php echo $wo['gamelist']['players'];?>
+   </td>
+   <td>
+     <div class="ajax-time" title="<?php echo date('c',$wo['gamelist']['time']); ?>">
+         <?php echo Wo_Time_Elapsed_String($wo['gamelist']['time']);?>
+     </div>
+   </td>
+   <td>
+    <button class="btn bg-danger admn_table_btn" onclick="Wo_DeleteGame(<?php echo $wo['gamelist']['id']?>,'hide');">Delete</button>
+   </td>
+</tr>

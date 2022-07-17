@@ -1,0 +1,20 @@
+<tr class="setting-postlist" id="PostID_<?php echo $wo['story']->id?>" data-post-id="<?php echo $wo['story']->id?>" data_selected="<?php echo $wo['story']->id ?>">
+   <td><input type="checkbox" id="check-data-<?php echo $wo['story']->id?>" class="delete-checkbox filled-in"><label for="check-data-<?php echo $wo['story']->id?>"></label></td>
+   <td><?php echo $wo['story']->id?></td>
+   <td>
+      <a href="<?php echo $wo['story']->publisher['url']; ?>">
+      <img src="<?php echo $wo['story']->publisher['avatar']?>" class="setting-avatar" alt="<?php echo $wo['story']->publisher['avatar']?> Profile Picture">
+      <?php echo $wo['story']->publisher['name']; ?>
+      </a>
+   </td>
+   <td><?php echo !empty($wo['story']->offer['description'])  ? mb_substr($wo['story']->offer['description'], 0, 50, "UTF-8") : '';?></td>
+   <td><a href="<?php echo $wo['story']->offer['url'];?>" target="_blank"><?php echo $wo['lang']['open_post'];?></a></td>
+   <td>
+      <div class="ajax-time" title="<?php echo date('c',$wo['story']->time); ?>">
+         <?php echo Wo_Time_Elapsed_String($wo['story']->time);?>
+      </div>
+   </td>
+   <td>
+      <button onclick="Wo_AdminDeletePost(<?php echo $wo['story']->id?>,'hide');" type="button" class="btn bg-danger admn_table_btn">Delete</button>
+   </td>
+</tr>

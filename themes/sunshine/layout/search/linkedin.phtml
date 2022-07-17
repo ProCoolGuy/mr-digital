@@ -1,0 +1,347 @@
+<div class="page-margin products wo_market wo_job_search">
+	<div class="row">
+		<div class="col-md-3">
+			<div class="market_search_header">
+				<form action="">
+					<div class="form-group">
+						<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24"><path fill="currentColor" d="M9.5,3A6.5,6.5 0 0,1 16,9.5C16,11.11 15.41,12.59 14.44,13.73L14.71,14H15.5L20.5,19L19,20.5L14,15.5V14.71L13.73,14.44C12.59,15.41 11.11,16 9.5,16A6.5,6.5 0 0,1 3,9.5A6.5,6.5 0 0,1 9.5,3M9.5,5C7,5 5,7 5,9.5C5,12 7,14 9.5,14C12,14 14,12 14,9.5C14,7 12,5 9.5,5" /></svg>
+						<input type="text" class="form-control" onkeyup="Wo_SearchAll(this.value)" placeholder="<?php echo $wo['lang']['keyword']; ?>" id="search_for_text" value="<?php echo (isset($_GET['query'])) ? Wo_Secure($_GET['query']): '';?>">
+					</div>
+				</form>
+			</div>
+			<div class="market_widget">
+				<div class="m_widget_head"><?php echo $wo['lang']['type'];?></div>
+				<div class="market_categories">
+					<ul class="product-category-slider">
+						<li>
+							<input type="radio" id="search_type_all" name="search_type" value="all" checked>
+							<label for="search_type_all"><a><?php echo $wo['lang']['all'];?></a></label>
+						</li>
+						<li>
+							<input type="radio" id="search_type_users" name="search_type" value="users">
+							<label for="search_type_users"><a><?php echo $wo['lang']['users'];?></a></label>
+						</li>
+						<li>
+							<input type="radio" id="search_type_pages" name="search_type" value="pages">
+							<label for="search_type_pages"><a><?php echo $wo['lang']['pages'];?></a></label>
+						</li>
+						<li>
+							<input type="radio" id="search_type_groups" name="search_type" value="groups">
+							<label for="search_type_groups"><a><?php echo $wo['lang']['groups'];?></a></label>
+						</li>
+						<li>
+							<input type="radio" id="search_type_service" name="search_type" value="service">
+							<label for="search_type_service"><a><?php echo $wo['lang']['services'];?></a></label>
+						</li>
+					</ul>
+				</div>
+			</div>
+			<div class="market_widget">
+				<div class="m_widget_head"><?php echo $wo['lang']['certifications'];?></div>
+				<div class="market_search_header">
+					<form action="">
+						<div class="form-group">
+							<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24"><path fill="currentColor" d="M9.5,3A6.5,6.5 0 0,1 16,9.5C16,11.11 15.41,12.59 14.44,13.73L14.71,14H15.5L20.5,19L19,20.5L14,15.5V14.71L13.73,14.44C12.59,15.41 11.11,16 9.5,16A6.5,6.5 0 0,1 3,9.5A6.5,6.5 0 0,1 9.5,3M9.5,5C7,5 5,7 5,9.5C5,12 7,14 9.5,14C12,14 14,12 14,9.5C14,7 12,5 9.5,5" /></svg>
+							<input type="text" class="form-control" onkeyup="Wo_SearchAllCertifications(this.value)" placeholder="<?php echo $wo['lang']['keyword']; ?>" id="search_for_certifications">
+						</div>
+					</form>
+				</div>
+			</div>
+			<div class="market_widget">
+				<div class="m_widget_head"><?php echo $wo['lang']['job_types'];?></div>
+				<?php
+				$checked_array = array('full_time' => '',
+			                           'contract' => '',
+			                           'part_time' => '',
+			                           'internship' => '',
+			                           'temporary' => '',
+			                           'on_site' => '',
+			                           'hybrid' => '',
+			                           'remote' => '');
+				if (!empty($_GET['job_type'])) {
+					foreach ($_GET['job_type'] as $key => $value) {
+						if (in_array($value, array_keys($checked_array))) {
+							$checked_array[$value] = 'checked';
+						}
+					}
+				}
+				if (!empty($_GET['workplaces'])) {
+					foreach ($_GET['workplaces'] as $key => $value) {
+						if (in_array($value, array_keys($checked_array))) {
+							$checked_array[$value] = 'checked';
+						}
+					}
+				}
+				?>
+				<div class="market_categories">
+					<ul class="product-category-slider">
+						<li>
+							<input type="checkbox" id="full_time" name="job_type[]" value="full_time" <?php echo $checked_array['full_time']; ?>>
+							<label for="full_time"><a><?php echo $wo['lang']['full_time']; ?></a></label>
+						</li>
+						<li>
+							<input type="checkbox" id="contract" name="job_type[]" value="contract" <?php echo $checked_array['contract']; ?>>
+							<label for="contract"><a><?php echo $wo['lang']['contract']; ?></a></label>
+						</li>
+						<li>
+							<input type="checkbox" id="part_time" name="job_type[]" value="part_time" <?php echo $checked_array['part_time']; ?>>
+							<label for="part_time"><a><?php echo $wo['lang']['part_time']; ?></a></label>
+						</li>
+						<li>
+							<input type="checkbox" id="internship" name="job_type[]" value="internship" <?php echo $checked_array['internship']; ?>>
+							<label for="internship"><a><?php echo $wo['lang']['internship']; ?></a></label>
+						</li>
+						<li>
+							<input type="checkbox" id="temporary" name="job_type[]" value="temporary" <?php echo $checked_array['temporary']; ?>>
+							<label for="temporary"><a><?php echo $wo['lang']['temporary']; ?></a></label>
+						</li>
+			        </ul>
+				</div>
+			</div>
+			<div class="market_widget">
+				<div class="m_widget_head"><?php echo $wo['lang']['workplaces'];?></div>
+				<div class="market_categories">
+					<ul class="product-category-slider">
+						<li>
+							<input type="checkbox" id="on_site" name="workplaces[]" value="on_site" <?php echo $checked_array['on_site']; ?>>
+							<label for="on_site"><a><?php echo $wo['lang']['on_site']; ?></a></label>
+						</li>
+						<li>
+							<input type="checkbox" id="hybrid" name="workplaces[]" value="hybrid" <?php echo $checked_array['hybrid']; ?>>
+							<label for="hybrid"><a><?php echo $wo['lang']['hybrid']; ?></a></label>
+						</li>
+						<li>
+							<input type="checkbox" id="remote" name="workplaces[]" value="remote" <?php echo $checked_array['remote']; ?>>
+							<label for="remote"><a><?php echo $wo['lang']['remote']; ?></a></label>
+						</li>
+			        </ul>
+				</div>
+			</div>
+			<div class="market_widget">
+				<div class="m_widget_head"><?php echo $wo['lang']['experience'];?></div>
+				<div class="select-nearby-users-distance">
+					<form>
+						<input type="range" class="cusrange" id="nearby-users-distance" name="amountRange" onchange="Wo_SearchExperience();" value="0" min="0" max="40" oninput="this.form.amountInput.value=this.value">
+						<input type="number" name="amountInput" min="0" max="40" value="0" oninput="this.form.amountRange.value=this.value" readonly id="cusrange-reader"/>
+					</form>
+				</div>
+			</div>
+		</div>
+		
+		<div class="col-md-9">
+
+			<div class="wo_search_page">
+				<?php
+					$array = array('search_type' => 'all');
+					if (!empty($_GET['query'])) {
+						$array['keyword'] = $_GET['query'];
+					}
+					$info = LinkedinSearch($array);
+					array_multisort( array_column($info, "sort_time"), SORT_DESC, $info );
+					if (count($info) > 20) {
+						$info = array_slice($info, 0, 20, true);
+					}
+					
+				?>
+				<div id="linkedin_data" class="row sun_find_friends">
+					<?php
+					if (count($info) > 0) {
+						foreach ($info as $key => $wo['result']) {
+							if ($wo['result']['sort_type'] == 'user') {
+								echo Wo_LoadPage('search/linkedin_user_list');
+							}
+							if ($wo['result']['sort_type'] == 'page') {
+								echo Wo_LoadPage('search/linkedin_page_list');
+							}
+							if ($wo['result']['sort_type'] == 'group') {
+								echo Wo_LoadPage('search/linkedin_group_list');
+							}
+							if ($wo['result']['sort_type'] == 'service') {
+								echo Wo_LoadPage('search/linkedin_service_list');
+							}
+						}
+					} else {
+						echo '<h5 class="search-filter-center-text empty_state"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-alert-octagon"><polygon points="7.86 2 16.14 2 22 7.86 22 16.14 16.14 22 7.86 22 2 16.14 2 7.86 7.86 2"></polygon><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg> ' . $wo['lang']['no_available_data'] . '</h5>';
+					}
+					?>
+				</div>
+			</div>
+			<div class="posts_load load-produts">
+			    <?php if (count($info) > 0): ?>
+				<div class="load-more">
+                    <button class="btn btn-default text-center wo_load_more" onclick="Wo_LoadLinkedin();">
+						<span><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z"></path></svg></span> <?php echo $wo['lang']['load_more'] ?>
+					</button>
+                </div>
+                <?php endif ?>
+			</div>
+		<div class="clear"></div>
+	</div>
+</div>
+<?php echo Wo_LoadPage('products/create'); ?>
+<script>
+$(document).ready(function() {
+	$(document).on('change', "input[name='search_type']", function(event) {
+		keyword = $('#search_for_text').val();
+		certifications = $('#search_for_certifications').val();
+		search_type = $(this).val();
+		experience = $('#cusrange-reader').val();
+		var job_type = [];
+        $("input[name='job_type[]']:checked").each(function(i){
+          job_type[i] = $(this).val();
+        });
+        var workplaces = [];
+        $("input[name='workplaces[]']:checked").each(function(i){
+          workplaces[i] = $(this).val();
+        });
+		$.post(Wo_Ajax_Requests_File() + '?f=search_linkedin&mode_type=linkedin', {keyword: keyword,search_type:search_type,certifications:certifications,experience:experience,job_type:job_type,workplaces:workplaces}, function (data) {
+			if (data.status == 200) {
+				if (data.html.length > 0) {
+					$('#linkedin_data').html(data.html);
+				} else {
+					$('#linkedin_data').html('<h5 class="search-filter-center-text empty_state"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-alert-octagon"><polygon points="7.86 2 16.14 2 22 7.86 22 16.14 16.14 22 7.86 22 2 16.14 2 7.86 7.86 2"></polygon><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg><?php echo $wo['lang']['no_available_data'] ?></h5>');
+				}
+			}
+		});
+	});
+	$(document).on('change', "input[name='job_type[]']", function(event) {
+		keyword = $('#search_for_text').val();
+		certifications = $('#search_for_certifications').val();
+		search_type = $("input[name='search_type']:checked").val();
+		experience = $('#cusrange-reader').val();
+		var job_type = [];
+        $("input[name='job_type[]']:checked").each(function(i){
+          job_type[i] = $(this).val();
+        });
+        var workplaces = [];
+        $("input[name='workplaces[]']:checked").each(function(i){
+          workplaces[i] = $(this).val();
+        });
+		$.post(Wo_Ajax_Requests_File() + '?f=search_linkedin&mode_type=linkedin', {keyword: keyword,search_type:search_type,certifications:certifications,experience:experience,job_type:job_type,workplaces:workplaces}, function (data) {
+			if (data.status == 200) {
+				if (data.html.length > 0) {
+					$('#linkedin_data').html(data.html);
+				} else {
+					$('#linkedin_data').html('<h5 class="search-filter-center-text empty_state"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-alert-octagon"><polygon points="7.86 2 16.14 2 22 7.86 22 16.14 16.14 22 7.86 22 2 16.14 2 7.86 7.86 2"></polygon><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg><?php echo $wo['lang']['no_available_data'] ?></h5>');
+				}
+			}
+		});
+	});
+	$(document).on('change', "input[name='workplaces[]']", function(event) {
+		keyword = $('#search_for_text').val();
+		certifications = $('#search_for_certifications').val();
+		search_type = $("input[name='search_type']:checked").val();
+		experience = $('#cusrange-reader').val();
+		var workplaces = [];
+        $("input[name='workplaces[]']:checked").each(function(i){
+          workplaces[i] = $(this).val();
+        });
+		var job_type = [];
+        $("input[name='job_type[]']:checked").each(function(i){
+          job_type[i] = $(this).val();
+        });
+		$.post(Wo_Ajax_Requests_File() + '?f=search_linkedin&mode_type=linkedin', {keyword: keyword,search_type:search_type,certifications:certifications,experience:experience,job_type:job_type,workplaces:workplaces}, function (data) {
+			if (data.status == 200) {
+				if (data.html.length > 0) {
+					$('#linkedin_data').html(data.html);
+				} else {
+					$('#linkedin_data').html('<h5 class="search-filter-center-text empty_state"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-alert-octagon"><polygon points="7.86 2 16.14 2 22 7.86 22 16.14 16.14 22 7.86 22 2 16.14 2 7.86 7.86 2"></polygon><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg><?php echo $wo['lang']['no_available_data'] ?></h5>');
+				}
+			}
+		});
+	});
+});
+function Wo_SearchAll(keyword) {
+	search_type = $("input[name='search_type']:checked").val();
+	certifications = $('#search_for_certifications').val(); 
+	experience = $('#cusrange-reader').val();
+	var workplaces = [];
+    $("input[name='workplaces[]']:checked").each(function(i){
+      workplaces[i] = $(this).val();
+    });
+	var job_type = [];
+    $("input[name='job_type[]']:checked").each(function(i){
+      job_type[i] = $(this).val();
+    });
+	$.post(Wo_Ajax_Requests_File() + '?f=search_linkedin&mode_type=linkedin', {keyword: keyword,search_type:search_type,certifications:certifications,experience:experience,workplaces:workplaces,job_type:job_type}, function (data) {
+		if (data.status == 200) {
+			if (data.html.length > 0) {
+				$('#linkedin_data').html(data.html);
+			} else {
+				$('#linkedin_data').html('<h5 class="search-filter-center-text empty_state"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-alert-octagon"><polygon points="7.86 2 16.14 2 22 7.86 22 16.14 16.14 22 7.86 22 2 16.14 2 7.86 7.86 2"></polygon><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg><?php echo $wo['lang']['no_available_data'] ?></h5>');
+			}
+		}
+	});
+}
+function Wo_SearchAllCertifications(certifications) {
+	keyword = $('#search_for_text').val();
+	search_type = $("input[name='search_type']:checked").val();
+	experience = $('#cusrange-reader').val();
+	var workplaces = [];
+    $("input[name='workplaces[]']:checked").each(function(i){
+      workplaces[i] = $(this).val();
+    });
+	var job_type = [];
+    $("input[name='job_type[]']:checked").each(function(i){
+      job_type[i] = $(this).val();
+    });
+	$.post(Wo_Ajax_Requests_File() + '?f=search_linkedin&mode_type=linkedin', {keyword: keyword,search_type:search_type,certifications:certifications,experience:experience,workplaces:workplaces,job_type:job_type}, function (data) {
+		if (data.status == 200) {
+			if (data.html.length > 0) {
+				$('#linkedin_data').html(data.html);
+			} else {
+				$('#linkedin_data').html('<h5 class="search-filter-center-text empty_state"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-alert-octagon"><polygon points="7.86 2 16.14 2 22 7.86 22 16.14 16.14 22 7.86 22 2 16.14 2 7.86 7.86 2"></polygon><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg><?php echo $wo['lang']['no_available_data'] ?></h5>');
+			}
+		}
+	});
+}
+function Wo_SearchExperience() {
+	experience = $('#cusrange-reader').val();
+	keyword = $('#search_for_text').val();
+	search_type = $("input[name='search_type']:checked").val();
+	certifications = $('#search_for_certifications').val(); 
+	var workplaces = [];
+    $("input[name='workplaces[]']:checked").each(function(i){
+      workplaces[i] = $(this).val();
+    });
+	var job_type = [];
+    $("input[name='job_type[]']:checked").each(function(i){
+      job_type[i] = $(this).val();
+    });
+	$.post(Wo_Ajax_Requests_File() + '?f=search_linkedin&mode_type=linkedin', {keyword: keyword,search_type:search_type,certifications:certifications,experience:experience,workplaces:workplaces,job_type:job_type}, function (data) {
+		if (data.status == 200) {
+			if (data.html.length > 0) {
+				$('#linkedin_data').html(data.html);
+			} else {
+				$('#linkedin_data').html('<h5 class="search-filter-center-text empty_state"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-alert-octagon"><polygon points="7.86 2 16.14 2 22 7.86 22 16.14 16.14 22 7.86 22 2 16.14 2 7.86 7.86 2"></polygon><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg><?php echo $wo['lang']['no_available_data'] ?></h5>');
+			}
+		}
+	});
+}
+function Wo_LoadLinkedin() {
+	$('.load-produts').html('<div class="white-loading list-group"><div class="cs-loader"><div class="cs-loader-inner"><label> ●</label><label> ●</label><label> ●</label><label> ●</label><label> ●</label><label> ●</label></div></div></div>');
+	experience = $('#cusrange-reader').val();
+	keyword = $('#search_for_text').val();
+	search_type = $("input[name='search_type']:checked").val();
+	certifications = $('#search_for_certifications').val();
+	offset = $('.linkedin_data:last').attr('data-id');
+	var workplaces = [];
+    $("input[name='workplaces[]']:checked").each(function(i){
+      workplaces[i] = $(this).val();
+    });
+	var job_type = [];
+    $("input[name='job_type[]']:checked").each(function(i){
+      job_type[i] = $(this).val();
+    });
+	$.post(Wo_Ajax_Requests_File() + '?f=search_linkedin&mode_type=linkedin', {keyword: keyword,search_type:search_type,certifications:certifications,experience:experience,workplaces:workplaces,job_type:job_type,offset:offset}, function (data) {
+		if (data.status == 200) {
+			if (data.html.length > 0) {
+				$('.load-produts').html('<div class="load-more"><button class="btn btn-default text-center pointer" onclick="Wo_LoadLinkedin();"><i class="fa fa-arrow-down progress-icon" data-icon="arrow-down"></i> <?php echo $wo['lang']['load_more'] ?></button></div>');
+				$('#linkedin_data').append(data.html);
+			} else {
+				$('.load-produts').html('<div class="load-more"><button class="btn btn-default text-center pointer" onclick="Wo_LoadLinkedin();"><?php echo $wo['lang']['no_available_data'] ?></button></div>');
+			}
+		}
+	});
+}
+</script>

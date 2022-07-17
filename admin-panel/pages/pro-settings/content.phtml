@@ -1,0 +1,436 @@
+<div class="container-fluid">
+    <div>
+        <h3>Pro System Settings</h3>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="#">Home</a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a href="#">Pro System</a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">Pro System Settings</li>
+            </ol>
+        </nav>
+    </div>
+    <!-- Vertical Layout -->
+    <div class="row">
+        <div class="col-lg-6 col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="card-title">Pro System Settings</h6>
+                    <div class="pro-settings-alert"></div>
+                    <form class="pro-settings" method="POST">
+
+                      <div class="float-left">
+                          <label for="pro" class="main-label">Pro System</label>
+                          <br><small class="admin-info">If you disbale Pro Mode, <br>All features will be free and activated without the boost feature.</small>
+                      </div>
+                      <div class="form-group float-right switcher">
+                          <input type="hidden" name="pro" value="0" />
+                          <input type="checkbox" name="pro" id="chck-pro" value="1" <?php echo ($wo['config']['pro'] == 1) ? 'checked': '';?> <?php echo(EnableForMode('pro')) ?>>
+                          <label for="chck-pro" class="check-trail <?php echo(EnableForMode('pro',true)) ?>" <?php echo(EnableForMode('pro',false,true)) ?>><span class="check-handler"></span></label>
+                      </div>
+                      <div class="clearfix"></div>
+                      <hr>
+                      
+                      <div class="float-left">
+                          <label for="recurring_payment" class="main-label">Recurring Payment</label>
+                          <br><small class="admin-info">Enable automatic payments (cronjob)</small>
+                      </div>
+                      <div class="form-group float-right switcher">
+                          <input type="hidden" name="recurring_payment" value="off" />
+                          <input type="checkbox" name="recurring_payment" id="chck-recurring_payment" value="on" <?php echo ($wo['config']['recurring_payment'] == '1') ? 'checked': '';?> <?php echo(EnableForMode('recurring_payment')) ?>>
+                          <label for="chck-recurring_payment" class="check-trail <?php echo(EnableForMode('recurring_payment',true)) ?>" <?php echo(EnableForMode('recurring_payment',false,true)) ?>><span class="check-handler"></span></label>
+                      </div>
+                      <div class="clearfix"></div>
+                      <hr>
+                      
+                      <div class="float-left">
+                          <label for="refund_system" class="main-label">Refund System</label>
+                          <br><small class="admin-info">Allow users to request refund.</small>
+                      </div>
+                      <div class="form-group float-right switcher">
+                          <input type="hidden" name="refund_system" value="off" />
+                          <input type="checkbox" name="refund_system" id="chck-refund_system" value="on" <?php echo ($wo['config']['refund_system'] == 'on') ? 'checked': '';?> <?php echo(EnableForMode('refund_system')) ?>>
+                          <label for="chck-refund_system" class="check-trail <?php echo(EnableForMode('refund_system',true)) ?>" <?php echo(EnableForMode('refund_system',false,true)) ?>><span class="check-handler"></span></label>
+                      </div>
+                      <div class="clearfix"></div>
+                        <!-- <div class="form-group form-float">
+                            <div class="form-line">
+                                <input type="text" id="weekly_price" name="weekly_price" class="form-control" value="<?php echo $wo['config']['weekly_price'];?>">
+                                <label class="form-label">Weekly Price (USD)</label>
+                            </div>
+                        </div>
+                        <div class="form-group form-float">
+                            <div class="form-line">
+                                <input type="text" id="monthly_price" name="monthly_price" class="form-control" value="<?php echo $wo['config']['monthly_price'];?>">
+                                <label class="form-label">Monthly Price (USD)</label>
+                            </div>
+                        </div>
+                        <div class="form-group form-float">
+                            <div class="form-line">
+                                <input type="text" id="yearly_price" name="yearly_price" class="form-control" value="<?php echo $wo['config']['yearly_price'];?>">
+                                <label class="form-label">Yearly Price (USD)</label>
+                            </div>
+                        </div>
+                        <div class="form-group form-float">
+                            <div class="form-line">
+                                <input type="text" id="lifetime_price" name="lifetime_price" class="form-control" value="<?php echo $wo['config']['lifetime_price'];?>">
+                                <label class="form-label">LifeTime Price (USD)</label>
+                            </div>
+                        </div> -->
+                        <!-- <div class="form-group form-float">
+                            <div class="form-line">
+                                <input type="text" id="monthly_boosts" name="monthly_boosts" class="form-control" value="<?php echo $wo['config']['monthly_boosts'];?>">
+                                <label class="form-label">Monthly Boosts <small>Monthly Max posts/pages boosts allowed.</small></label>
+                            </div>
+                        </div>
+                        <div class="form-group form-float">
+                            <div class="form-line">
+                                <input type="text" id="yearly_boosts" name="yearly_boosts" class="form-control" value="<?php echo $wo['config']['yearly_boosts'];?>">
+                                <label class="form-label">Yearly Boosts <small>Yearly Max posts/pages boosts allowed.</small></label>
+                            </div>
+                        </div>
+                        <div class="form-group form-float">
+                            <div class="form-line">
+                                <input type="text" id="lifetime_boosts" name="lifetime_boosts" class="form-control" value="<?php echo $wo['config']['lifetime_boosts'];?>">
+                                <label class="form-label">Lifetime Boosts <small>Lifetime Max posts/pages boosts allowed.</small></label>
+                            </div>
+                        </div> -->
+                        <div class="clearfix"></div>
+                        <input type="hidden" name="hash_id" value="<?php echo Wo_CreateSession();?>">
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6 col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="card-title">Edit Pro Packages</h6>
+                  <div class="table-responsive1">
+                        <table class="table table-bordered table-striped table-hover">
+                          <thead>
+                            <tr>
+                              <th>Name</th>
+                              <th>Status</th>
+                              <th>Action</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+
+                             <tr class="setting-userlist">
+                                <?php $pro_info = Wo_GetUserProType(1); ?>
+                               <td style="color:<?php echo $pro_info['color_name']?>">
+								<div class="pro-pack-name">
+                                <?php if (!empty($wo['pro_packages']['star']['image'])) { ?>
+                                    <img src="<?php echo($wo['pro_packages']['star']['image']) ?>" class="pro_packages_icon_inline">
+                                   <?php }else{ ?>
+                                    <span style="background-color:<?php echo $pro_info['color_name']?>"><i class="fa fa-star fa-fw"></i> </span>
+                                   <?php } ?>
+                                   &nbsp;<?php echo $wo['lang']['star']?></div>
+                               </td>
+                               <td><?php echo ($wo['pro_packages']['star']['status'] == 1) ? '<span class="label label-success"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="green" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z" /></svg> Enabled</span>': '<span class="label label-danger"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="red" d="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z" /></svg> Disabled</span>';?></td>
+                               <td>
+                                  <a class="btn bg-info admn_table_btn" href="javascript:void(0)" onclick="ShowEditPro(this)" data_pro_type="star">Edit</a>
+                               </td>
+                            </tr>
+
+                            <tr class="setting-userlist">
+                                <?php $pro_info = Wo_GetUserProType(2); ?>
+                               <td style="color:<?php echo $pro_info['color_name']?>">
+								<div class="pro-pack-name">
+                                <?php if (!empty($wo['pro_packages']['hot']['image'])) { ?>
+                                    <img src="<?php echo($wo['pro_packages']['hot']['image']) ?>" class="pro_packages_icon_inline">
+                                   <?php }else{ ?>
+                                    <span style="background-color:<?php echo $pro_info['color_name']?>"><i class="fa fa-fire fa-fw"></i> </span>
+                                   <?php } ?>
+                                   &nbsp;<?php echo $wo['lang']['hot']?></div>
+                               </td>
+                               <td><?php echo ($wo['pro_packages']['hot']['status'] == 1) ? '<span class="label label-success"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="green" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z" /></svg> Enabled</span>': '<span class="label label-danger"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="red" d="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z" /></svg> Disabled</span>';?></td>
+                               <td>
+                                  <a class="btn bg-info admn_table_btn" href="javascript:void(0)" onclick="ShowEditPro(this)" data_pro_type="hot">Edit</a>
+                               </td>
+                            </tr>
+
+                            <tr class="setting-userlist">
+                                <?php $pro_info = Wo_GetUserProType(3); ?>
+                               <td style="color:<?php echo $pro_info['color_name']?>">
+								<div class="pro-pack-name">
+                                <?php if (!empty($wo['pro_packages']['ultima']['image'])) { ?>
+                                    <img src="<?php echo($wo['pro_packages']['ultima']['image']) ?>" class="pro_packages_icon_inline">
+                                   <?php }else{ ?>
+                                    <span style="background-color:<?php echo $pro_info['color_name']?>"><i class="fa fa-bolt fa-fw"></i> </span>
+                                   <?php } ?>
+                                   &nbsp;<?php echo $wo['lang']['ultima']?></div>
+                               </td>
+                               <td><?php echo ($wo['pro_packages']['ultima']['status'] == 1) ? '<span class="label label-success"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="green" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z" /></svg> Enabled</span>': '<span class="label label-danger"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="red" d="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z" /></svg> Disabled</span>';?></td>
+                               <td>
+                                  <a class="btn bg-info admn_table_btn" href="javascript:void(0)" onclick="ShowEditPro(this)" data_pro_type="ultima">Edit</a>
+                               </td>
+                            </tr>
+
+                            <tr class="setting-userlist">
+                                <?php $pro_info = Wo_GetUserProType(4); ?>
+                               <td style="color:<?php echo $pro_info['color_name']?>">
+								<div class="pro-pack-name">
+                                <?php if (!empty($wo['pro_packages']['vip']['image'])) { ?>
+                                    <img src="<?php echo($wo['pro_packages']['vip']['image']) ?>" class="pro_packages_icon_inline">
+                                   <?php }else{ ?>
+                                    <span style="background-color:<?php echo $pro_info['color_name']?>"><i class="fa fa-rocket fa-fw"></i> </span>
+                                   <?php } ?>
+                                   &nbsp;<?php echo $wo['lang']['vip']?></div>
+                               </td>
+                               <td><?php echo ($wo['pro_packages']['vip']['status'] == 1) ? '<span class="label label-success"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="green" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z" /></svg> Enabled</span>': '<span class="label label-danger"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="red" d="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z" /></svg> Disabled</span>';?></td>
+                               <td>
+                                  <a class="btn bg-info admn_table_btn" href="javascript:void(0)" onclick="ShowEditPro(this)" data_pro_type="vip">Edit</a>
+                               </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                  </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6 col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="card-title">Pro Membership Features</h6>
+                    <form class="pro-settings" method="POST">
+                         <div class="float-left">
+                            <label for="membership_system" class="main-label">Pro Membership On Sign Up</label>
+                            <br><small class="admin-info">Require Pro Memebership from users on sign up page.</small>
+                        </div>
+                        <div class="form-group float-right switcher">
+                            <input type="hidden" name="membership_system" value="0" />
+                            <input type="checkbox" name="membership_system" id="chck-membership_system" value="1" <?php echo ($wo['config']['membership_system'] == 1) ? 'checked': '';?>>
+                            <label for="chck-membership_system" class="check-trail"><span class="check-handler"></span></label>
+                        </div>
+                        <div class="clearfix"></div>
+                        <hr>
+                        <label for="who_upload">Upload System</label>
+                        <select class="form-control show-tick" id="who_upload" name="who_upload">
+                          <option value="all" <?php echo ($wo['config']['who_upload'] == 'all') ? 'selected': '';?> >All Users</option>
+                          <option value="pro" <?php echo ($wo['config']['who_upload'] == 'pro') ? 'selected': '';?> >Pro Users Only</option>
+                        </select>
+                        <small class="admin-info">Who can upload images, videos and other data?</small>
+                      
+                        <label for="Who_call">Video & Audio Calls</label>
+                        <select class="form-control show-tick" id="Who_call" name="Who_call">
+                          <option value="all" <?php echo ($wo['config']['Who_call'] == 'all') ? 'selected': '';?> >All Users</option>
+                          <option value="pro" <?php echo ($wo['config']['Who_call'] == 'pro') ? 'selected': '';?> >Pro Users Only</option>
+                        </select>
+                        <small class="admin-info">Who can make Video / Audio calls?</small>
+                       
+                        
+                        <input type="hidden" name="hash_id" value="<?php echo Wo_CreateSession();?>">
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+        
+    </div>
+    <!-- #END# Vertical Layout -->
+<script>
+function ShowEditPro(self) {
+    $(self).text('Please wait ..');
+    type = $(self).attr('data_pro_type');
+    $.post(Wo_Ajax_Requests_File() + '?f=admin_setting&s=get_pro', {type: type}, function(data, textStatus, xhr) {
+        $(self).text('EDIT');
+        if (data.status == 200) {
+            $('#pro_form_data').html(data.html);
+            $('#proModal').modal('show');
+        }
+    });
+}
+
+$(function() {
+
+    $('.switcher input[type=checkbox]').click(function () {
+        setToTrue = 0;
+        if ($(this).is(":checked") === true) {
+            if ($(this).attr('name') != 'refund_system') {
+                setToTrue = 1;
+            }
+            else{
+                setToTrue = 'on';
+            }
+            
+        }
+        var configName = $(this).attr('name');
+        var hash_id = $('input[name=hash_id]').val();
+        var objData = {};
+        objData[configName] = setToTrue;
+        objData['hash_id'] = hash_id;
+        $.post( Wo_Ajax_Requests_File() + '?f=admin_setting&s=update_general_setting', objData);
+    });
+
+    var setTimeOutColor = setTimeout(function (){});
+    $('select').on('change', function() {
+         clearTimeout(setTimeOutColor);
+        var thisElement = $(this);
+        var configName = thisElement.attr('name');
+        var hash_id = $('input[name=hash_id]').val();
+        var objData = {};
+        objData[configName] = this.value;
+        objData['hash_id'] = hash_id;
+        thisElement.addClass('warning');
+        $.post( Wo_Ajax_Requests_File() + '?f=admin_setting&s=update_general_setting', objData, function (data) {
+            if (data.status == 200) {
+                thisElement.removeClass('warning');
+                thisElement.addClass('success');
+            } else {
+                thisElement.addClass('error');
+            }
+            var setTimeOutColor = setTimeout(function () {
+                thisElement.removeClass('success');
+                thisElement.removeClass('warning');
+                thisElement.removeClass('error');
+            }, 2000);
+        });
+    });
+    $('input[type=text], input[type=number]').on('keyup', delay(function() {
+            clearTimeout(setTimeOutColor);
+            var thisElement = $(this);
+            var configName = thisElement.attr('name');
+            var hash_id = $('input[name=hash_id]').val();
+            var objData = {};
+            objData[configName] = this.value;
+            objData['hash_id'] = hash_id;
+            thisElement.addClass('warning');
+            $.post( Wo_Ajax_Requests_File() + '?f=admin_setting&s=update_general_setting', objData, function (data) {
+                if (data.status == 200) {
+                    thisElement.removeClass('warning');
+                    thisElement.addClass('success');
+                } else {
+                    thisElement.addClass('error');
+                }
+                var setTimeOutColor = setTimeout(function () {
+                    thisElement.removeClass('success');
+                    thisElement.removeClass('warning');
+                    thisElement.removeClass('error');
+                }, 2000);
+                //thisElement.focus();
+            });
+    }, 500));
+
+    var form_pro = $('form.proModalForm');
+    form_pro.ajaxForm({
+        url: Wo_Ajax_Requests_File() + '?f=admin_setting&s=update_pro_member',
+        beforeSend: function() {
+            form_pro.find('.waves-effect').text('Please wait..');
+        },
+        success: function(data) {
+            $('#proModal').animate({
+                scrollTop : 0                       // Scroll to top of body
+            }, 500);
+            $('#save_pro_btn').text('SAVE CHANGES');
+            if (data.status == 200) {
+                form_pro.find('.waves-effect').text('Save');
+                $('#proModalAlert').html('<div class="alert alert-success"><i class="fa fa-check"></i> Settings updated successfully</div>');
+                setTimeout(function () {
+                    $('#proModalAlert').empty();
+                    $('#proModal').modal('hide');
+                    if (data.html != '') {
+                        setTimeout(function () {
+                            $('.modal-body form .data').html('<div class="preloader pl-size-xl "><div class="spinner-layer pl-teal"><div class="circle-clipper left"><div class="circle"></div></div><div class="circle-clipper right"><div class="circle"></div></div></div></div>');
+                            $('#defaultModalLabel').html('Edit key: ' + data.type);
+                            $('#id_of_key').val(data.type);
+                            $('.modal-body form .data').html(data.html);
+                            $('#defaultModal').modal('show');
+                        },500);
+                        
+                    }
+                    else{
+                        setTimeout(function () {
+                            location.reload();
+                        },1000);
+                    }
+                }, 2000);
+            }
+            else{
+                $('#proModalAlert').html('<div class="alert alert-danger">'+data.message+'</div>');
+            }
+        }
+    });
+
+    var form_lang_settings = $('form.edit-key-settings');
+    form_lang_settings.ajaxForm({
+        url: Wo_Ajax_Requests_File() + '?f=admin_setting&s=update_lang_key&hash=' + $('.main_session').val(),
+        beforeSend: function() {
+            $('.btn-save').text('Please wait..');
+        },
+        success: function(data) {
+            $('#defaultModal').animate({
+                scrollTop : 0                       // Scroll to top of body
+            }, 10);
+            setTimeout(function () {
+                if (data.status == 200) {
+                    $('.btn-save').text('SAVE CHANGES');
+                    var value_to_use = $('[data-editable=1]').val();
+                    var id_of_key = $('#id_of_key').val();
+                    $('#edit_' + id_of_key).text(value_to_use);
+                    $('#defaultModal').modal('hide');
+                    setTimeout(function () {
+                        location.reload();
+                    },1000);
+                }
+            },300);
+        }
+    });
+  
+});
+function Wo_SubmitProForm(self) {
+    $('#save_pro_btn').text('Please wait..');
+    $('.proModalForm').submit();
+}
+function Wo_SubmitLangForm() {
+    $('.edit-key-settings').submit();
+}
+</script>
+<div class="modal fade" id="proModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content ">
+            <div class="modal-header">
+                <h4 class="modal-title" id="proModalLabel">Edit Pro Package</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body pt-2">
+                <div class="alert" id="proModalAlert"></div>
+                <form class="proModalForm" method="POST">
+                    <div id="pro_form_data"></div>
+                    <input type="hidden" name="hash_id" value="<?php echo Wo_CreateSession();?>">
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" onclick="Wo_SubmitProForm(this);" class="btn btn-primary waves-effect" id="save_pro_btn">SAVE CHANGES</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="defaultModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content ">
+            <div class="modal-header">
+                <h4>Please edit the pro package name from here</h4>
+                <h4 class="modal-title" id="defaultModalLabel"></h4>
+            </div>
+            <div class="modal-body">
+                <div class="edit-lang-settings-alert"></div>
+                <form class="edit-key-settings" method="POST">
+                    <div class="data"></div>
+                    <input type="hidden" name="hash_id" value="<?php echo Wo_CreateSession();?>">
+                    <input type="hidden" name="id_of_key" id="id_of_key" value="">
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                <button type="button" onclick="Wo_SubmitLangForm();" class="btn btn-success waves-effect">SAVE CHANGES</button>
+            </div>
+        </div>
+    </div>
+</div>

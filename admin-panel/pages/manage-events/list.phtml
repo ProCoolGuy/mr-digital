@@ -1,0 +1,22 @@
+<tr class="setting-event" id="EventID_<?php echo $wo['event']['id']?>" data_selected="<?php echo $wo['event']['id'] ?>">
+  <td><input type="checkbox" id="check-data-<?php echo $wo['event']['id']?>" class="delete-checkbox filled-in"><label for="check-data-<?php echo $wo['event']['id']?>"></label></td>
+   <td><?php echo $wo['event']['id']?></td>
+   <td>
+      <a href="<?php echo $wo['event']['url']; ?>">LINK</a>
+   </td>
+   <td>
+      <a href="<?php echo $wo['event']['user_data']['url']; ?>">
+        <img src="<?php echo $wo['event']['user_data']['avatar']; ?>" class="setting-avatar" >
+         <?php echo $wo['event']['user_data']['name']; ?>
+         <?php echo $wo['event']['poster_id']; ?>
+      </a>
+   </td>
+   <td>
+     <div class="ajax-time">
+         <?php echo ($wo['event']['start_date']);?>
+     </div>
+   </td>
+   <td>
+      <button type="button" class="delete-event btn bg-danger admn_table_btn" id="<?php echo $wo['event']['id']?>" onclick="Wo_DeleteEvent(<?php echo $wo['event']['id']?>,'hide')">Delete</button>
+   </td>
+</tr>

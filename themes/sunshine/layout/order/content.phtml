@@ -1,0 +1,121 @@
+<div class="page-margin">
+	<h2 class="ch_checkout_title">
+		<?php echo $wo['lang']['status']; ?>: <span class="badge"><?php echo ucfirst($wo['lang'][$wo['order']->status]) ?></span>
+		<?php if ($wo['order']->status != 'delivered' && $wo['order']->status != 'shipped') { ?>
+			<select class="border-bottom" id="cart_product_qty" onchange="ChangeStatus(this,'<?php echo $wo['hash_id']; ?>')">
+				<?php if ($wo['order']->status == 'placed') { ?>
+					<option value="placed" <?php if ($wo['order']->status == 'placed') {echo "selected";} ?>><?php echo $wo['lang']['placed']; ?></option>
+					<option value="canceled" <?php if ($wo['order']->status == 'canceled') {echo "selected";} ?>><?php echo $wo['lang']['canceled']; ?></option>
+					<option value="accepted" <?php if ($wo['order']->status == 'accepted') {echo "selected";} ?>><?php echo $wo['lang']['accepted']; ?></option>
+					<option value="packed" <?php if ($wo['order']->status == 'packed') {echo "selected";} ?>><?php echo $wo['lang']['packed']; ?></option>
+					<option value="shipped" <?php if ($wo['order']->status == 'shipped') {echo "selected";} ?>><?php echo $wo['lang']['shipped']; ?></option>
+				<?php }elseif ($wo['order']->status == 'accepted') { ?>
+					<option value="accepted" <?php if ($wo['order']->status == 'accepted') {echo "selected";} ?>><?php echo $wo['lang']['accepted']; ?></option>
+					<option value="packed" <?php if ($wo['order']->status == 'packed') {echo "selected";} ?>><?php echo $wo['lang']['packed']; ?></option>
+					<option value="shipped" <?php if ($wo['order']->status == 'shipped') {echo "selected";} ?>><?php echo $wo['lang']['shipped']; ?></option>
+				<?php }elseif ($wo['order']->status == 'packed') { ?>
+					<option value="packed" <?php if ($wo['order']->status == 'packed') {echo "selected";} ?>><?php echo $wo['lang']['packed']; ?></option>
+					<option value="shipped" <?php if ($wo['order']->status == 'shipped') {echo "selected";} ?>><?php echo $wo['lang']['shipped']; ?></option>
+				<?php }elseif ($wo['order']->status == 'shipped') { ?>
+					<option value="shipped" <?php if ($wo['order']->status == 'shipped') {echo "selected";} ?>><?php echo $wo['lang']['shipped']; ?></option>
+				<?php } ?>
+			</select>
+		<?php } ?>
+	</h2>
+	
+	<?php if ($wo['order']->status != 'delivered') { ?>
+		<div class="alert alert-info">
+			<?php echo $wo['lang']['if_the_order_status']; ?>
+		</div>
+		<div class="alert alert-info">
+			<?php echo $wo['lang']['if_the_order_delivered']; ?>
+		</div>
+	<?php } ?>
+	
+	<div class="row">
+		<div class="col-md-5">
+			<h4><?php echo $wo['lang']['tracking_details'] ?></h4>
+			<div class="panel wo_order_detail_widget">
+				<div class="tracking_alert"></div>
+				<div class="sun_input">
+					<label><?php echo $wo['lang']['link']; ?></label>
+					<input type="url" name="url" id="tracking_url" autofocus placeholder="<?php echo $wo['lang']['link']; ?>" value="<?php echo(!empty($wo['order']->tracking_url) ? $wo['order']->tracking_url : '') ?>">
+				</div>
+				<div class="sun_input">
+					<label><?php echo $wo['lang']['tracking_number']; ?></label>
+					<input type="text" name="id" id="tracking_id" autofocus placeholder="<?php echo $wo['lang']['tracking_number']; ?>" value="<?php echo(!empty($wo['order']->tracking_id) ? $wo['order']->tracking_id : '') ?>">
+				</div>
+				<button type="button" class="btn btn-default btn-mat buy_button" onclick="SaveTracking(this,'<?php echo $wo['hash_id']; ?>')"><?php echo $wo['lang']['save']; ?></button>
+			</div>
+			<h4><?php echo $wo['lang']['delivery_address'] ?></h4>
+			<div class="address_book panel wo_order_detail_widget">
+				<div class="address_book_innr">
+					<div class="address_box">
+						<p class="addrs_name"><?php echo($wo['address']->name) ?></p>
+						<p class="addrs_phone"><?php echo($wo['address']->phone) ?></p>
+						<p class="addrs_street"><?php echo($wo['address']->address) ?></p>
+						<p class="addrs_street"><?php echo($wo['address']->city) ?><br><?php echo($wo['address']->country) ?></p>
+						<p class="addrs_count"><?php echo($wo['address']->zip) ?></p>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-7">
+			<div class="panel panel-white ch_card ch_cart">
+				<div class="row ch_prod_items_row">
+					<?php echo $wo['html']; ?>
+				</div>
+				<div class="ch_total_price">
+					<div class="divider border-bottom"></div>
+
+					<h4><?php echo $wo['lang']['payments'] ?></h4>
+					<div class="cust_order_prices">
+						<h4><?php echo $wo['lang']['subtotal']; ?></h4>
+						<p><?php echo $wo['config']['currency_symbol_array'][$wo['config']['currency']].$wo['total']; ?></p>
+					</div>
+					
+					<div class="cust_order_prices">
+						<h4><?php echo $wo['lang']['commission']; ?></h4>
+						<p><?php echo $wo['config']['currency_symbol_array'][$wo['config']['currency']].$wo['total_commission']; ?></p>
+					</div>
+					
+					<div class="cust_order_prices">
+						<h4><?php echo $wo['lang']['final_price']; ?></h4>
+						<p><?php echo $wo['config']['currency_symbol_array'][$wo['config']['currency']].$wo['total_final_price']; ?></p>
+					</div>
+					
+					<div class="divider border-bottom"></div>
+					<button type="button" class="btn btn-info btn-mat buy_button" onclick="DownloadPurchased('<?php echo $wo['hash_id'] ?>','order')"><?php echo $wo['lang']['download_invoice']; ?></button>
+					<svg width="371" height="218" viewBox="0 0 371 218" fill="none" xmlns="http://www.w3.org/2000/svg"><path opacity="0.4" d="M275.008 41.3416C307.369 28.1561 375.43 47.6713 391.786 57.0941L410.44 43.2371L532.518 -219.202L71.3192 -143.669C60.4225 -120.263 39.7451 -60.5365 44.2096 -8.88462C49.7902 55.6802 112.183 99.047 174.223 94.1242C232.5 89.5 234.557 57.8234 275.008 41.3416Z" fill="#48B774" stroke="white"/><path d="M300.467 72.6242C332.827 59.4387 663.274 90.2678 679.63 99.6906L766.842 -127.791L557.976 -187.919L96.7778 -112.387C85.881 -88.9802 65.2036 -29.2539 69.6681 22.398C75.2487 86.9628 136.92 125.407 199.682 125.407C262.5 125.407 260.016 89.1061 300.467 72.6242Z" stroke="#48B774" stroke-width="6"/></svg>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<a href="<?php echo Wo_SeoLink('index.php?link1=order&id=' . $wo['hash_id']); ?>" data-ajax="?link1=order&id=<?php echo $wo['hash_id']; ?>" id="load_order"></a>
+
+<script type="text/javascript">
+	function SaveTracking(self,hash) {
+		$(self).html("<?php echo $wo['lang']['please_wait']; ?>");
+	    $(self).attr('disabled', "true");
+	    tracking_id = $('#tracking_id').val()
+	    tracking_url = $('#tracking_url').val()
+	    $.post(Wo_Ajax_Requests_File() + '?f=products&s=tracking', {tracking_url: tracking_url,tracking_id: tracking_id,order_hash: hash}, function(data, textStatus, xhr) {
+	    	$(self).removeAttr('disabled');
+			$(self).text("<?php echo $wo['lang']['save']; ?>");
+	    	if (data.status == 200) {
+	    		<?php if ($wo['config']['node_socket_flow'] == 1) { ?>
+		            socket.emit("main_notification", {user_id: _getCookie("user_id"), type: "added",to_id: "<?php echo($wo['order']->user_id) ?>" });
+		        <?php } ?>
+	    		$('.tracking_alert').html("<div class='alert alert-success bg-success'><i class='fa fa-info-circle'></i> "+data.message+"</div>");
+	    	}
+	    	else{
+	    		$('.tracking_alert').html("<div class='alert alert-danger bg-danger'><i class='fa fa-info-circle'></i> "+data.message+"</div>");
+	    	}
+	    	setTimeout(function () {
+            	$('.tracking_alert').html("");
+            },2000);
+	    });
+	}
+</script>

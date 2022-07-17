@@ -1,0 +1,22 @@
+<div class="col-xs-6 col-sm-4 col-md-3" id="product-<?php echo $wo['product']['id']?>" data-id="<?php echo $wo['product']['id']?>">
+	<div class="wo_post_prod_full_related">
+		<a href="<?php echo $wo['product']['url']?>" class="img" data-ajax="?link1=post&id=<?php echo $wo['product']['seo_id'];?>">
+			<img src="<?php echo $wo['product']['images'][0]['image_org'];?>">
+		</a>
+		<div class="info">
+			<h5 class="title">
+				<a href="<?php echo $wo['product']['url']?>" data-ajax="?link1=post&id=<?php echo $wo['product']['seo_id'];?>" title="<?php echo $wo['product']['name']?>"><?php echo $wo['product']['name']?></a>
+			</h5>
+			<div class="product-price">
+				<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="currentColor" d="M5,6H23V18H5V6M14,9A3,3 0 0,1 17,12A3,3 0 0,1 14,15A3,3 0 0,1 11,12A3,3 0 0,1 14,9M9,8A2,2 0 0,1 7,10V14A2,2 0 0,1 9,16H19A2,2 0 0,1 21,14V10A2,2 0 0,1 19,8H9M1,10H3V20H19V22H1V10Z"></path></svg>&nbsp;<?php echo (!empty($wo['currencies'][$wo['product']['currency']]['symbol'])) ? $wo['currencies'][$wo['product']['currency']]['symbol'] : $wo['config']['classified_currency_s'];?><?php echo $wo['product']['price_format']?>
+			</div>
+			<div class="product-by">
+				<?php
+				    $product_by_ = $wo['product']['category'];
+				    $product_by_ = str_replace('{product_category_name}', $wo['products_categories'][$wo['product']['category']], $product_by_);
+				?>
+				<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="currentColor" d="M11,13.5V21.5H3V13.5H11M12,2L17.5,11H6.5L12,2M17.5,13C20,13 22,15 22,17.5C22,20 20,22 17.5,22C15,22 13,20 13,17.5C13,15 15,13 17.5,13Z"></path></svg>&nbsp;<a href="<?php echo Wo_SeoLink('index.php?link1=products&c_id=' . $wo['product']['category']);?>" data-ajax="?link1=products&c_id=<?php echo $wo['product']['category'];?>"><?php echo $wo['products_categories'][$wo['product']['category']];?></a>
+			</div>
+		</div>
+	</div>
+</div>

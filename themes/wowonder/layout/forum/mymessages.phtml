@@ -1,0 +1,67 @@
+<?php echo Wo_LoadPage('forum/headers/header'); ?>
+<div role="tabpanel" class="tab-pane active" id="showthread">
+	<div class="w-100">
+		<?php if (count($wo['messages']) > 0): ?>
+			  <table class="table threads-table table-striped">
+			    <thead class="wow_forum_dis_thead">
+			      <tr>
+			        <th><?php echo $wo['lang']['subject']; ?></th>
+			        <th><?php echo $wo['lang']['forum']; ?></th>
+			        <th><?php echo $wo['lang']['posted']; ?></th>
+			        <th width="20%"><?php echo $wo['lang']['action']; ?></th>
+			      </tr>
+			    </thead>
+			    <tbody id="mymessage-list">
+			    <?php foreach ($wo['messages'] as $wo['message']): ?>
+			    	<?php echo Wo_LoadPage("forum/includes/mymessage-list"); ?>
+			    <?php endforeach; ?>
+
+			    </tbody>
+			  </table>
+	    <?php else: ?>
+			<?php echo '<div class="empty_state"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M12,3C17.5,3 22,6.58 22,11C22,15.42 17.5,19 12,19C10.76,19 9.57,18.82 8.47,18.5C5.55,21 2,21 2,21C4.33,18.67 4.7,17.1 4.75,16.5C3.05,15.07 2,13.13 2,11C2,6.58 6.5,3 12,3M17,12V10H15V12H17M13,12V10H11V12H13M9,12V10H7V12H9Z" /></svg>' . $wo['lang']['no_replies_found'] .  '</div>'; ?>
+		<?php endif; ?>	
+	</div>
+	<div class="col-md-12">
+	    <div class="posts_load">
+	        <?php if (count($wo['messages']) > 0): ?>
+	        <div class="load-more">
+	            <button class="btn btn-default text-center pointer load-my-replies"  >
+	            <i class="fa fa-arrow-down progress-icon" data-icon="arrow-down"></i> <?php echo $wo['lang']['load_more_posts'] ?></button>
+	        </div>
+	        <?php endif ?>
+	    </div>  
+	</div>
+</div>
+<div class="clear"></div>
+<?php echo Wo_LoadPage('forum/includes/delete-reply'); ?>
+<?php echo Wo_LoadPage('forum/headers/footer'); ?>
+
+<script>
+	$(".load-my-replies").click(function () {
+        $.ajax({
+             url: Wo_Ajax_Requests_File(),
+             type: 'GET',
+             dataType: 'json',
+             data: {
+                f:"load-my-thread-replies",
+                offset:($(".my-thread-reply-list").length > 0) ? $(".my-thread-reply-list:last").attr('data-thread-reply') : 0
+
+             },
+             success:function(data){
+                
+                if (data['status'] == 200) {
+                	
+                    $("#mymessage-list").append(data['html'])
+                 }
+                 else{
+
+                   $(".posts_load").remove()
+                   
+                 }
+
+             }
+          });
+    });
+</script>
+

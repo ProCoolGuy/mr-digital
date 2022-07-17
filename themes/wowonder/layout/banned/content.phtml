@@ -1,0 +1,15 @@
+<div class="page-margin">
+	<div class="wow_content">
+		<div class="wo_banned_user">
+			<img src="<?php echo $wo['config']['theme_url'];?>/img/banned.png">
+			<?php if (!empty($wo['user']['banned_reason'])) { ?>
+				<h2><?php echo str_replace('{site_name}', $wo['config']['siteName'], $wo['lang']['were_banned_from']);?></h2>
+				<p><span class="bold"><?php echo $wo['lang']['reason'];?></span>: <?php echo $wo['user']['banned_reason']; ?></p>
+				<p><?php echo str_replace('{contact_us}', '<a class="main" href="'.Wo_SeoLink('index.php?link1=contact-us').'">'.$wo['lang']['contact_us'].'</a>', $wo['lang']['contact_us_more_details']); ?></p>
+			<?php }else{
+				$text = str_replace('{contact_us}', '<a class="main" href="'.Wo_SeoLink('index.php?link1=contact-us').'">'.$wo['lang']['contact_us'].'</a>', $wo['lang']['banned_for_violating']); ?>
+				<h2><?php echo $text;?></h2>
+			<?php } ?>
+		</div>
+	</div>
+</div>

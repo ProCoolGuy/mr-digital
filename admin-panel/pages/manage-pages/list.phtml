@@ -1,0 +1,22 @@
+<tr class="setting-pagelist" id="PageID_<?php echo $wo['pagelist']['page_id']?>" data-page-id="<?php echo $wo['pagelist']['page_id']?>" data_selected="<?php echo $wo['pagelist']['page_id']?>">
+   <td><input type="checkbox" id="check-data-<?php echo $wo['pagelist']['page_id']?>" class="delete-checkbox filled-in"><label for="check-data-<?php echo $wo['pagelist']['page_id']?>"></label></td>
+   <td><?php echo $wo['pagelist']['page_id']?></td>
+   <td>
+      <a href="<?php echo $wo['pagelist']['url']; ?>">
+      <img src="<?php echo $wo['pagelist']['avatar']; ?>" class="setting-avatar" alt="<?php echo $wo['pagelist']['avatar']?> Page Picture">
+      <?php echo $wo['pagelist']['name']; ?>
+      </a>
+   </td>
+   <td>
+    <a href="<?php echo $wo['pagelist']['owner']['url']; ?>">
+      <img src="<?php echo $wo['pagelist']['owner']['avatar']; ?>" class="setting-avatar" alt="<?php echo $wo['pagelist']['owner']['avatar']?> Profile Picture">
+      <?php echo $wo['pagelist']['owner']['name'];?>
+      </a>
+    
+   </td>
+   <td><?php echo $wo['pagelist']['category'];?></td>
+   <td>
+      <a target = "_blank" class="btn bg-info admn_table_btn" href="<?php echo Wo_SeoLink('index.php?link1=page-setting&page=' . $wo['pagelist']['page_name']) ?>">Edit</a>
+      <button onclick="Wo_DeletePage(<?php echo $wo['pagelist']['page_id']?>,'hide');" type="button" class="btn bg-danger admn_table_btn">Delete</button>
+   </td>
+</tr>

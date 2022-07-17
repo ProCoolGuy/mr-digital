@@ -1,0 +1,104 @@
+<div class="container-fluid">
+    <div>
+        <h3>Third party sites</h3>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="#">Home</a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a href="#">API Settings</a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">Third party sites</li>
+            </ol>
+        </nav>
+    </div>
+	<div class="row">
+    <div class="col-lg-6 col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <h6 class="card-title">Third party sites</h6>
+                <div class="third-party-sites-alert"></div>
+                <form class="third-party-sites-settings" method="POST">
+                    <div class="form-group form-float">
+                        <div class="form-line">
+                            <label class="form-label">PlayTube</label>
+                            <input type="text" name="playtube_url" class="form-control" value="<?php echo $wo['config']['playtube_url'];?>">
+                            <small class="admin-info">Your website that uses PlayTube Script, e.g. https://demo.playtubescript.com</small>
+                        </div>
+                    </div>
+                    <div class="alert alert-warning">This feature allows you to integrate PlayTube script with your site, so videos will be embedded in the post box if someone shares a link from your site.</div>
+                    <p>What is <a href="https://goo.gl/KvoSwz" target="_blank">PlayTube</a>?</p>
+                    <div class="clearfix"></div>
+                    <input type="hidden" name="hash_id" value="<?php echo Wo_CreateSession();?>">
+                    <button type="submit" class="btn btn-primary m-t-15 waves-effect">Save</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-6 col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <h6 class="card-title">Third party sites</h6>
+                <div class="third-party-sites-alert-deep"></div>
+                <form class="third-party-sites-settings-deep" method="POST">
+                    <div class="form-group form-float">
+                        <div class="form-line">
+                            <label class="form-label">DeepSound</label>
+                            <input type="text" name="deepsound_url" class="form-control" value="<?php echo $wo['config']['deepsound_url'];?>">
+                            <small class="admin-info">Your website that uses DeepSound Script, e.g. https://demo.deepsoundscript.com</small>
+                        </div>
+                    </div>
+                    <div class="alert alert-warning">This feature allows you to integrate Deep Sound script with your site, so Sounds will be embedded in the post box if someone shares a link from your site.</div>
+                    <p>What is <a href="https://codecanyon.net/item/deepsound-the-ultimate-php-music-sharing-platform/23609470?s_rank=1" target="_blank">DeepSound</a>?</p>
+                    <div class="clearfix"></div>
+                    <input type="hidden" name="hash_id" value="<?php echo Wo_CreateSession();?>">
+                    <button type="submit" class="btn btn-primary m-t-15 waves-effect">Save</button>
+                </form>
+            </div>
+        </div>
+    </div>
+	</div>
+</div>
+
+
+<script>
+
+$(function() {
+    var form_email_settings = $('form.third-party-sites-settings');
+    var form_deep_settings = $('form.third-party-sites-settings-deep');
+    form_email_settings.ajaxForm({
+        url: Wo_Ajax_Requests_File() + '?f=admin_setting&s=update_general_setting',
+        beforeSend: function() {
+            form_email_settings.find('button').text('Please wait..');
+        },
+        success: function(data) {
+            if (data.status == 200) {
+                form_email_settings.find('button').text('Save');
+                $("html, body").animate({ scrollTop: 0 }, "slow");
+                $('.third-party-sites-alert').html('<div class="alert alert-success"><i class="fa fa-check"></i> Settings updated successfully</div>');
+                setTimeout(function () {
+                    $('.third-party-sites-alert').empty();
+                }, 2000);
+            }
+        }
+    });
+    form_deep_settings.ajaxForm({
+        url: Wo_Ajax_Requests_File() + '?f=admin_setting&s=update_general_setting',
+        beforeSend: function() {
+            form_deep_settings.find('button').text('Please wait..');
+        },
+        success: function(data) {
+            if (data.status == 200) {
+                form_deep_settings.find('button').text('Save');
+                $("html, body").animate({ scrollTop: 0 }, "slow");
+                $('.third-party-sites-alert-deep').html('<div class="alert alert-success"><i class="fa fa-check"></i> Settings updated successfully</div>');
+                setTimeout(function () {
+                    $('.third-party-sites-alert-deep').empty();
+                }, 2000);
+            }
+        }
+    });
+});
+</script>

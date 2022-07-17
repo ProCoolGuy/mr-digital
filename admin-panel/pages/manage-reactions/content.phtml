@@ -1,0 +1,523 @@
+<?php $wo['reactions_types'] = Wo_GetReactionsTypes(''); ?>
+<div class="container-fluid">
+    <div>
+        <h3>Manage Reactions</h3>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="#">Home</a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a href="#">Settings</a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a href="#">Posts</a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">Manage Reactions</li>
+            </ol>
+        </nav>
+    </div>
+    <!-- Vertical Layout -->
+    <div class="row">
+        <div class="col-lg-12 col-md-12">
+            <div class="card">
+                <div class="card-body">
+                  <h6 class="card-title">Add New Reaction</h6>
+                  <div class="alert alert-info">You can add new reactions from here, note you should write the reaction name on every language.</div>
+                  <div class="row">
+                       <div class="col-md-12" style="margin-bottom:0;">
+                        <div class="add_reaction_form_alert"></div>
+                            <form method="POST" id="add_reaction_form">
+                              <div class="row">
+                                <?php foreach (Wo_LangsNamesFromDB() as $wo['key_']) { ?>
+                                    <div class="col-md-2" id="normal-query-form">
+                                      <div class="form-group form-float">
+                                          <div class="form-line">
+                                            <label class="form-label"><?php echo ucfirst($wo['key_']); ?></label>
+                                              <input type="text" class="form-control" name="<?php echo($wo['key_']) ?>">
+                                          </div>
+                                      </div>
+                                    </div>
+                                <?php } ?>
+								</div>
+								<hr class="mb-4">
+								<div class="row">
+                                <div class="col-md-2" id="normal-query-form">
+                                  <div class="form-group form-float">
+                                      <div class="form-line focused">
+                                        <label class="form-label">Wowonder Reaction Icon</label>
+										<div class="btn-file d-flex align-items-center">
+											<input type="file" id="wowonder-icon" accept="image/x-png, image/gif, image/jpeg" name="wowonder" class="hidden">
+											<div class="mr-2 change-file-ico">
+												<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M16.5,6V17.5A4,4 0 0,1 12.5,21.5A4,4 0 0,1 8.5,17.5V5A2.5,2.5 0 0,1 11,2.5A2.5,2.5 0 0,1 13.5,5V15.5A1,1 0 0,1 12.5,16.5A1,1 0 0,1 11.5,15.5V6H10V15.5A2.5,2.5 0 0,0 12.5,18A2.5,2.5 0 0,0 15,15.5V5A4,4 0 0,0 11,1A4,4 0 0,0 7,5V17.5A5.5,5.5 0 0,0 12.5,23A5.5,5.5 0 0,0 18,17.5V6H16.5Z"></path></svg>
+											</div>
+											<div class="full-width">
+												<b id="wowonder-icon-name">Reaction Icon</b>
+											</div>
+										</div>
+                                      </div>
+                                  </div>
+                                </div>
+
+                                <div class="col-md-2" id="normal-query-form">
+                                  <div class="form-group form-float">
+                                      <div class="form-line focused">
+                                        <label class="form-label">Sunshine Reaction Icon</label>
+										<div class="btn-file d-flex align-items-center">
+											<input type="file" id="sunshine-icon" accept="image/x-png, image/gif, image/jpeg" name="sunshine" class="hidden">
+											<div class="mr-2 change-file-ico">
+												<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M16.5,6V17.5A4,4 0 0,1 12.5,21.5A4,4 0 0,1 8.5,17.5V5A2.5,2.5 0 0,1 11,2.5A2.5,2.5 0 0,1 13.5,5V15.5A1,1 0 0,1 12.5,16.5A1,1 0 0,1 11.5,15.5V6H10V15.5A2.5,2.5 0 0,0 12.5,18A2.5,2.5 0 0,0 15,15.5V5A4,4 0 0,0 11,1A4,4 0 0,0 7,5V17.5A5.5,5.5 0 0,0 12.5,23A5.5,5.5 0 0,0 18,17.5V6H16.5Z"></path></svg>
+											</div>
+											<div class="full-width">
+												<b id="sunshine-icon-name">Reaction Icon</b>
+											</div>
+										</div>
+                                      </div>
+                                  </div>
+                                </div>
+
+
+                                <div class="clearfix"></div>
+                              <div class="col-md-2">
+                                  <button class="btn btn-primary my-3">Add Reaction</button>
+                              </div>
+                              </div>
+                              <div class="clearfix"></div>
+                           </form>
+                       </div>
+                   </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-12 col-md-12">
+            <div class="card">
+                <div class="card-body">
+                  <h6 class="card-title">Manage Reaction</h6>
+                   <div class="clearfix"></div>
+                   <!-- <div class="col-md-2" id="normal-query-form">
+                      <div class="form-group form-float">
+                          <div class="form-line">
+                            <select class="form-control" name="themes" id="themes">
+                              <?php 
+                              $themes = Wo_GetThemes();
+                              if (!empty($themes)) {
+                                foreach ($themes as $key => $theme) { 
+                                  $theme = str_replace('themes/', '', $theme);
+                                  $selected = '';
+                                  if ($theme == $wo['config']['theme']) {
+                                    $selected = 'selected';
+                                  }
+                                  ?>
+                                  <option <?php echo $selected; ?>><?php echo $theme; ?></option>
+                                  
+                               <?php  } } ?>
+                              
+                            </select>
+                          </div>
+                      </div>
+                    </div> -->
+                   
+                   <div class="table-responsive1">
+                        <table class="table table-bordered table-striped table-hover">
+                            <thead>
+                                <tr>
+                                      <th>ID</th>
+					                  <th>Name</th>
+                            <th>Wowonder Theme Icon</th>
+                            <th>Sunshine Theme Icon</th>
+					                  <th>Status</th>
+                            <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php 
+                                foreach ($wo['reactions_types'] as $reaction) {
+                                  $wo['reaction_name'] = $reaction['name'];
+                                  $wo['reaction_id'] = $reaction['id'];
+                                  $wo['reaction_wowonder_icon'] = $reaction['wowonder_icon'];
+                                  $wo['reaction_sunshine_icon'] = $reaction['sunshine_icon'];
+                                  $wo['reaction_status'] = $reaction['status'];
+                                	echo Wo_LoadAdminPage('manage-reactions/list');
+                                }
+                                ?>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+    <!-- #END# Vertical Layout -->
+    <div class="modal fade" id="DeleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModal1Label" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModal1Label">DELETE REACTION</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to continue? this action can't be undo
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<div class="modal fade" id="editcategoryModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content modal_content_back">
+      <div class="modal-header">
+        <h5 class="modal-title" id="editcategoryModalLabel">Edit Reaction</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="edit_reaction_form_alert"></div>
+        <form class="edit_reaction_form" method="POST" id="modal-body-langs">
+          <div class="data_lang"></div>
+          <input type="hidden" name="hash_id" value="<?php echo Wo_CreateSession();?>">
+          <input type="hidden" name="id_of_key" id="id_of_key" value="">
+        </form>
+        
+      </div>
+      <div class="modal-footer">
+        
+        <button type="button" class="btn btn-primary modal_close_btn" data-dismiss="modal">CLOSE</button>
+        <button type="button" class="btn btn-success" id="save_edited_reaction">SAVE CHANGES</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style type="text/css">
+	.btn-file { position: relative; overflow: hidden;cursor: pointer;}
+	.btn-file input[type=file] { position: absolute; top: 0; right: 0; min-width: 100%; min-height: 100%; font-size: 100px; text-align: right; opacity: 0; outline: none; background: #fff; cursor: inherit; display: block; }
+	.change-file-ico {min-width: 36px;}
+	.change-file-ico svg {border-radius: 50%;background: rgb(2 154 214 / 15%);color: #029ad6;padding: 7px;width: 36px;height: 36px;}
+	.full-width {width: 100%;}
+	#wowonder-icon-name, #sunshine-icon-name {font-weight: normal;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;display: block;}
+</style>
+
+<script>
+	$("#wowonder-icon").change(function () {
+		var filename = $(this).val().replace(/C:\\fakepath\\/i, '');
+		$("#wowonder-icon-name").text(filename);
+    });
+	$("#sunshine-icon").change(function () {
+		var filename = $(this).val().replace(/C:\\fakepath\\/i, '');
+		$("#sunshine-icon-name").text(filename);
+    });
+  function ReactionStatus(self,id) {
+    $(self).text('Please wait..');
+    $.post(Wo_Ajax_Requests_File() + '?f=admin_setting&s=reaction_status', {id: id}, function(data, textStatus, xhr) {
+      window.location.reload();
+    });
+  }
+  function DeleteReaction(self,id,type = 'show') {
+    if (type == 'hide') {
+      $('#DeleteModal').find('.btn-primary').attr('onclick', "DeleteReaction(this,'"+id+"')");
+      $('#DeleteModal').modal('show');
+      return false;
+    }
+    $.post(Wo_Ajax_Requests_File() + '?f=admin_setting&s=delete_reaction', {id: id}, function(data, textStatus, xhr) {
+        if (data.status == 200) {
+            $('#list-'+id).slideUp('slow');
+            setTimeout(function () {
+                $('#list-'+id).remove();
+            },2000);
+        }
+    });
+  }
+
+  function EditReaction(id) {
+    $.post(Wo_Ajax_Requests_File() + '?f=admin_setting&s=get_reaction_form', {id: id}, function(data, textStatus, xhr) {
+        if (data.status == 200) {
+          $('.data_lang').html(data.html);
+          $('#editcategoryModal').modal();
+        }
+    });
+  }
+
+var add_reaction_form = $('form#add_reaction_form');
+var edit_reaction_form = $('form.edit_reaction_form');
+
+add_reaction_form.ajaxForm({
+    url: Wo_Ajax_Requests_File() + '?f=admin_setting&s=add_reaction',
+    beforeSend: function() {
+        add_reaction_form.find('.btn-info').text("Please wait..");
+    },
+    success: function(data) {
+      add_reaction_form.find('.btn-info').text('Add');
+        if (data.status == 200) {
+            $('.add_reaction_form_alert').html('<div class="alert alert-success"><i class="fa fa-check"></i> Reaction successfully added</div>');
+            setTimeout(function () {
+                $('.add_reaction_form_alert').empty();
+            }, 2000);
+            window.location.reload();
+        }
+        else{
+          $('.add_reaction_form_alert').html('<div class="alert alert-danger"> '+data.message+'</div>');
+            setTimeout(function () {
+                $('.add_reaction_form_alert').empty();
+            }, 2000);
+        }
+    }
+});
+
+edit_reaction_form.ajaxForm({
+    url: Wo_Ajax_Requests_File() + '?f=admin_setting&s=edit_reaction&hash=' + $('.main_session').val(),
+    beforeSend: function() {
+        $('#editcategoryModal').find('.btn-success').text("Please wait..");
+    },
+    success: function(data) {
+        if (data.status == 200) {
+            $('#editcategoryModal').find('.btn-success').text('SAVE CHANGES');
+            $('.edit_reaction_form_alert').html('<div class="alert alert-success"><i class="fa fa-check"></i> Reaction successfully edited</div>');
+            setTimeout(function () {
+                $('.edit_reaction_form_alert').empty();
+            }, 3000);
+            window.location.reload();
+        }
+        else{
+          $('.edit_reaction_form_alert').html('<div class="alert alert-danger"> '+data.message+'</div>');
+            setTimeout(function () {
+                $('.edit_reaction_form_alert').empty();
+            }, 2000);
+        }
+    }
+});
+
+$(document).on('click','#save_edited_reaction', function(event) {
+  event.preventDefault();
+  $('.edit_reaction_form').submit();
+});
+
+
+
+</script>
+<style type="text/css">
+  .emoji {width: 120px;height: 120px;background: #FFDA6A;display: inline-block;border-radius: 50%;position: relative;transform: scale(0.325);}
+
+.emoji__face, .emoji__eyebrows, .emoji__eyes, .emoji__mouth, .emoji__tongue, .emoji__heart, .emoji__hand, .emoji__thumb {position: absolute;}
+.emoji__face:before, .emoji__face:after, .emoji__eyebrows:before, .emoji__eyebrows:after, .emoji__eyes:before, .emoji__eyes:after, .emoji__mouth:before, .emoji__mouth:after, .emoji__tongue:before, .emoji__tongue:after, .emoji__heart:before, .emoji__heart:after, .emoji__hand:before, .emoji__hand:after, .emoji__thumb:before, .emoji__thumb:after {position: absolute;content: '';}
+
+.emoji__face {width: inherit;height: inherit;}
+
+.emoji--like {background: #548DFF;}
+.emoji--like .emoji__hand {left: 25px;bottom: 30px;width: 20px;height: 40px;background: #FFFFFF;border-radius: 5px;z-index: 0;-webkit-animation: hands-up 2s linear infinite;animation: hands-up 2s linear infinite;}
+.emoji--like .emoji__hand:before {left: 25px;bottom: 5px;width: 40px;background: inherit;height: 10px;border-radius: 2px 10px 10px 2px;box-shadow: 1px -9px 0 1px #FFFFFF, 2px -19px 0 2px #FFFFFF, 3px -29px 0 3px #FFFFFF;}
+.emoji--like .emoji__thumb {border-bottom: 20px solid #FFFFFF;border-left: 20px solid transparent;top: -25px;right: -25px;z-index: 2;-webkit-transform: rotate(5deg);transform: rotate(5deg);-webkit-transform-origin: 0% 100%;transform-origin: 0% 100%;-webkit-animation: thumbs-up 2s linear infinite;animation: thumbs-up 2s linear infinite;}
+.emoji--like .emoji__thumb:before {border-radius: 50% 50% 0 0;background: #FFFFFF;width: 10px;height: 12px;left: -10px;top: -8px;-webkit-transform: rotate(-15deg);transform: rotate(-15deg);-webkit-transform-origin: 100% 100%;transform-origin: 100% 100%;box-shadow: -1px 4px 0 -1px #FFFFFF;}
+
+.emoji--love {background: #F55064;}
+.emoji--love .emoji__heart {left: calc(50% - 40px);top: calc(50% - 40px);width: 80px;height: 80px;-webkit-animation: heart-beat 1s linear infinite alternate;animation: heart-beat 1s linear infinite alternate;}
+.emoji--love .emoji__heart:before, .emoji--love .emoji__heart:after {left: calc(50% - 20px);top: calc(50% - 32px);width: 40px;height: 64px;background: #FFFFFF;border-radius: 20px 20px 0 0;}
+.emoji--love .emoji__heart:before {-webkit-transform: translate(20px) rotate(-45deg);transform: translate(20px) rotate(-45deg);-webkit-transform-origin: 0 100%;transform-origin: 0 100%;}
+.emoji--love .emoji__heart:after {-webkit-transform: translate(-20px) rotate(45deg);transform: translate(-20px) rotate(45deg);-webkit-transform-origin: 100% 100%;transform-origin: 100% 100%;}
+
+.emoji--haha .emoji__face {-webkit-animation: haha-face 2s linear infinite;animation: haha-face 2s linear infinite;}
+.emoji--haha .emoji__eyes {width: 26px;height: 6px;border-radius: 2px;left: calc(50% - 13px);top: 35px;-webkit-transform: rotate(20deg);transform: rotate(20deg);background: transparent;box-shadow: -25px 5px 0 0 #000000, 25px -5px 0 0 #000000;}
+.emoji--haha .emoji__eyes:after {left: 0;top: 0;width: 26px;height: 6px;border-radius: 2px;-webkit-transform: rotate(-40deg);transform: rotate(-40deg);background: transparent;box-shadow: -25px -5px 0 0 #000000, 25px 5px 0 0 #000000;}
+.emoji--haha .emoji__mouth {width: 80px;height: 40px;left: calc(50% - 40px);top: 50%;background: #000000;border-radius: 0 0 40px 40px;overflow: hidden;z-index: 1;-webkit-animation: haha-mouth 2s linear infinite;animation: haha-mouth 2s linear infinite;}
+.emoji--haha .emoji__tongue {width: 70px;height: 30px;background: #F55064;left: calc(50% - 35px);bottom: -10px;border-radius: 50%;}
+
+.emoji--wow .emoji__face {-webkit-animation: wow-face 3s linear infinite;animation: wow-face 3s linear infinite;}
+.emoji--wow .emoji__eyebrows {left: calc(50% - 3px);height: 6px;width: 6px;border-radius: 50%;background: transparent;box-shadow: -18px 0 0 0 #000000, -33px 0 0 0 #000000, 18px 0 0 0 #000000, 33px 0 0 0 #000000;-webkit-animation: wow-brow 3s linear infinite;animation: wow-brow 3s linear infinite;}
+.emoji--wow .emoji__eyebrows:before, .emoji--wow .emoji__eyebrows:after {width: 24px;height: 20px;border: 6px solid #000000;box-sizing: border-box;border-radius: 50%;border-bottom-color: transparent;border-left-color: transparent;border-right-color: transparent;top: -3px;left: calc(50% - 12px);}
+.emoji--wow .emoji__eyebrows:before {margin-left: -25px;}
+.emoji--wow .emoji__eyebrows:after { margin-left: 25px;}
+.emoji--wow .emoji__eyes { width: 16px;height: 24px;left: calc(50% - 8px);top: 35px;border-radius: 50%;background: transparent;box-shadow: 25px 0 0 0 #000000, -25px 0 0 0 #000000;}
+.emoji--wow .emoji__mouth {width: 30px;height: 45px;left: calc(50% - 15px);top: 50%;border-radius: 50%;background: #000000;-webkit-animation: wow-mouth 3s linear infinite;animation: wow-mouth 3s linear infinite;}
+
+.emoji--sad .emoji__face {-webkit-animation: sad-face 2s ease-in infinite;animation: sad-face 2s ease-in infinite;}
+.emoji--sad .emoji__eyebrows {left: calc(50% - 3px);top: 35px;height: 6px;width: 6px;border-radius: 50%;background: transparent;box-shadow: -40px 9px 0 0 #000000, -25px 0 0 0 #000000, 25px 0 0 0 #000000, 40px 9px 0 0 #000000;}
+.emoji--sad .emoji__eyebrows:before, .emoji--sad .emoji__eyebrows:after {width: 30px;height: 20px;border: 6px solid #000000;box-sizing: border-box;border-radius: 50%;border-bottom-color: transparent;border-left-color: transparent;border-right-color: transparent;top: 2px;left: calc(50% - 15px);}
+.emoji--sad .emoji__eyebrows:before {margin-left: -30px;-webkit-transform: rotate(-30deg);transform: rotate(-30deg);}
+.emoji--sad .emoji__eyebrows:after {margin-left: 30px;-webkit-transform: rotate(30deg);transform: rotate(30deg);}
+.emoji--sad .emoji__eyes {width: 14px;height: 16px;left: calc(50% - 7px);top: 50px;border-radius: 50%;background: transparent;box-shadow: 25px 0 0 0 #000000, -25px 0 0 0 #000000;}
+.emoji--sad .emoji__eyes:after {background: #548DFF;width: 12px;height: 12px;margin-left: 6px;border-radius: 0 100% 40% 50% / 0 50% 40% 100%;-webkit-transform-origin: 0% 0%;transform-origin: 0% 0%;-webkit-animation: tear-drop 2s ease-in infinite;animation: tear-drop 2s ease-in infinite;}
+.emoji--sad .emoji__mouth {width: 60px;height: 80px;left: calc(50% - 30px);top: 80px;box-sizing: border-box;border: 6px solid #000000;border-radius: 50%;border-bottom-color: transparent;border-left-color: transparent;border-right-color: transparent;background: transparent;-webkit-animation: sad-mouth 2s ease-in infinite;animation: sad-mouth 2s ease-in infinite;}
+.emoji--sad .emoji__mouth:after {width: 6px;height: 6px;background: transparent;border-radius: 50%;top: 4px;left: calc(50% - 3px);box-shadow: -18px 0 0 0 #000000, 18px 0 0 0 #000000;}
+
+.emoji--angry {background: linear-gradient(#D5234C -10%, #FFDA6A);background-size: 100%;-webkit-animation: angry-color 2s ease-in infinite;animation: angry-color 2s ease-in infinite;}
+.emoji--angry .emoji__face {-webkit-animation: angry-face 2s ease-in infinite;animation: angry-face 2s ease-in infinite;}
+.emoji--angry .emoji__eyebrows {left: calc(50% - 3px);top: 55px;height: 6px;width: 6px;border-radius: 50%;background: transparent;box-shadow: -44px 5px 0 0 #000000, -7px 16px 0 0 #000000, 7px 16px 0 0 #000000, 44px 5px 0 0 #000000;}
+.emoji--angry .emoji__eyebrows:before, .emoji--angry .emoji__eyebrows:after {width: 50px;height: 20px;border: 6px solid #000000;box-sizing: border-box;border-radius: 50%;border-top-color: transparent;border-left-color: transparent;border-right-color: transparent;top: 0;left: calc(50% - 25px);}
+.emoji--angry .emoji__eyebrows:before {margin-left: -25px;-webkit-transform: rotate(15deg);transform: rotate(15deg);}
+.emoji--angry .emoji__eyebrows:after {margin-left: 25px;-webkit-transform: rotate(-15deg);transform: rotate(-15deg);}
+.emoji--angry .emoji__eyes {width: 12px;height: 12px;left: calc(50% - 6px);top: 70px;border-radius: 50%;background: transparent;box-shadow: 25px 0 0 0 #000000, -25px 0 0 0 #000000;}
+.emoji--angry .emoji__mouth {width: 36px;height: 18px;left: calc(50% - 18px);bottom: 15px;background: #000000;border-radius: 50%;-webkit-animation: angry-mouth 2s ease-in infinite;animation: angry-mouth 2s ease-in infinite;}
+
+@-webkit-keyframes slideUp {
+0%{opacity: 0;transform: translateY(30px);}
+100%{opacity: 1;transform: translateY(0px);}
+}
+@keyframes slideUp {
+0%{opacity: 0;transform: translateY(30px);}
+100%{opacity: 1;transform: translateY(0px);}
+}
+
+@-webkit-keyframes heart-beat {
+25% {-webkit-transform: scale(1.1);transform: scale(1.1);}
+75% {-webkit-transform: scale(0.6);transform: scale(0.6);}
+}
+@keyframes heart-beat {
+25% {-webkit-transform: scale(1.1);transform: scale(1.1);}
+75% {-webkit-transform: scale(0.6);transform: scale(0.6);}
+}
+
+@-webkit-keyframes haha-face {
+10%, 30%, 50% {-webkit-transform: translateY(25px);transform: translateY(25px);}
+20%, 40% {-webkit-transform: translateY(15px);transform: translateY(15px);}
+60%, 80% {-webkit-transform: translateY(0);transform: translateY(0);}
+70%, 90% {-webkit-transform: translateY(-10px);transform: translateY(-10px);}
+}
+@keyframes haha-face {
+10%, 30%, 50% {-webkit-transform: translateY(25px);transform: translateY(25px);}
+20%, 40% {-webkit-transform: translateY(15px);transform: translateY(15px);}
+60%, 80% {-webkit-transform: translateY(0);transform: translateY(0);}
+70%, 90% {-webkit-transform: translateY(-10px);transform: translateY(-10px);}
+}
+@-webkit-keyframes haha-mouth {
+10%, 30%, 50% {-webkit-transform: scale(0.6);transform: scale(0.6);top: 45%;}
+20%, 40% {-webkit-transform: scale(0.8);transform: scale(0.8);top: 45%;}
+60%, 80% {-webkit-transform: scale(1);transform: scale(1);top: 50%;}
+70% {-webkit-transform: scale(1.2);transform: scale(1.2);top: 50%;}
+90% {-webkit-transform: scale(1.1);transform: scale(1.1);top: 50%;}
+}
+@keyframes haha-mouth {
+10%, 30%, 50% {-webkit-transform: scale(0.6);transform: scale(0.6);top: 45%;}
+20%, 40% {-webkit-transform: scale(0.8);transform: scale(0.8);top: 45%;}
+60%, 80% {-webkit-transform: scale(1);transform: scale(1);top: 50%;}
+70% {-webkit-transform: scale(1.2);transform: scale(1.2);top: 50%;}
+90% {-webkit-transform: scale(1.1);transform: scale(1.1);top: 50%;}
+}
+
+@-webkit-keyframes wow-face {
+15%, 25% {-webkit-transform: rotate(20deg) translateX(-25px);transform: rotate(20deg) translateX(-25px);}
+45%, 65% {-webkit-transform: rotate(-20deg) translateX(25px);transform: rotate(-20deg) translateX(25px);}
+75%, 100% {-webkit-transform: rotate(0deg) translateX(0);transform: rotate(0deg) translateX(0);}
+}
+@keyframes wow-face {
+15%, 25% {-webkit-transform: rotate(20deg) translateX(-25px);transform: rotate(20deg) translateX(-25px);}
+45%, 65% {-webkit-transform: rotate(-20deg) translateX(25px);transform: rotate(-20deg) translateX(25px);}
+75%, 100% {-webkit-transform: rotate(0deg) translateX(0);transform: rotate(0deg) translateX(0);}
+}
+@-webkit-keyframes wow-brow {
+15%, 65% {top: 25px;}
+75%, 100%, 0% {top: 15px;}
+}
+@keyframes wow-brow {
+15%, 65% {top: 25px;}
+75%, 100%, 0% {top: 15px;}
+}
+@-webkit-keyframes wow-mouth {
+10%, 30% {width: 20px;height: 20px;left: calc(50% - 10px);}
+50%, 70% {width: 30px;height: 40px;left: calc(50% - 15px);}
+75%, 100% {height: 50px;}
+}
+@keyframes wow-mouth {
+10%, 30% {width: 20px;height: 20px;left: calc(50% - 10px);}
+50%, 70% {width: 30px;height: 40px;left: calc(50% - 15px);}
+75%, 100% {height: 50px;}
+}
+
+@-webkit-keyframes sad-face {
+25%, 35% {top: -15px;}
+55%, 95% {top: 10px;}
+100%, 0% {top: 0;}
+}
+@keyframes sad-face {
+25%, 35% {top: -15px;}
+55%, 95% {top: 10px;}
+100%, 0% {top: 0;}
+}
+@-webkit-keyframes sad-mouth {
+25%, 35% {-webkit-transform: scale(0.85);transform: scale(0.85);top: 70px;}
+55%, 100%, 0% {-webkit-transform: scale(1);transform: scale(1);top: 80px;}
+}
+@keyframes sad-mouth {
+25%, 35% {-webkit-transform: scale(0.85);transform: scale(0.85);top: 70px;}
+55%, 100%, 0% {-webkit-transform: scale(1);transform: scale(1);top: 80px;}
+}
+@-webkit-keyframes tear-drop {
+0%, 100% {display: block;left: 35px;top: 15px;-webkit-transform: rotate(45deg) scale(0);transform: rotate(45deg) scale(0);}
+25% {display: block;left: 35px;-webkit-transform: rotate(45deg) scale(2);transform: rotate(45deg) scale(2);}
+49.9% {display: block;left: 35px;top: 65px;-webkit-transform: rotate(45deg) scale(0);transform: rotate(45deg) scale(0);}
+50% {display: block;left: -35px;top: 15px;-webkit-transform: rotate(45deg) scale(0);transform: rotate(45deg) scale(0);}
+75% {display: block;left: -35px;-webkit-transform: rotate(45deg) scale(2);transform: rotate(45deg) scale(2);}
+99.9% {display: block;left: -35px;top: 65px;-webkit-transform: rotate(45deg) scale(0);transform: rotate(45deg) scale(0);}
+}
+@keyframes tear-drop {
+0%, 100% {display: block;left: 35px;top: 15px;-webkit-transform: rotate(45deg) scale(0);transform: rotate(45deg) scale(0);}
+25% {display: block;left: 35px;-webkit-transform: rotate(45deg) scale(2);transform: rotate(45deg) scale(2);}
+49.9% {display: block;left: 35px;top: 65px;-webkit-transform: rotate(45deg) scale(0);transform: rotate(45deg) scale(0);}
+50% {display: block;left: -35px;top: 15px;-webkit-transform: rotate(45deg) scale(0);transform: rotate(45deg) scale(0);}
+75% {display: block;left: -35px;-webkit-transform: rotate(45deg) scale(2);transform: rotate(45deg) scale(2);}
+99.9% {display: block;left: -35px;top: 65px;-webkit-transform: rotate(45deg) scale(0);transform: rotate(45deg) scale(0);}
+}
+
+@-webkit-keyframes hands-up {
+25% {-webkit-transform: rotate(15deg);transform: rotate(15deg);}
+50% {-webkit-transform: rotate(-15deg) translateY(-10px);transform: rotate(-15deg) translateY(-10px);}
+75%, 100% {-webkit-transform: rotate(0deg);transform: rotate(0deg);}
+}
+@keyframes hands-up {
+25% {-webkit-transform: rotate(15deg);transform: rotate(15deg);}
+50% {-webkit-transform: rotate(-15deg) translateY(-10px);transform: rotate(-15deg) translateY(-10px);}
+75%, 100% {-webkit-transform: rotate(0deg);transform: rotate(0deg);}
+}
+@-webkit-keyframes thumbs-up {
+25% {-webkit-transform: rotate(20deg);transform: rotate(20deg);}
+50%, 100% {-webkit-transform: rotate(5deg);transform: rotate(5deg);}
+}
+@keyframes thumbs-up {
+25% {-webkit-transform: rotate(20deg);transform: rotate(20deg);}
+50%, 100% {-webkit-transform: rotate(5deg);transform: rotate(5deg);}
+}
+
+@-webkit-keyframes angry-color {
+45%, 60% {background-size: 250%;}
+85%, 100%, 0% {background-size: 100%;}
+}
+@keyframes angry-color {
+45%, 60% {background-size: 250%;}
+85%, 100%, 0% {background-size: 100%;}
+}
+@-webkit-keyframes angry-face {
+35%, 60% {-webkit-transform: translateX(0) translateY(10px) scale(0.9);transform: translateX(0) translateY(10px) scale(0.9);}
+40%, 50% {-webkit-transform: translateX(-5px) translateY(10px) scale(0.9);transform: translateX(-5px) translateY(10px) scale(0.9);}
+45%, 55% {-webkit-transform: translateX(5px) translateY(10px) scale(0.9);transform: translateX(5px) translateY(10px) scale(0.9);}
+}
+@keyframes angry-face {
+35%, 60% {-webkit-transform: translateX(0) translateY(10px) scale(0.9);transform: translateX(0) translateY(10px) scale(0.9);}
+40%, 50% {-webkit-transform: translateX(-5px) translateY(10px) scale(0.9);transform: translateX(-5px) translateY(10px) scale(0.9);}
+45%, 55% {-webkit-transform: translateX(5px) translateY(10px) scale(0.9);transform: translateX(5px) translateY(10px) scale(0.9);}
+}
+@-webkit-keyframes angry-mouth {
+25%, 50% {height: 6px;bottom: 25px;}
+}
+@keyframes angry-mouth {
+25%, 50% {height: 6px;bottom: 25px;}
+}
+.reaction {list-style-type: none;display: inline-block;width: 48px;height: 48px;float: left;opacity: 1;border-radius: 50%;transform: scale(1);transition: transform .25s ease;-webkit-animation-fill-mode: both;animation-fill-mode: both;-webkit-animation: slideUp cubic-bezier(0.49, 0, 0.46, 1);animation: slideUp cubic-bezier(0.49, 0, 0.46, 1);}
+/* .like-btn:hover .reactions-box { display: block; } */
+
+/*.animated_2 {-webkit-animation-duration: 0.1s;animation-duration: 0.1s;}
+.animated_4 {-webkit-animation-duration: 0.2s;animation-duration: 0.2s;}
+.animated_6 {-webkit-animation-duration: 0.3s;animation-duration: 0.3s;}
+.animated_8 {-webkit-animation-duration: 0.4s;animation-duration: 0.4s;}
+.animated_10 {-webkit-animation-duration: 0.5s;animation-duration: 0.5s;}
+.animated_12 {-webkit-animation-duration: 0.6s;animation-duration: 0.6s;}*/
+  
+
+.reaction img {width: 100%;height: 100%;object-fit: cover;}
+</style>

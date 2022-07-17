@@ -1,0 +1,109 @@
+<div class="wow_content wow_sett_content">
+	<div class="wo_page_hdng pag_neg_padd">
+		<div class="wo_page_hdng_innr">
+			<span><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="currentColor" d="M22.7,19L13.6,9.9C14.5,7.6 14,4.9 12.1,3C10.1,1 7.1,0.6 4.7,1.7L9,6L6,9L1.6,4.7C0.4,7.1 0.9,10.1 2.9,12.1C4.8,14 7.5,14.5 9.8,13.6L18.9,22.7C19.3,23.1 19.9,23.1 20.3,22.7L22.6,20.4C23.1,20 23.1,19.3 22.7,19Z"></path></svg></span> <?php echo $wo['lang']['privileges'];?>
+		</div>
+	</div>
+	<form class="setting-general-form form-horizontal" method="post">
+		<div class="setting-general-alert setting-update-alert"></div>
+		
+		<div class="row">
+			<?php 
+				$selected_e_settings   = ($wo['admin_info']['general'] == 1)   ? ' checked' : '';
+			?>
+			<div class="col-md-12 round-check">
+				<input type="checkbox" name="general" id="general" value="1" <?php echo $selected_e_settings; ?>>
+				<label for="general"><?php echo $wo['lang']['access_to_general_settings']; ?></label>
+			</div>
+
+			<?php 
+				$selected_e_settings   = ($wo['admin_info']['info'] == 1)   ? ' checked' : '';
+			?>
+			<div class="col-md-12 round-check">
+				<input type="checkbox" name="info" id="info" value="1" <?php echo $selected_e_settings; ?>>
+				<label for="info"><?php echo $wo['lang']['access_to_info_settings']; ?></label>
+			</div>
+			
+			<?php 
+				$selected_e_settings   = ($wo['admin_info']['social'] == 1)   ? ' checked' : '';
+			?>
+			<div class="col-md-12 round-check">
+				<input type="checkbox" name="social" id="social" value="1" <?php echo $selected_e_settings; ?>>
+				<label for="social"><?php echo $wo['lang']['access_to_social_settings']; ?></label>
+			</div>
+
+			<?php 
+				$selected_e_settings   = ($wo['admin_info']['avatar'] == 1)   ? ' checked' : '';
+			?>
+			<div class="col-md-12 round-check">
+				<input type="checkbox" name="avatar" id="avatar" value="1" <?php echo $selected_e_settings; ?>>
+				<label for="avatar"><?php echo $wo['lang']['access_to_avatar_settings']; ?></label>
+			</div>
+			
+			<?php 
+				$selected_e_settings   = ($wo['admin_info']['design'] == 1)   ? ' checked' : '';
+			?>
+			<div class="col-md-12 round-check">
+				<input type="checkbox" name="design" id="design" value="1" <?php echo $selected_e_settings; ?>>
+				<label for="design"><?php echo $wo['lang']['access_to_design_settings']; ?></label>
+			</div>
+			
+			<?php 
+				$selected_e_settings   = ($wo['admin_info']['admins'] == 1)   ? ' checked' : '';
+			?>
+			<div class="col-md-12 round-check">
+				<input type="checkbox" name="admins" id="admins" value="1" <?php echo $selected_e_settings; ?>>
+				<label for="admins"><?php echo $wo['lang']['access_to_admins_settings']; ?></label>
+			</div>
+
+			<?php 
+				$selected_e_settings   = ($wo['admin_info']['analytics'] == 1)   ? ' checked' : '';
+			?>
+			<div class="col-md-12 round-check">
+				<input type="checkbox" name="analytics" id="analytics" value="1" <?php echo $selected_e_settings; ?>>
+				<label for="analytics"><?php echo $wo['lang']['access_to_analytics_settings']; ?></label>
+			</div>
+			
+			<?php 
+				$selected_e_settings   = ($wo['admin_info']['delete_page'] == 1)   ? ' checked' : '';
+			?>
+			<div class="col-md-12 round-check">
+				<input type="checkbox" name="delete_page" id="delete_page" value="1" <?php echo $selected_e_settings; ?>>
+				<label for="delete_page"><?php echo $wo['lang']['access_to_delete_page_settings']; ?></label>
+			</div>
+		</div>
+
+        <div class="text-center">
+			<button type="submit" class="btn btn-main btn-mat btn-mat-raised add_wow_loader"><?php echo $wo['lang']['save']; ?></button>
+		</div>
+		<input type="hidden" name="page_id" value="<?php echo $wo['setting']['page_id'];?>">
+		<input type="hidden" name="user_id" value="<?php echo $wo['admin_info']['user_id'];?>">
+		<input type="hidden" name="hash_id" value="<?php echo Wo_CreateSession();?>">
+	</form>
+</div>
+<script type="text/javascript">
+$(function() {
+  $('form.setting-general-form').ajaxForm({
+    url: Wo_Ajax_Requests_File() + '?f=pages&s=privileges',
+    beforeSend: function() {
+      $('.setting-general-form').find('.add_wow_loader').addClass('btn-loading');
+    },
+    success: function(data) {
+      scrollToTop();
+      if (data.status == 200) {
+        $('.setting-general-alert').html('<div class="alert alert-success">' + data.message + '</div>');
+        $('.alert-success').fadeIn('fast', function() {
+           $(this).delay(2500).slideUp(500, function() {
+              $(this).remove();
+            });
+        });
+      } else {
+          var errors = data.errors.join("<br>");
+          $('.setting-general-alert').html('<div class="alert alert-danger">' + errors + '</div>');
+          $('.alert-danger').fadeIn(300);
+      }
+      $('.setting-general-form').find('.add_wow_loader').removeClass('btn-loading');
+    }
+  });
+});
+</script>

@@ -1,0 +1,62 @@
+<script type="text/javascript">
+  var video = document.getElementById('basic-stream');
+
+Twilio.Video.connect('<?php echo $wo['video_call']['access_token'];?>', { name: '<?php echo $wo['video_call']['room'];?>' }).then(room => {
+  console.log('Connected to Room "%s"', room.name);
+ 
+  room.participants.forEach(participantConnected);
+  room.on('participantConnected', participantConnected);
+ 
+  //room.on('participantDisconnected', participantDisconnected);
+  //room.once('disconnected', error => room.participants.forEach(participantDisconnected));
+  room.on('disconnected', room => {
+    // Detach the local media elements
+    room.localParticipant.tracks.forEach(publication => {
+      const attachedElements = publication.track.detach();
+      attachedElements.forEach(element => element.remove());
+      $.get(Wo_Ajax_Requests_File(), {f:'cancel_call'}, function (data) {});
+      location.href = "<?php echo($wo['config']['site_url']) ?>";
+    });
+  });
+  room.on('participantDisconnected', function(participant) {
+    console.log(participant.identity + ' left the Room');
+    $.get(Wo_Ajax_Requests_File(), {f:'cancel_call'}, function (data) {});
+    location.href = "<?php echo($wo['config']['site_url']) ?>";
+  });
+  $(document).on('click', 'a[data-ajax]', function(e) {
+      room.disconnect();
+      $.get(Wo_Ajax_Requests_File(), {f:'cancel_call'}, function (data) {});
+      location.href = "<?php echo($wo['config']['site_url']) ?>";
+  });
+  $(document).on('click', '.end_vdo_call', function(e) {
+      room.disconnect();
+      $.get(Wo_Ajax_Requests_File(), {f:'cancel_call'}, function (data) {});
+      location.href = "<?php echo($wo['config']['site_url']) ?>";
+  });
+});
+ 
+function participantConnected(participant) {
+  console.log('Participant "%s" connected', participant.identity);
+ 
+  const div = document.createElement('div');
+  div.id = participant.sid;
+  //div.innerText = participant.identity;
+  participant.tracks.forEach(publication => {
+    if (publication.isSubscribed) {
+      const track = publication.track;
+      div.appendChild(track.attach());
+    }
+  });
+  participant.on('trackSubscribed', track => {
+    /*$('#remote-media').html('');*/
+    document.getElementById('remote-media').appendChild(track.attach());
+  });
+ 
+  $('#remote-media').html(div);
+  if (navigator.getUserMedia) {
+    navigator.mediaDevices.getUserMedia({audio: true, video: true}).then((stream) => {video.srcObject = stream});
+    $('#basic-stream').removeClass('hidden');
+    $('.end_vdo_call').removeClass('hidden');
+  }
+}
+</script>

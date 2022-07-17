@@ -1,0 +1,76 @@
+<script src="<?php echo $wo['config']['theme_url'];?>/javascript/bbcode/jquery.bbcode.js"></script>
+<link rel="stylesheet" href="<?php echo $wo['config']['theme_url'];?>/javascript/bbcode/jquery.bbcode.css" media="all">
+<style>
+.f_category,.member_list,.adv-mbr-search,.g_search, .bg-main, .blocksubhead {background-color: <?php echo $wo['config']['header_background'];?>;color: #fff;}
+.section-list {padding: 10px;}
+.forum-tabs{width: 100%;overflow: hidden;margin-bottom: 20px;}
+.forum-tabs li{width: 25%;background-color: #a84849;float: left;text-align: center;font-size: 14px;}
+.forum-tabs li a{width: 100%;padding: 10px 0px;background-color: #a84849;color: #fff;vertical-align: middle;}
+.forum-tabs li a:hover{background: rgba(245, 245, 245, 0.04);}
+.navbar-collapse {padding-left: 0 !important;}
+.flink {color: <?php echo $wo['config']['btn_background_color'];?> !important;}
+blockquote {border-left: 2px solid <?php echo $wo['config']['btn_background_color'];?> !important;}
+.bbcode-editor .bbcode-toolbar {color: #fff;background: <?php echo $wo['config']['header_background'];?> !important;padding: 8px;padding-bottom: 5px;}
+</style>
+<?php 
+$forum_class = 'search-forums';
+if (!empty($_GET['fid'])) {
+	$forum_class = 'search-forum-threads';
+}
+if ($_GET['link1'] == 'showthread') {
+	$forum_class = 'forum-messages-search';
+}
+
+ ?>
+<div class="page-margin" id="forum-cont">
+	<?php if ($wo['config']['user_ads'] == 1): ?>
+			<div id="sidebar-sticky-forum">
+				<?php 
+				  $wo['sidebar-ad'] = Wo_GetAdsByType('forum');
+				  if (!empty($wo['sidebar-ad'])) {
+				  	echo Wo_LoadPage('ads/includes/forum-ad');
+				  }
+				?>
+				<div class="clear"></div>
+			</div>
+	    <?php endif; ?>
+	
+	<div class="page-margin wow_content mt-0">
+		<div class="wo_page_hdng pag_neg_padd pag_alone">
+			<div class="wo_page_hdng_innr big_size">
+				<span><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="currentColor" d="M15,4V11H5.17L4,12.17V4H15M16,2H3A1,1 0 0,0 2,3V17L6,13H16A1,1 0 0,0 17,12V3A1,1 0 0,0 16,2M21,6H19V15H6V17A1,1 0 0,0 7,18H18L22,22V7A1,1 0 0,0 21,6Z"></path></svg></span> <?php echo $wo['lang']['forum']; ?>
+			</div>
+		</div>
+	</div>
+	<div class="page-margin wow_content">
+		<div class="wo_page_hdng pag_neg_padd pag_alone">
+			<div class="wo_page_hdng_menu">
+				<ul class="list-unstyled">
+					<li class="<?php if ($wo['active'] == 'forums') echo 'active'; ?>"><a href="<?php echo Wo_SeoLink('index.php?link1=forum');?>" data-ajax="?link1=forum"><?php echo $wo['lang']['browse_forum']; ?></a></li>
+					<li class="<?php if ($wo['active'] == 'members') echo 'active'; ?>"><a href="<?php echo Wo_SeoLink('index.php?link1=forum-members');?>" data-ajax="?link1=forum-members"><?php echo $wo['lang']['members']; ?></a></li>
+					<li class="<?php if ($wo['active'] == 'search') echo 'active'; ?>"><a href="<?php echo Wo_SeoLink('index.php?link1=forum-search');?>" data-ajax="?link1=forum-search"><?php echo $wo['lang']['search']; ?></a></li>
+					<li class="<?php if ($_GET['link1'] == 'mythreads') echo 'active'; ?>"><a href="<?php echo Wo_SeoLink('index.php?link1=mythreads');?>" data-ajax="?link1=mythreads"><?php echo $wo['lang']['my_threads']; ?></a></li>
+					<li class="<?php if ($_GET['link1'] == 'mymessages') echo 'active'; ?>"><a href="<?php echo Wo_SeoLink('index.php?link1=mymessages');?>" data-ajax="?link1=mymessages"><?php echo $wo['lang']['my_messages']; ?></a></li>
+				</ul>
+				<?php if (empty($wo['forums'])) {
+					$wo['forums']        = Wo_GetForums();
+				} ?>
+				<?php if ($wo['forums'] && count($wo['forums']) > 0): ?>
+					<div class="btn-group dropdown wow_forum_jump_btn">
+						<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><?php echo $wo['lang']['jump_to']; ?>&nbsp;&nbsp;<span class="caret"></span></button>
+						<ul class="dropdown-menu dropdown-menu-right" role="menu">
+							<?php foreach ($wo['forums'] as $jump): ?>
+								<li>
+									<a href="<?php echo Wo_SeoLink('index.php?link1=forums&fid='.$jump['id']);?>" class="<?php if ($jump['name'] == $wo['forums']['name']) echo 'bold'; ?>"><?php echo $jump['name']; ?></a>
+								</li>
+							<?php endforeach ?>
+						</ul>
+					</div>
+				<?php endif ?>
+			</div>
+		</div>
+	</div>
+
+
+	<!-- Tab panes -->
+	<div class="tab-content" id="tab-content">

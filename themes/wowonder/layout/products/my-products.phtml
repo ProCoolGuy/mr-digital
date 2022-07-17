@@ -1,0 +1,49 @@
+<div class="page-margin">
+	<div class="row">
+		<div class="col-md-2 leftcol"><?php echo Wo_LoadPage("sidebar/left-sidebar"); ?></div>
+		<div class="col-md-7 singlecol">
+			<div class="page-margin wow_content mt-0">
+				<div class="wo_page_hdng pag_neg_padd pag_alone">
+					<div class="wo_page_hdng_innr big_size">
+						<span><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="currentColor" d="M12,18H6V14H12M21,14V12L20,7H4L3,12V14H4V20H14V14H18V20H20V14M20,4H4V6H20V4Z"></path></svg></span> <?php echo $wo['lang']['market']; ?>
+					</div>
+				</div>
+			</div>
+			<div class="page-margin wow_content">
+				<div class="wo_page_hdng pag_neg_padd pag_alone">
+					<div class="wo_page_hdng_menu">
+						<ul class="list-unstyled">
+							<li class="active"><a href="<?php echo Wo_SeoLink('index.php?link1=my-products'); ?>" data-ajax="?link1=my-products"><?php echo $wo['lang']['my_products'] ?></a></li>
+							<?php if ($wo['config']['store_system'] == 'on') { ?>
+							<li><a href="<?php echo Wo_SeoLink('index.php?link1=purchased'); ?>" data-ajax="?link1=purchased"><?php echo $wo['lang']['purchased'] ?></a></li>
+							<?php if ($wo['have_products'] > 0) { ?>
+								<li><a href="<?php echo Wo_SeoLink('index.php?link1=orders'); ?>" data-ajax="?link1=orders"><?php echo $wo['lang']['orders'] ?></a></li>
+							<?php } ?>
+							<?php } ?>
+							<li><a href="<?php echo Wo_SeoLink('index.php?link1=products'); ?>" data-ajax="?link1=products"><?php echo $wo['lang']['market'] ?></a></li>
+						</ul>
+						<a class="btn btn-main btn-mat btn-mat-raised" href="#" data-toggle="modal" data-target="#create-product-modal" data-backdrop="static" data-keyboard="false"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z"></path></svg> <?php echo $wo['lang']['create'] ?></a>
+					</div>
+				</div>
+			</div>
+			
+			<div class="wo_my_pages">
+				<div class="row my_products">
+					<?php
+						$products = Wo_GetProducts(array('user_id' => $wo['user']['user_id']));
+						if (count($products) > 0) {
+							foreach ($products as $wo['product']) {
+								echo Wo_LoadPage('products/product-style');
+							}
+						} else {
+							echo '<h5 class="search-filter-center-text empty_state"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-shopping-cart"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg> ' . $wo['lang']['no_available_products'] . '</h5>';
+						}
+					?>
+				</div>
+				<div class="clear"></div>
+			</div>
+		</div>
+	</div>
+	<!-- .row -->
+</div>
+<?php echo Wo_LoadPage('products/create'); ?>

@@ -1,0 +1,9 @@
+<?php 
+$data = $db->where('name','recover')->getOne(T_HTML_EMAILS);
+$html = $data->value;
+$replaces = array('USERNAME' => $wo['recover']['username'],
+                  'SITE_NAME' => $wo['config']['siteName'],
+                  'LINK' => $wo['recover']['link']);
+$html = Wo_ReplaceText($html,$replaces);
+echo $html;
+ ?>

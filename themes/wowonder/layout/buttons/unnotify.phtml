@@ -1,0 +1,5 @@
+<span id="Notify-<?php echo $wo['follow']['user_id']?>" title="<?php echo(str_replace('{USER}', $wo['follow']['name'], $wo['lang']['stop_notification_posts'])) ?>" data_next="<?php echo(str_replace('{USER}', $wo['follow']['name'], $wo['lang']['get_notification_posts'])) ?>" class="btn-glossy">
+    <button type="button" onclick="Wo_RegisterFollowNotify(<?php echo $wo['follow']['user_id'];?>,0)" class="btn-active btn btn-default btn-sm wo_following_btn wo_user_folw_empty_btns" id="wo_useract_btn">
+       <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-bell-off"><path d="M13.73 21a2 2 0 0 1-3.46 0"></path><path d="M18.63 13A17.89 17.89 0 0 1 18 8"></path><path d="M6.26 6.26A5.86 5.86 0 0 0 6 8c0 7-3 9-3 9h14"></path><path d="M18 8a6 6 0 0 0-9.33-5"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>
+    </button>
+</span>

@@ -1,0 +1,86 @@
+<div class="page-margin">
+	<div class="wow_main_float_head com_thing">
+		<div class="container">
+			<h1><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="currentColor" d="M15,2C16.94,2 18.59,2.7 19.95,4.05C21.3,5.41 22,7.06 22,9C22,10.56 21.5,11.96 20.58,13.2C19.64,14.43 18.44,15.27 16.97,15.7L17,15.38V15C17,12.81 16.23,10.93 14.65,9.35C13.07,7.77 11.19,7 9,7H8.63L8.3,7.03C8.73,5.56 9.57,4.36 10.8,3.42C12.04,2.5 13.44,2 15,2M9,8A7,7 0 0,1 16,15A7,7 0 0,1 9,22A7,7 0 0,1 2,15A7,7 0 0,1 9,8M9,10A5,5 0 0,0 4,15A5,5 0 0,0 9,20A5,5 0 0,0 14,15A5,5 0 0,0 9,10Z"></path></svg> <?php echo $wo['lang']['common_things']; ?></h1>
+			<h4 class="text-center"><?php echo $wo['lang']['people_with_common'] ?></h4>
+		</div>
+	</div>
+	
+	<div class="wow_main_blogs_bg"></div>
+
+	<div class="row wo_com_things_row" id="nearby_users_list">
+		<?php
+			$nearby_users = Wo_GetCommonUsers(array('limit' => 20));
+			if (count($nearby_users) > 0) {
+				foreach ($nearby_users as $wo['UsersList']) {
+					echo Wo_LoadPage('common_things/user-list');
+				}
+			}
+			else{
+				echo '<div class="empty_state"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M16,13C15.71,13 15.38,13 15.03,13.05C16.19,13.89 17,15 17,16.5V19H23V16.5C23,14.17 18.33,13 16,13M8,13C5.67,13 1,14.17 1,16.5V19H15V16.5C15,14.17 10.33,13 8,13M8,11A3,3 0 0,0 11,8A3,3 0 0,0 8,5A3,3 0 0,0 5,8A3,3 0 0,0 8,11M16,11A3,3 0 0,0 19,8A3,3 0 0,0 16,5A3,3 0 0,0 13,8A3,3 0 0,0 16,11Z" /></svg>' . $wo['lang']['no_users_found'] . '</div>';
+			}
+		?>
+	</div>
+	<div class="posts_load">
+		<?php if (count($nearby_users) >= 1): ?>
+			<div class="load-more">
+				<div class="btn btn-default text-center pointer" id="load_more_nearby_users" onclick="Wo_LoadMoreNearByUsers();">
+					<i class="fa fa-arrow-down progress-icon" data-icon="arrow-down"></i> <?php echo $wo['lang']['load_more'] ?>
+				</div>
+			</div>
+		<?php endif ?>
+	</div>
+	<?php //echo Wo_LoadPage('footer/content'); ?>
+</div>
+
+<script>
+$('.wow_main_blogs_bg').css('height', ($('.wow_main_float_head').height()) + 'px');
+
+	$(document).on('mousedown mousemove mouseup mouseleave hover', '.slick-track', function(event) {
+		var last = parseInt($('.slick-slide').last().attr('data-slick-index'));
+		var first = parseInt($('.slick-slide').first().attr('data-slick-index'));
+		var current = parseInt($('.slick-current').attr('data-slick-index'));
+		if (current > first && current < last) {
+			$('.slick-next').addClass('slick-disabled');
+			$('.slick-prev').addClass('slick-disabled');
+		}
+		else if (current == first) {
+			$('.slick-prev').removeClass('slick-disabled');
+			$('.slick-next').addClass('slick-disabled');
+		}
+		else if (current == last) {
+			$('.slick-next').removeClass('slick-disabled');
+			$('.slick-prev').addClass('slick-disabled');
+		}
+
+	});
+	function Wo_LoadMoreNearByUsers(){
+		var after_id = ($(".wo_comthing_usr").length > 0) ? $(".wo_comthing_usr").last().attr('id') : 0;
+		if (!after_id) { return false;}
+		Wo_progressIconLoader($('#load_more_nearby_users'));
+		$.ajax({
+			url: Wo_Ajax_Requests_File(),
+			type: 'GET',
+			dataType: 'json',
+			data: {
+				f:'show_common_user',
+				s:'load',
+				offset:after_id
+			},
+		})
+		.done(function(data) {
+
+	        if (data['status'] == 200){
+	        	$("#nearby_users_list").append(data.html);
+	        	$("[data-toggle]").tooltip();
+	        	$("#load_more_nearby_users").html('<i class="fa fa-arrow-down progress-icon" data-icon="arrow-down"></i> <?php echo $wo['lang']['load_more']; ?>');
+	        } 
+	        else{
+	        	$("#load_more_nearby_users").html('<?php echo $wo['lang']['no_result']; ?>');
+	        } 
+		})
+		.fail(function() {
+			console.log("error");
+		})
+	}
+</script>

@@ -1,0 +1,88 @@
+<div class="page-margin">
+	<div class="row wo_find_friends">
+		<div class="col-md-2 leftcol"><?php echo Wo_LoadPage("sidebar/left-sidebar"); ?></div>
+		<div class="col-md-7 singlecol">
+			<div class="wo_com_things_head">
+				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M15,2C16.94,2 18.59,2.7 19.95,4.05C21.3,5.41 22,7.06 22,9C22,10.56 21.5,11.96 20.58,13.2C19.64,14.43 18.44,15.27 16.97,15.7L17,15.38V15C17,12.81 16.23,10.93 14.65,9.35C13.07,7.77 11.19,7 9,7H8.63L8.3,7.03C8.73,5.56 9.57,4.36 10.8,3.42C12.04,2.5 13.44,2 15,2M9,8A7,7 0 0,1 16,15A7,7 0 0,1 9,22A7,7 0 0,1 2,15A7,7 0 0,1 9,8M9,10A5,5 0 0,0 4,15A5,5 0 0,0 9,20A5,5 0 0,0 14,15A5,5 0 0,0 9,10Z"></path></svg>
+				<div>
+					<h3><?php echo $wo['lang']['common_things'] ?></h3>
+					<p><?php echo $wo['lang']['people_with_common'] ?></p>
+				</div>
+			</div>
+			<div class="row wo_com_things_row" id="nearby_users_list">
+				<?php
+					$nearby_users = Wo_GetCommonUsers(array('limit' => 20));
+					if (count($nearby_users) > 0) {
+						foreach ($nearby_users as $wo['UsersList']) {
+							echo Wo_LoadPage('common_things/user-list');
+						}
+					}
+					else{
+						echo '<h5 class="search-filter-center-text empty_state"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-users"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg> ' . $wo['lang']['no_users_found'] . '</h5>';
+					}
+				?>
+			</div>
+			<div class="clear"></div>
+			<div class="posts_load">
+				<?php if (count($nearby_users) >= 1): ?>
+					<div class="load-more">
+						<button class="btn text-center wo_load_more" id="load_more_nearby_users" onclick="Wo_LoadMoreNearByUsers();">
+							<span><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z"></path></svg></span> <?php echo $wo['lang']['load_more'] ?>
+						</button>
+					</div>
+				<?php endif ?>
+			</div>
+			<?php //echo Wo_LoadPage('footer/content'); ?>
+		</div>
+	</div>
+	<!-- .row -->
+</div>
+
+<script>
+	$(document).on('mousedown mousemove mouseup mouseleave hover', '.slick-track', function(event) {
+		var last = parseInt($('.slick-slide').last().attr('data-slick-index'));
+		var first = parseInt($('.slick-slide').first().attr('data-slick-index'));
+		var current = parseInt($('.slick-current').attr('data-slick-index'));
+		if (current > first && current < last) {
+			$('.slick-next').addClass('slick-disabled');
+			$('.slick-prev').addClass('slick-disabled');
+		}
+		else if (current == first) {
+			$('.slick-prev').removeClass('slick-disabled');
+			$('.slick-next').addClass('slick-disabled');
+		}
+		else if (current == last) {
+			$('.slick-next').removeClass('slick-disabled');
+			$('.slick-prev').addClass('slick-disabled');
+		}
+
+	});
+	function Wo_LoadMoreNearByUsers(){
+		var after_id = ($(".wo_comthing_usr").length > 0) ? $(".wo_comthing_usr").last().attr('id') : 0;
+		if (!after_id) { return false;}
+		Wo_progressIconLoader($('#load_more_nearby_users'));
+		$.ajax({
+			url: Wo_Ajax_Requests_File(),
+			type: 'GET',
+			dataType: 'json',
+			data: {
+				f:'show_common_user',
+				s:'load',
+				offset:after_id
+			},
+		})
+		.done(function(data) {
+	        if (data['status'] == 200){
+	        	$("#nearby_users_list").append(data.html);
+	        	$("[data-toggle]").tooltip();
+	        	$("#load_more_nearby_users").html('<span><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z"></path></svg></span> <?php echo $wo['lang']['load_more']; ?>');
+	        } 
+	        else{
+	        	$("#load_more_nearby_users").html('<?php echo $wo['lang']['no_result']; ?>');
+	        } 
+		})
+		.fail(function() {
+			console.log("error");
+		})
+	}
+</script>

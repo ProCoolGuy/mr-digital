@@ -1,0 +1,23 @@
+{
+  "name": "socketioserver",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "download": "^8.0.0",
+    "express": "^4.17.1",
+    "handlebars": "^4.7.6",
+    "md5": "^2.3.0",
+    "moment": "^2.29.1",
+    "mysql2": "^2.2.5",
+    "sequelize": "^6.3.5",
+    "socket.io": "^2.3.0",
+    "socket.io-redis": "^5.4.0",
+    "striptags": "^3.1.1"
+  }
+}

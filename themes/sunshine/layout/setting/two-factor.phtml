@@ -1,0 +1,103 @@
+<div class="wo_settings_page sun_sett_page">
+	<h3><?php echo $wo['lang']['two_factor']; ?></h3>
+
+	<form class="form-horizontal setting-change-password-form" method="post">
+		<div class="setting-password-alert setting-update-alert"></div>
+         
+		 <!-- Form Name -->
+		 
+		 <div class="setting-panel row">
+      <?php if ($wo['config']['two_factor_type'] == 'both' || $wo['config']['two_factor_type'] == 'phone') { ?>
+      <div class="form-group col-lg-12">
+        <label class="col-md-12" for="phone_number"><?php echo $wo['lang']['phone_number']; ?></label>
+        <div class="col-md-12">
+          <input name="phone_number" id="phone_number" type="text" class="form-control input-md" autocomplete="off" placeholder="+15417543010" value="<?php echo $wo['setting']['phone_number']?>">
+        </div>
+      </div>
+      <?php } ?>
+			<div class="form-group col-lg-12">
+				<label class="col-md-12" for="two_factor"><?php echo $wo['lang']['two_factor']; ?></label>
+				<div class="col-md-12">
+					<select id="two_factor_select" name="two_factor" class="form-control">
+						<option value="enable" <?php echo ($wo['setting']['two_factor'] == '1')   ? 'selected' : '';?> ><?php echo $wo['lang']['enable']; ?></option>
+						<option value="disable" <?php echo ($wo['setting']['two_factor'] == '0')   ? 'selected' : '';?> ><?php echo $wo['lang']['disable']; ?></option>
+					</select>
+          <input type="hidden" name="" id="two_factor_value">
+					<br>
+					<small><?php echo $wo['lang']['two_factor_description'] ?></small>
+				</div>
+			</div>
+		</div>
+		
+		<div class="form-group last-sett-btn modal-footer">
+			<div class="ball-pulse"><div></div><div></div><div></div></div>
+			<button type="button" class="btn btn-main setting-panel-mdbtn" id="submit_two_factor_btn"><?php echo $wo['lang']['save'];?></button>
+            <input type="hidden" name="user_id" value="<?php echo $wo['setting']['user_id'];?>">
+            <input type="hidden" name="hash_id" value="<?php echo Wo_CreateSession();?>">
+         </div>
+   </form>
+</div>
+
+
+
+
+
+<script type="text/javascript">
+
+  $(document).on('click', '#submit_two_factor_btn', function(event) {
+    $.ajax({
+    url: Wo_Ajax_Requests_File() + '?f=update_two_factor&s='+$('#two_factor_select').val(),
+    type: 'POST',
+    data:$('form.setting-change-password-form').serialize(),
+    beforeSend: function() {
+      $('.wo_settings_page').find('.last-sett-btn .ball-pulse').fadeIn(100);
+    },
+    success: function(data) {
+      if (data.status == 200) {
+        $('.setting-password-alert').html('<div class="alert alert-success">' + data.message + '</div>');
+        $('.alert-success').fadeIn('fast', function() {
+          $(this).delay(2000).slideUp(500, function() {
+              $(this).remove();
+              if ($('#two_factor_select').val() == 'enable') {
+                $('#verify_code').modal('show');
+              }
+          });
+        });
+      } else if (data.status == 400) {
+        $('.setting-password-alert').html('<div class="alert alert-danger">' + data.message + '</div>');
+        $('.alert-danger').fadeIn(300);
+      }
+      $('.wo_settings_page').find('.last-sett-btn .ball-pulse').fadeOut(100);
+    }
+  });
+    
+  });
+$(function() {
+
+  $('form.confirmation_code_form').ajaxForm({
+    url: Wo_Ajax_Requests_File() + '?f=update_two_factor&s=verify',
+    beforeSend: function() {
+      $('#confirmation_code_form_btn').text('<?php echo($wo['lang']['please_wait']) ?>');
+    },
+    success: function(data) {
+      if (data.status == 200) {
+        $('#confirmation_code_form_alert').html('<div class="alert alert-success">' + data.message + '</div>');
+        $('#confirmation_code_form_alert').fadeIn('fast', function() {
+          $(this).delay(2500).slideUp(500, function() {
+              $(this).remove();
+              $('#verify_code').modal('hide');
+              location.reload();
+          });
+        });
+      } else if (data.status == 400) {
+        $('#confirmation_code_form_alert').html('<div class="alert alert-danger">' + data.message + '</div>');
+        $('.alert-danger').fadeIn(300);
+      }
+      $('#confirmation_code_form_btn').text('<?php echo($wo['lang']['send']) ?>');
+    }
+  });
+
+
+
+});
+</script>

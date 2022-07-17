@@ -1,0 +1,104 @@
+<script>
+	jQuery(document).ready(function($) {
+		$('.movies-subheadnav').click(function(event) {
+			var _self   = $(this);
+			var _movies = $(this).attr('data-movies');
+			$.ajax({
+				url: Wo_Ajax_Requests_File(),
+				type: 'GET',
+				dataType: 'json',
+				data: {f: 'movies', s:_movies},
+			})
+			.done(function(data) {
+				if (data.status == 200) {
+					$(".movies .movies-inner").html(data.html)
+					$(".movies-top-breadcrumb .main").removeClass('main');
+					_self.addClass('main');
+				}
+
+				else{
+					$(".movies .movies-inner").html('<div class="empty_state"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M18,9H16V7H18M18,13H16V11H18M18,17H16V15H18M8,9H6V7H8M8,13H6V11H8M8,17H6V15H8M18,3V5H16V3H8V5H6V3H4V21H6V19H8V21H16V19H18V21H20V3H18Z" /></svg> ' + data.html + ' </div>');
+				}
+			})
+			.fail(function() {
+				console.log("Something went wrong. Try again later");
+			})
+			
+		});
+
+
+
+		$('.load-more-movies').click(function(event) {
+			var _self   = $(this);
+			var _lastId = ($('.movies-film-wrapper').length > 0) ? $('.movies-film-wrapper').last().attr('data-film-id') : 0;
+
+			//Load All
+			if (_self.attr('data-movies-type') == 'all') {
+				var dataObj = {f: 'movies',s:'load',offset:_lastId,t:'a'};
+			}
+
+			//Load by Genre
+			else if (_self.attr('data-movies-type') == 'genre') {
+				var dataObj = {f: 'movies',s:'load',offset:_lastId,t:'g',g:_self.attr('data-genre')};
+			}
+
+			//Load by Country
+			else if (_self.attr('data-movies-type') == 'country') {
+				var dataObj = {f: 'movies',s:'load',offset:_lastId,t:'c',c:_self.attr('data-country')};
+			}
+			else{
+				alert(false);
+			}
+			$.ajax({
+					url: Wo_Ajax_Requests_File(),
+					type: 'GET',
+					dataType: 'json',
+					data: dataObj,
+				})
+				.done(function(data) {
+					if (data.status == 200) {
+						$('.movies .movies-inner').append(data.html)
+					}
+					else{
+						_self.text(data.html)
+					}
+				})
+				.fail(function() {
+					console.log("Something went wrong. Try again later");
+			})
+		});
+	});	
+	$(document).on('keyup', '#search-movies', function(event) {
+		var _self = $(this);
+		_self.focus(function(event) {
+			$('ul#search-movies-result').addClass('visible');
+		});
+		_self.blur(function(event) {
+			//$('ul#search-movies-result').removeClass('visible');
+		});
+
+		if (_self.val().length >=2) {
+			Wo_Delay(function(){
+				$.ajax({
+					url:Wo_Ajax_Requests_File(),
+					type: 'GET',
+					dataType: 'json',
+					data: {f: 'movies',s:'search',key:_self.val()},
+				})
+				.done(function(data) {
+					if (data.status == 200) {
+						$('ul#search-movies-result').html(data.html);
+						$('ul#search-movies-result').addClass('visible');
+					}
+					else{
+						$('ul#search-movies-result').html('<span class="center-text w100">'+data.html+'</span>');
+
+					}
+				})
+				.fail(function() {
+					console.log("Something went wrong. Try again later");
+				})
+			},1)
+		}
+	});
+</script>

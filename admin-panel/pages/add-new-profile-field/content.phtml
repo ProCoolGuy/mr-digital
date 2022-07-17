@@ -1,0 +1,134 @@
+<div class="container-fluid">
+    <div>
+        <h3>Create New Custom Field</h3>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="#">Home</a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a href="#">Users</a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">Create New Custom Field</li>
+            </ol>
+        </nav>
+    </div>
+    <!-- Vertical Layout -->
+    <div class="row">
+        <div class="col-lg-8 col-md-8">
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="card-title">Create New Custom Field</h6>
+                    <div class="alert alert-info">Use {{LANG lang_variable}} to translate the field data. e.g: {{LANG first_name}}</div>
+                    <div class="add-settings-alert"></div>
+                    <form class="add-settings" method="POST">
+                        <label for="type">Field Type</label>
+                        <select class="form-control show-tick chosen-select" id="type" name="type">
+                          <option value="textbox">Textbox</option>
+               	          <option value="textarea">Textarea</option>
+               	          <option value="selectbox">Select box</option>
+                        </select>
+                        <div class="clearfix"></div>
+                        <br>
+                        <div class="form-group form-float">
+                            <div class="form-line">
+                                <label class="form-label">Field Name</label>
+                                <input type="text" id="name" name="name" class="form-control">
+                            </div>
+                        </div>
+                       
+                        <div class="form-group form-float">
+                            <div class="form-line">
+                                <label class="form-label">Field Length</label>
+                                <input type="text" id="length" name="length" class="form-control" value="32">
+                                 <small class="admin-info">Default value is 32, and max value is 1000</small>
+                            </div>
+                        </div>
+                         <div class="form-group form-float">
+                            <div class="form-line">
+                                <label class="form-label">Field Description</label>
+                                <textarea name="description" id="description" class="form-control" cols="30" rows="3"></textarea>
+                                <small class="admin-info">The description will show under the field.</small>
+                            </div>
+                        </div>
+                        <label for="placement">Field placement</label>
+                        <select class="form-control show-tick " id="placement" name="placement">
+                         <option value="general">General settings</option>
+		                 <option value="profile">Profile settings</option>
+		                 <option value="social">Social links</option>
+		                 <option value="none">Don't show the field in settings page</option>
+                        </select>
+                        <small class="admin-info">Where you want to show this field?</small>
+                        <div class="clearfix"></div>
+                        <br>
+                        <label for="registration_page">Show On The Registration Page</label>
+                        <select class="form-control show-tick" id="registration_page" name="registration_page">
+                         		<option value="0" selected>No</option>
+                 				<option value="1">Yes</option>
+                        </select>
+                        <small class="admin-info">Do you want this field to show in registration page?</small>
+                        <div class="clearfix"></div>
+                        <br>
+                        <label for="profile_page">Show On User Profile Page</label>
+                        <select class="form-control show-tick" id="profile_page" name="profile_page">
+                         		<option value="0" selected>No</option>
+                 				<option value="1">Yes</option>
+                        </select>
+                        <div class="clearfix"></div>
+                        <br><br>
+                        <div class="form-group form-float options" style="display:none">
+                            <div class="form-line">
+                                <label class="form-label">Select Field Options</label>
+                                <textarea name="options" id="options" class="form-control" cols="30" rows="3"></textarea>
+                                <small class="admin-info">One option per line</small>
+                            </div>
+                        </div>
+                        <input type="hidden" name="hash_id" value="<?php echo Wo_CreateSession();?>">
+                        <button type="submit" class="btn btn-primary m-t-15 waves-effect">Create</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+    <!-- #END# Vertical Layout -->
+<script>
+$(function() {
+	$('.chosen-select').on('change', function(evt, params) {
+       var selectedValue = $(this).val();
+       if (selectedValue == 'selectbox') {
+       	  $('.options').fadeIn(200);
+       } else {
+       	  $('.options').fadeOut(200);
+       }
+       setTimeout(function () {
+                      $(".content").getNiceScroll().resize()
+                    }, 500);
+   });
+});
+
+$(function() {
+    var form_add_settings = $('form.add-settings');
+    form_add_settings.ajaxForm({
+        url: Wo_Ajax_Requests_File() + '?f=admin_setting&s=add_new_field',
+        beforeSend: function() {
+            form_add_settings.find('.waves-effect').text('Please wait..');
+        },
+        success: function(data) {
+            if (data.status == 200) {
+                $("html, body").animate({ scrollTop: 0 }, "slow");
+                $('.add-settings-alert').html('<div class="alert alert-success"><i class="fa fa-check"></i> Field added successfully</div>');
+                setTimeout(function () {
+		            window.location.href = '<?php echo Wo_LoadAdminLinkSettings('manage-profile-fields'); ?>';
+		        }, 1000);
+            } else if (data.status == 400) {
+                $('.add-settings-alert').html('<div class="alert alert-danger">'+data.message+'</div>');
+                setTimeout(function () {
+                    $('.add-settings-alert').empty();
+                }, 3000);
+	        }
+	        form_add_settings.find('.waves-effect').text('Create');
+        }
+    });
+});
+</script>

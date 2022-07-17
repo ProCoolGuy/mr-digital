@@ -1,0 +1,65 @@
+<div class="page-margin">
+	<div class="footer-wrapper-sidebar">
+		<div class="footer-powered">
+			<p>
+				<?php 
+					$copy = str_replace('{site_name}', $wo['config']['siteName'], $wo['lang']['copyrights']);
+					echo $copy = str_replace('{date}', date('Y'), $copy);
+				?>
+			</p>
+			<div class="lang_selct dropup">
+				<a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+					<svg height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M17.9,17.39C17.64,16.59 16.89,16 16,16H15V13A1,1 0 0,0 14,12H8V10H10A1,1 0 0,0 11,9V7H13A2,2 0 0,0 15,5V4.59C17.93,5.77 20,8.64 20,12C20,14.08 19.2,15.97 17.9,17.39M11,19.93C7.05,19.44 4,16.08 4,12C4,11.38 4.08,10.78 4.21,10.21L9,15V16A2,2 0 0,0 11,18M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z" /></svg> <?php echo $wo['lang']['language'];?>
+				</a>
+				<ul class="dropdown-menu dropdown-menu-right wow_lang_select_menu">
+					<?php
+						$langs = Wo_LangsNamesFromDB();
+						if (count($langs) > 0) {
+							foreach ($langs as $key => $wo['langs']) {
+								if ($wo['config'][$wo['langs']] == 1) {
+								$language = $wo['langs'];
+								$languages_name = ucfirst($wo['langs']);
+								$link = ($wo['config']['seoLink'] == 1) ? '?lang=' . $language: '?&lang=' . $language;
+					?>
+						<li class="language_select"><a href="<?php echo $link;?>" rel="nofollow" class="<?php echo $languages_name;?>"><?php echo $languages_name;?></a></li>
+					<?php } } } ?>
+				</ul>
+			</div>
+		</div>
+		
+		<hr>
+
+		<ul class="list-inline">
+			<li><a data-ajax="?link1=terms&type=about-us" href="<?php echo Wo_SeoLink('index.php?link1=terms&type=about-us');?>"><?php echo $wo['lang']['about'];?></a></li>
+			<?php  if ($wo['config']['blogs'] == 1) { ?>
+				<li><a href="<?php echo Wo_SeoLink('index.php?link1=blogs');?>"><?php echo $wo['lang']['blog'];?></a></li>
+			<?php } ?>
+			<li><a data-ajax="?link1=contact-us" href="<?php echo Wo_SeoLink('index.php?link1=contact-us');?>"><?php echo $wo['lang']['contact_us'];?></a></li>
+			<?php if ($wo['config']['developers_page'] == 1)  { ?>
+				<li><a data-ajax="?link1=developers" href="<?php echo Wo_SeoLink('index.php?link1=developers');?>"><?php echo $wo['lang']['developers'];?></a></li>
+			<?php } ?>
+			<li>
+				<div class="dropdown dropup sun_foot_drop_menu">
+					<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+						<?php echo $wo['lang']['more'];?> <span class="caret"></span>
+					</a>
+					<ul class="dropdown-menu dropdown-menu-right" role="menu">
+						<li><a data-ajax="?link1=terms&type=privacy-policy" href="<?php echo Wo_SeoLink('index.php?link1=terms&type=privacy-policy');?>"><?php echo $wo['lang']['privacy_policy'];?></a></li>
+						<li><a data-ajax="?link1=terms&type=terms" href="<?php echo Wo_SeoLink('index.php?link1=terms&type=terms');?>"><?php echo $wo['lang']['terms_of_use'];?></a></li>
+						<?php if ($wo['config']['refund_system'] == 'on') { ?>
+							<li><a data-ajax="?link1=terms&type=refund" href="<?php echo Wo_SeoLink('index.php?link1=terms&type=refund');?>"><?php echo $wo['lang']['request_refund'];?></a></li>
+						<?php } ?>
+						<?php
+							$pages = Wo_GetCustomPages();
+							if (count($pages) > 0) {
+							foreach ($pages as $key => $page) {
+						?>
+						<li><a href="<?php echo Wo_SeoLink('index.php?link1=site-pages&page_name=' . $page['page_name']);?>"><?php echo $page['page_title'];?></a></li>
+						<?php } } ?>
+					</ul>
+				</div>
+			</li> 
+		</ul>
+		<div class="clear"></div>
+	</div>
+</div>

@@ -1,0 +1,18 @@
+<ul class="page-margin wow_content negg_padd list-unstyled event-options-list" id="sidebar-albums-list-container">
+	<div class="wo_page_hdng" style="margin-bottom: 5px;">
+		<div class="wo_page_hdng_innr">
+			<span><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="currentColor" d="M22,16V4A2,2 0 0,0 20,2H8A2,2 0 0,0 6,4V16A2,2 0 0,0 8,18H20A2,2 0 0,0 22,16M11,12L13.03,14.71L16,11L20,16H8M2,6V20A2,2 0 0,0 4,22H18V20H4V6"></path></svg></span> <a href="<?php echo Wo_SeoLink('index.php?link1=albums&user=' . $wo['user_profile']['username']);?>" data-ajax="?link1=albums&user=<?php echo $wo['user_profile']['username'];?>"><?php echo $wo['lang']['albums'];?></a>&nbsp;<div style="font-weight: normal">(<?php echo number_format($wo['user_profile']['details']['album_count']);?>)</div>
+		</div>
+	</div>
+	<li>
+		<div class="sidebar-albums-container">
+			<?php 
+			foreach (Wo_GetUserAlbums($wo['user_profile']['user_id'], 'sidebar', 12) as $wo['album']) {
+				$wo['album']['album_name'] = mb_substr($wo['album']['album_name'], 0, 10);
+				echo Wo_LoadPage('sidebar/sidebar-album-list');
+			}
+			?>
+		</div>
+	</li>
+	<li><div class="clear"></div></li>
+</ul>

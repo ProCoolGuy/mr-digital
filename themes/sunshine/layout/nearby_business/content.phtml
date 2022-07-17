@@ -1,0 +1,242 @@
+<div class="page-margin">
+	<div class="row wo_find_friends">
+		<div class="col-md-2 leftcol"><?php echo Wo_LoadPage("sidebar/left-sidebar"); ?></div>
+		<div class="col-md-10 singlecol">
+			<?php if (Wo_IsAdmin() && strpos($wo['config']['site_url'], 'https') === false): ?>
+				<div class="alert alert-warning">
+					<p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-alert-triangle"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12" y2="17"></line></svg> SSL is required to able to use this feature. (Just admin can see this warning) </p>
+				</div>
+			<?php endif; ?>
+			
+			<div class="sun_find_frns_hdr">
+				<div class="row">
+					<div class="col-md-5 col-sm-4">
+						<label><?php echo $wo['lang']['keyword'] ?></label>
+						<form action="#">
+							<div class="form-group inner-addon">
+								<input type="text" class="form-control" placeholder="<?php echo $wo['lang']['keyword']; ?>" id="nearby-username" onkeydown="Wo_LoadNearByBusiness(this);">
+							</div>
+						</form>
+					</div>
+					<div class="col-md-4 col-sm-6">
+						<label><?php echo $wo['lang']['location_dist'];?> (km)</label>
+						<div class="select-nearby-users-distance">
+							<form>
+								<input type="range" class="cusrange" id="nearby-users-distance" name="amountRange" onchange="Wo_LoadNearByBusiness(this);" value="0" min="1" max="1000" oninput="this.form.amountInput.value=this.value">
+								<input type="number" name="amountInput" min="1" max="1000" value="1" oninput="this.form.amountRange.value=this.value" readonly id="cusrange-reader"/>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			<div id="map" class="sun_map_frns"></div>
+			
+			<h4 class="sun_users_count"><b><?php echo Wo_GetNearbyBusinessCount(array('country' => $wo['user']['country_id'])); ?></b><?php echo $wo['lang']['business_found'] ?></h4>
+
+			<div class="row sun_find_friends" id="nearby_users_list">
+				<?php
+					$nearby_users = Wo_GetNearbyBusiness(array('country' => $wo['user']['country_id']));
+					if (count($nearby_users) > 0) {
+						foreach ($nearby_users as $wo['UsersList']) {
+							$wo['result'] = $wo['UsersList']['page_data'];
+							echo Wo_LoadPage('nearby_business/list');
+						}
+					}
+					else{
+						echo '<h5 class="search-filter-center-text empty_state"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-users"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg> ' . $wo['lang']['no_business_found'] . '</h5>';
+					}
+				?>
+			</div>
+			<div class="clear"></div>
+
+			<div class="posts_load">
+				<?php if (count($nearby_users) >= 1): ?>
+					<div class="load-more">
+						<button class="btn text-center wo_load_more" id="load_more_nearby_users" onclick="Wo_LoadMoreNearByBusiness();">
+							<span><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z"></path></svg></span> <?php echo $wo['lang']['load_more'] ?>
+						</button>
+					</div>
+				<?php endif ?>
+			</div>
+		</div>
+	</div>
+	<!-- .row -->
+</div>
+<div class="modal fade" id="show_user_location_map" role="dialog">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<div class="modal-body">
+				<?php if ($wo['config']['google_map'] == 1) { ?>
+				<iframe src="" frameborder="0" width="100%" style="height: calc(100vh - 400px);"></iframe>
+				<?php } ?>
+				<?php if ($wo['config']['yandex_map'] == 1) { ?>
+					<div id="show_user_location__map" <?php echo($wo['config']['yandex_map'] == 1 ? 'style="width: 100%; height: 300px; padding: 0; margin: 0;"' : '') ?>></div>
+				<?php } ?>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal" onclick="javascript:$('#show_user_location_map').modal('hide');"><?php echo $wo['lang']['close']; ?></button>
+			</div>
+		</div>
+	</div>
+</div>
+<link rel="stylesheet" href="<?php echo $wo['config']['theme_url'];?>/stylesheet/leaflet.css?version=<?php echo $wo['config']['version']; ?>">
+<script>
+	var planes = [];
+		var markersArray = [];
+	$.getScript('<?php echo $wo['config']['theme_url'];?>/javascript/leaflet.js?version=<?php echo $wo['config']['version']; ?>', function(data, textStatus) {
+		/*Map*/
+		
+		<?php foreach ($nearby_users as $user) : ?>
+		planes.push(['<?php echo $user['page_data']['name']?>',<?php echo $user['job']['lat']?>, <?php echo $user['job']['lng']?>]);
+		<?php endforeach; ?>
+		var map = L.map('map').setView([<?php echo $wo['user']['lat']?>, <?php echo $wo['user']['lng']?>], 7);
+
+		L.tileLayer(
+			'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+				attribution: '',
+				maxZoom: 18,
+			}).addTo(map);
+
+		for (var i = 0; i < planes.length; i++) {
+			marker = new L.marker([planes[i][1],planes[i][2]])
+			.bindPopup(planes[i][0])
+			.addTo(map);
+			markersArray.push(marker);
+		};
+	});
+
+	function Wo_LoadMoreNearByBusiness(){
+		var after_id = ($(".page_last_id").length > 0) ? $(".page_last_id").last().attr('data-id') : 0;
+		var name     = $("#nearby-username").val();
+		var distance = $("#nearby-users-distance").val();
+		if (!after_id && !name && !distance) { return false;}
+		Wo_progressIconLoader($('#load_more_nearby_users'));
+		$.ajax({
+			url: Wo_Ajax_Requests_File(),
+			type: 'GET',
+			dataType: 'json',
+			data: {
+				f:'nearby_shops',
+				s:'load_jobs',
+				offset:after_id,
+				name:name,
+				distance:distance,
+
+			},
+		})
+		.done(function(data) {
+
+	        if (data['status'] == 200){
+	        	$("#nearby_users_list").append(data.html);
+	        	$("[data-toggle]").tooltip();
+	        	$("#load_more_nearby_users").html('<span><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z"></path></svg></span> <?php echo $wo['lang']['load_more']; ?>');
+	        	if (data.users_info != '') {
+	        		data.users_info.forEach(function(element) {
+	        			marker = new L.marker([element.lat,element.lng])
+						.bindPopup(element.name)
+						.addTo(map);
+						markersArray.push(marker);
+					});
+	        	}
+	        } 
+
+	        else{
+	        	$("#load_more_nearby_users").html('<?php echo $wo['lang']['no_result']; ?>');
+	        } 
+		})
+		.fail(function() {
+			console.log("error");
+		})
+	}
+
+
+	function Wo_ShowUserLocationMap(user_geoData = false) {
+		if (!user_geoData) {return false;}
+		<?php if ($wo['config']['google_map'] == 1) { ?>
+		var google_map_api = 'https://www.google.com/maps/embed/v1/place?key=<?php echo $wo['config']['google_map_api']; ?>&q=' + user_geoData;
+		$("#show_user_location_map").modal().find('iframe').attr('src', google_map_api);
+		<?php } ?>
+		<?php if ($wo['config']['yandex_map'] == 1) { ?>
+			$('#show_user_location__map').html('');
+			$("#show_user_location_map").modal();
+			let geo = user_geoData.split(",");
+			var userMap = new ymaps.Map('show_user_location__map', {
+		        center: [geo[0],geo[1]],
+		        zoom: 9
+		    });
+		    userMap.geoObjects.add(new ymaps.Placemark([geo[0],geo[1]], {
+	            balloonContent: ''
+	        }));
+	    <?php } ?>
+	}
+	function Wo_LoadNearByBusiness(self = false){
+		var name     = $("#nearby-username").val();
+		var distance = $("#nearby-users-distance").val();
+		if (!name && !distance) { return false;}
+		if (self) {
+			Wo_progressIconLoader($(self));
+		}
+		else{
+			Wo_StartBar();
+		}
+		
+		$.ajax({
+			url: Wo_Ajax_Requests_File(),
+			type: 'GET',
+			dataType: 'json',
+			data: {
+				f:'nearby_shops',
+				s:'load_jobs',
+				name:name,
+				distance:distance
+			},
+		})
+		.done(function(data) {
+
+	        if (data['status'] == 200){
+	        	$("#nearby_users_list").html(data.html);
+	        	$("[data-toggle]").tooltip();
+	        	$("#load_more_nearby_users").html('<span><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z"></path></svg></span> <?php echo $wo['lang']['load_more']; ?>');
+	        	if (data.users_info != '') {
+	        		for (var i = 0; i < markersArray.length; i++ ) {
+	        			map.removeLayer(markersArray[i]);
+					}
+					markersArray = [];
+					markersArray.length = 0;
+ 
+	        		data.users_info.forEach(function(element) {
+	        			marker = new L.marker([element.lat,element.lng])
+						.bindPopup(element.name)
+						.addTo(map);
+						markersArray.push(marker);
+					});
+	        	}
+	        	$('.sun_users_count').find('b').text(data.count);
+
+	        } 
+
+	        else{
+	        	$('.sun_users_count').find('b').text(0);
+	        	for (var i = 0; i < markersArray.length; i++ ) {
+        			map.removeLayer(markersArray[i]);
+				}
+				markersArray = [];
+				markersArray.length = 0;
+	        	scrollToTop();
+	        	$("#nearby_users_list").html('<h5 class="search-filter-center-text empty_state"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-users"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg> <?php echo $wo['lang']['no_result']; ?></h5>');
+	        } 
+	        if (self) {
+				Wo_progressIconLoader($(self));
+			}
+			else{
+				Wo_FinishBar();
+			}
+		})
+		.fail(function() {
+			console.log("error");
+		})
+	}
+	
+
+</script>

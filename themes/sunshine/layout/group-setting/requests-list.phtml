@@ -1,0 +1,20 @@
+<div class="profile-style" id="request-<?php echo $wo['request']['user_id'] ?>">
+   <a href="<?php echo $wo['request']['url'];?>" data-ajax="?link1=timeline&u=<?php echo $wo['request']['username']?>">
+      <div class="avatar <?php echo Wo_RightToLeft('pull-left');?>">
+         <img src="<?php echo $wo['request']['avatar'];?>" alt="<?php echo $wo['request']['name']; ?> Profile Picture" />
+      </div>
+      <?php echo $wo['request']['name']; ?>
+      <?php if($wo['request']['verified'] == 1) { ?>
+         <span class="verified-color">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" class="feather feather-check-circle" title="<?php echo $wo['lang']['verified_user'];?>" data-toggle="tooltip"><path d="M23,12L20.56,9.22L20.9,5.54L17.29,4.72L15.4,1.54L12,3L8.6,1.54L6.71,4.72L3.1,5.53L3.44,9.21L1,12L3.44,14.78L3.1,18.47L6.71,19.29L8.6,22.47L12,21L15.4,22.46L17.29,19.28L20.9,18.46L20.56,14.78L23,12M10,17L6,13L7.41,11.59L10,14.17L16.59,7.58L18,9L10,17Z" /></svg>
+         </span>
+      <?php } ?>
+   </a>
+   <div class="page-website">
+      <?php echo Wo_UserStatus($wo['request']['user_id'],$wo['request']['lastseen']); ?>
+   </div>
+   <div>
+   <span onclick="Wo_AcceptJoinGroup(<?php echo $wo['request']['user_id']?>, <?php echo $wo['setting']['id']?>);" class="btn btn-default btn-sm"><i class="fa fa-check"></i> <?php echo $wo['lang']['accept']; ?></span>
+   <span onclick="Wo_DeleteJoinGroup(<?php echo $wo['request']['user_id']?>, <?php echo $wo['setting']['id']?>);" class="btn btn-default btn-sm"><i class="fa fa-remove"></i> <?php echo $wo['lang']['delete']; ?></span>
+   </div>
+</div>

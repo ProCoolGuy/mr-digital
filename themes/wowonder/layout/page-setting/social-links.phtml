@@ -1,0 +1,82 @@
+<div class="wow_content wow_sett_content">
+	<div class="wo_page_hdng pag_neg_padd">
+		<div class="wo_page_hdng_innr">
+			<span><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="currentColor" d="M22.7,19L13.6,9.9C14.5,7.6 14,4.9 12.1,3C10.1,1 7.1,0.6 4.7,1.7L9,6L6,9L1.6,4.7C0.4,7.1 0.9,10.1 2.9,12.1C4.8,14 7.5,14.5 9.8,13.6L18.9,22.7C19.3,23.1 19.9,23.1 20.3,22.7L22.6,20.4C23.1,20 23.1,19.3 22.7,19Z"></path></svg></span> <?php echo $wo['lang']['social_links'];?>
+		</div>
+	</div>
+	<form  method="post" class="form-horizontal setting-profile-form" enctype="multipart/form-data">
+		<div class="setting-profile-alert setting-update-alert"></div>
+		
+		<div class="row">
+			<div class="col-md-6">
+				<div class="wow_form_fields">
+					<label for="facebook"><?php echo $wo['lang']['facebook']; ?></label>
+					<input id="facebook" name="facebook" type="text" value="<?php echo $wo['setting']['facebook'];?>" placeholder="<?php echo $wo['lang']['username'];?>">
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div class="wow_form_fields">
+					<label for="twitter"><?php echo $wo['lang']['twitter']; ?></label>
+					<input id="twitter" name="twitter" type="text" value="<?php echo $wo['setting']['twitter'];?>" placeholder="<?php echo $wo['lang']['username'];?>">
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-6">
+				<div class="wow_form_fields">
+					<label for="instagram"><?php echo $wo['lang']['instagram']; ?></label>
+					<input id="instagram" name="instgram" type="text" value="<?php echo $wo['setting']['instgram'];?>" placeholder="<?php echo $wo['lang']['username'];?>">
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div class="wow_form_fields">
+					<label for="vk"><?php echo $wo['lang']['vkontakte']; ?></label>
+					<input id="vk" name="vk" type="text" value="<?php echo $wo['setting']['vk'];?>" placeholder="<?php echo $wo['lang']['username'];?>">
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-6">
+				<div class="wow_form_fields">
+					<label for="linkedin"><?php echo $wo['lang']['linkedin']; ?></label>
+					<input id="linkedin" name="linkedin" type="text" value="<?php echo $wo['setting']['linkedin'];?>" placeholder="<?php echo $wo['lang']['username'];?>">
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div class="wow_form_fields">
+					<label for="youtube"><?php echo $wo['lang']['youtube']; ?></label>
+					<input id="youtube" name="youtube" type="text" value="<?php echo $wo['setting']['youtube'];?>" placeholder="<?php echo $wo['lang']['username'];?>">
+				</div>
+			</div>
+		</div>
+
+        <div class="text-center">
+			<button type="submit" class="btn btn-main btn-mat btn-mat-raised add_wow_loader"><?php echo $wo['lang']['save']; ?></button>
+		</div>
+        <input type="hidden" name="page_id" id="page-id" value="<?php echo $wo['setting']['page_id'];?>">
+       <input type="hidden" name="hash_id" value="<?php echo Wo_CreateSession();?>">
+	</form>
+</div>
+
+<script type="text/javascript">
+$(function() {
+  $('form.setting-profile-form').ajaxForm({
+    url: Wo_Ajax_Requests_File() + '?f=pages&s=update_sociallink_setting',
+    beforeSend: function() {
+      $('.setting-profile-form').find('.add_wow_loader').addClass('btn-loading');
+    },
+    success: function(data) {
+      if (data.status == 200) {
+        scrollToTop();
+        $('.setting-profile-alert').html('<div class="alert alert-success">' + data.message + '</div>');
+        $('.alert-success').fadeIn('fast', function() {
+          $(this).delay(2500).slideUp(500, function() {
+            $(this).remove();
+          });
+        });
+      } 
+      $('.setting-profile-form').find('.add_wow_loader').removeClass('btn-loading');
+    }
+  });
+});
+</script>

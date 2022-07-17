@@ -1,0 +1,20 @@
+<?php if($wo['mediafilelist']->user){  ?>
+    <tr id="ReceiptID_<?php echo $wo['mediafilelist']->id?>" data-receipt-id="<?php echo $wo['mediafilelist']->id?>">
+		<td><?php echo $wo['mediafilelist']->description;?></td>
+		<td><?php echo Wo_GetCurrency($wo['config']['currency']) . $wo['mediafilelist']->price;?></td>
+		<td><span class="ajax-time"><?php echo $wo['mediafilelist']->created_at;?></span></td>
+		<td>
+			<a class="image-popup btn bg-info admn_table_btn admn-mng-bnk-rct" href="<?php echo Wo_GetMedia($wo['mediafilelist']->receipt_file); ?>" >
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M3,22L4.5,20.5L6,22L7.5,20.5L9,22L10.5,20.5L12,22L13.5,20.5L15,22L16.5,20.5L18,22L19.5,20.5L21,22V2L19.5,3.5L18,2L16.5,3.5L15,2L13.5,3.5L12,2L10.5,3.5L9,2L7.5,3.5L6,2L4.5,3.5L3,2M18,9H6V7H18M18,13H6V11H18M18,17H6V15H18V17Z" /></svg> <img src="<?php echo Wo_GetMedia($wo['mediafilelist']->receipt_file); ?>" class="card-img-top">Show Receipt
+            </a>
+		</td>
+		<td>
+			<?php if((int)$wo['mediafilelist']->approved == 0){?>
+				<a href="javascript:void(0)" class="btn bg-success admn_table_btn" onclick="Wo_ApproveReceipt(<?php echo $wo['mediafilelist']->id?>,'<?php echo $wo['mediafilelist']->receipt_file?>','hide');">Approve</a>
+				<a href="javascript:void(0)" class="btn bg-danger admn_table_btn" onclick="Wo_DeleteReceipt(<?php echo $wo['mediafilelist']->id?>,<?php echo $wo['mediafilelist']->user_id?>,'<?php echo $wo['mediafilelist']->receipt_file?>','hide');">Delete</a>
+			<?php } else{ ?>
+				<b style="color:darkgreen;">Approved <?php echo Wo_Time_Elapsed_String($wo['mediafilelist']->approved_at); ?></b>
+			<?php } ?>
+		</td>
+    </tr>
+<?php } ?>

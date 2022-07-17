@@ -1,0 +1,145 @@
+<?php 
+$wo['config']['ffmpeg']  = is_executable($wo['config']['ffmpeg_binary_file']);
+function isEnabled($func) {
+    return is_callable($func) && false === stripos(ini_get('disable_functions'), $func);
+}
+$enabled = true;
+if (!isEnabled('shell_exec')) {
+    $enabled = false;
+}
+?>
+<div class="container-fluid">
+    <div>
+        <h3>FFMPEG Settings</h3>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="#">Home</a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a href="#">Settings</a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">FFMPEG Settings</li>
+            </ol>
+        </nav>
+    </div>
+    <!-- Vertical Layout -->
+    <div class="row">
+        <div class="col-lg-6 col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="card-title">FFMPEG System Settings</h6>
+                    <div class="ffmpeg-settings-alert"></div>
+                    <form class="ffmpeg-settings" method="POST">
+                        <p>This system will compress, convert, and optimzise videos to mp4. This system require "ffmpeg" to be installed in your server. </p><br>
+                        <label for="upload_system">FFMPEG System </label>
+                        <div class="form-group">
+                            <div class="form-check form-check-inline">
+                                <input  class="form-check-input" type="radio" name="ffmpeg_system" id="ffmpeg_system-enabled" value="on" <?php echo ($wo['config']['ffmpeg_system'] == 'on') ? 'checked': '';?>>
+                                <label class="form-check-label" for="ffmpeg_system-enabled">Enabled</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input  class="form-check-input" type="radio" name="ffmpeg_system" id="ffmpeg_system-disabled" value="off" <?php echo ($wo['config']['ffmpeg_system'] == 'off') ? 'checked': '';?>>
+                                <label class="form-check-label" for="ffmpeg_system-disabled" class="m-l-20">Disabled</label>
+                            </div>
+                        </div>   
+                        How to install FFMPEG?<br>
+                        <a href="https://www.vultr.com/docs/how-to-install-ffmpeg-on-centos" target="_blank">Install FFMPEG on Linux Centos</a><br>
+                        <a href="https://github.com/adaptlearning/adapt_authoring/wiki/Installing-FFmpeg" target="_blank">Install FFMPEG on Linux Ubuntu | Windows</a><br>If you still can't install FFMPEG, please contact your hosting provider, and they shall install it. <br><br>
+                        <?php if ($enabled == false): ?>
+                            <p style="color: red">shell_exec() has been disabled for security reasons, please contact your host provider to enable it. shell_exec is required to enable this system.</p><br>
+                        <?php endif; ?>
+                        <div class="form-group  form-float">
+                            <br><div class="form-line">
+                                <?php if (!$wo['config']['ffmpeg']): ?>
+                                <label class="form-label" style="color: red;">
+                                    FFmpeg binary does not exist on path: <?php echo $wo['config']['ffmpeg_binary_file'] ?>
+                                </label>
+                                <?php else: ?>
+                                <label class="form-label">
+                                    FFmpeg binary file path: on Linux(/usr/bin/ffmpeg) or Windows(C:\\ffmpeg\bin\ffmpeg.exe)
+                                </label>
+                                <?php endif; ?>
+                                <input type="text" id="ffmpeg_binary_file" name="ffmpeg_binary_file" class="form-control" value="<?php echo $wo['config']['ffmpeg_binary_file'] ?>">
+                                
+                            </div>
+                        </div>
+                        <?php if ($wo['config']['ffmpeg'] && $enabled == true): ?>
+                        <label for="comments_default_num">Convert video speed</label>
+                        <select class="form-control show-tick" id="convert_speed" name="convert_speed">
+                            <option value="ultrafast" <?php echo ($wo['config']['convert_speed'] == 'ultrafast') ? 'selected': '';?>>Ultrafast</option>
+                            <option value="superfast" <?php echo ($wo['config']['convert_speed'] == 'superfast') ? 'selected': '';?>>Superfast</option>
+                            <option value="veryfast" <?php echo ($wo['config']['convert_speed'] == 'veryfast') ? 'selected': '';?>>Veryfast</option>
+                            <option value="faster" <?php echo ($wo['config']['convert_speed'] == 'faster') ? 'selected': '';?>>Faster</option>
+                            <option value="fast" <?php echo ($wo['config']['convert_speed'] == 'fast') ? 'selected': '';?>>Fast</option>
+                            <option value="medium" <?php echo ($wo['config']['convert_speed'] == 'medium') ? 'selected': '';?>>Medium</option>
+                            <option value="slow" <?php echo ($wo['config']['convert_speed'] == 'slow') ? 'selected': '';?>>Slow</option>
+                            <option value="slower" <?php echo ($wo['config']['convert_speed'] == 'slower') ? 'selected': '';?>>Slower</option>
+                            <option value="veryslow" <?php echo ($wo['config']['convert_speed'] == 'veryslow') ? 'selected': '';?>>Veryslow</option>
+                        </select>
+                        <br><p>"Convert video speed" affect the encoding speed. Using a slower preset gives you better compression, or quality per filesize, whereas faster presets give you worse compression and higher filesize.</p><br><?php endif; ?>
+                        <div class="form-group form-float">
+                            <div class="form-line">
+                                <label class="form-label">Allowed extenstions (separated with comma,)</label>
+                                <input type="text" id="allowedffmpegExtenstion" name="allowedffmpegExtenstion" class="form-control" value="<?php echo $wo['config']['allowedffmpegExtenstion']?>">
+                            </div>
+                        </div>
+                        <br>
+                        <div class="form-group form-float">
+                            <div class="form-line">
+                                <label class="form-label">Allowed MIME Types (separated with comma,)</label>
+                                <input type="text" id="ffmpeg_mime_types" name="ffmpeg_mime_types" class="form-control" value="<?php echo $wo['config']['ffmpeg_mime_types']?>">
+                            </div>
+                        </div>
+                        <br>
+                        <input type="hidden" name="hash_id" value="<?php echo Wo_CreateSession();?>">
+
+                        <button type="submit" class="btn btn-primary m-t-15 waves-effect">Save</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6 col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="card-title">Debug FFMPEG</h6>
+                    <div class="debug-settings-alert"></div>
+                    <form class="debug-settings" method="POST">
+                        <div class="form-group form-float">
+                            <div class="form-line">
+                                <label class="form-label">Debug FFMPEG</label>
+                                <textarea name="debug_ffmpeg" id="debug_ffmpeg" class="form-control" cols="30" rows="5" style="height: 300px !important;"></textarea>
+                            </div>
+                        </div>
+                        <input type="hidden" name="hash_id" value="<?php echo Wo_CreateSession();?>">
+
+                        <button type="submit" class="btn btn-primary m-t-15 waves-effect">Debug</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+<script type="text/javascript">
+    $(function() {
+        var ffmpeg_settings = $('form.ffmpeg-settings');
+        
+
+        ffmpeg_settings.ajaxForm({
+            url: Wo_Ajax_Requests_File() + '?f=admin_setting&s=update_general_setting',
+            beforeSend: function() {
+                ffmpeg_settings.find('.waves-effect').text("Please wait..");
+            },
+            success: function(data) {
+                if (data.status == 200) {
+                    ffmpeg_settings.find('.waves-effect').text('Save');
+                    $('.ffmpeg-settings-alert').html('<div class="alert alert-success"><i class="fa fa-check"></i> Settings updated successfully</div>');
+                    setTimeout(function () {
+                        $('.ffmpeg-settings-alert').empty();
+                    }, 2000);
+                }
+            }
+        });
+        
+    });
+</script>

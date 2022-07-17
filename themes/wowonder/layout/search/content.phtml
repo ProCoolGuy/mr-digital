@@ -1,0 +1,465 @@
+<?php 
+$not_found = '<div class="empty_state"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M15.5,12C18,12 20,14 20,16.5C20,17.38 19.75,18.21 19.31,18.9L22.39,22L21,23.39L17.88,20.32C17.19,20.75 16.37,21 15.5,21C13,21 11,19 11,16.5C11,14 13,12 15.5,12M15.5,14A2.5,2.5 0 0,0 13,16.5A2.5,2.5 0 0,0 15.5,19A2.5,2.5 0 0,0 18,16.5A2.5,2.5 0 0,0 15.5,14M7,15V17H9C9.14,18.55 9.8,19.94 10.81,21H5C3.89,21 3,20.1 3,19V5C3,3.89 3.89,3 5,3H19A2,2 0 0,1 21,5V13.03C19.85,11.21 17.82,10 15.5,10C14.23,10 13.04,10.37 12.04,11H7V13H10C9.64,13.6 9.34,14.28 9.17,15H7M17,9V7H7V9H17Z" /></svg> ' . $wo["lang"]["no_result"] . '</div>';
+$type_to_find = '<div class="empty_state"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M9.62,12L12,5.67L14.37,12M11,3L5.5,17H7.75L8.87,14H15.12L16.25,17H18.5L13,3H11Z" /></svg> ' . $wo["lang"]["what_are_looking_for"] . '</div>';
+?>
+<div class="page-margin">
+	<div class="wow_main_float_head searchs">
+		<div class="container">
+			<form action="<?php echo Wo_SeoLink('index.php?link1=search') ?>" method="get" class="search-filter-form" id="search_form">
+				<div class="wow_search_head">
+					<div class="wow_srch_fields">
+						<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M9.5,3A6.5,6.5 0 0,1 16,9.5C16,11.11 15.41,12.59 14.44,13.73L14.71,14H15.5L20.5,19L19,20.5L14,15.5V14.71L13.73,14.44C12.59,15.41 11.11,16 9.5,16A6.5,6.5 0 0,1 3,9.5A6.5,6.5 0 0,1 9.5,3M9.5,5C7,5 5,7 5,9.5C5,12 7,14 9.5,14C12,14 14,12 14,9.5C14,7 12,5 9.5,5Z" /></svg>
+						<input type="text" name="query" id="query" placeholder="<?php echo $wo['lang']['keyword'];?>" value="<?php echo (isset($_GET['query'])) ? Wo_Secure($_GET['query']): '';?>" autocomplete="off">
+					</div>
+					<div class="wow_srch_fields">
+						<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M12,11.5A2.5,2.5 0 0,1 9.5,9A2.5,2.5 0 0,1 12,6.5A2.5,2.5 0 0,1 14.5,9A2.5,2.5 0 0,1 12,11.5M12,2A7,7 0 0,0 5,9C5,14.25 12,22 12,22C12,22 19,14.25 19,9A7,7 0 0,0 12,2Z" /></svg>
+						<select name="country" id="country">
+							<option value="all" selected><?php echo $wo['lang']['all'];?></option>
+							<?php 
+								foreach ($wo['countries_name'] as $country_ids => $country) { 
+								$selected_c = (!empty($_GET['country']) && $_GET['country'] == $country_ids) ? ' selected': '';
+							?>
+								<option value="<?php echo $country_ids;?>" <?php echo $selected_c?>><?php echo $country;?></option>
+							<?php } ?>
+						</select>
+					</div>
+					<div class="wow_srch_fields">
+						<div class="dropdown">
+							<button id="srch_fltrs" class="btn" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M6,13H18V11H6M3,6V8H21V6M10,18H14V16H10V18Z" /></svg> <?php echo $wo['lang']['filter'];?> <span class="caret"></span></button>
+							<ul class="dropdown-menu wow_srch_drp_mnu" aria-labelledby="srch_fltrs">
+								<li>
+									<?php
+										$fields = Wo_GetUserCustomFields();
+										if (count($fields) > 0) {
+											foreach ($fields as $key => $wo['field']) {
+												$wo['field']['issearch'] = true;
+												echo Wo_LoadPage('setting/profile-fields');
+											}
+										}
+									?>
+								</li>
+								<li>
+									<script>
+										<?php
+											$age_from = 18;
+											if (!empty($_GET['age_from']) && is_numeric($_GET['age_from'])) {
+												$age_from = Wo_Secure( $_GET['age_from'] );
+											}
+											$age_to = 50;
+											if (!empty($_GET['age_to']) && is_numeric($_GET['age_to'])) {
+												$age_to = Wo_Secure( $_GET['age_to'] );
+											}
+										?>
+										$( function() {
+											$( "#slider-range" ).slider({
+												range: true,
+												min: 10,
+												max: 70,
+												values: [ <?php echo $age_from;?>, <?php echo $age_to;?> ],
+												slide: function( event, ui ) {
+													$( "#amount" ).val( ui.values[ 0 ] + " - " + ui.values[ 1 ] );
+													$( "#age_from" ).val( ui.values[ 0 ] );
+													$( "#age_to" ).val( ui.values[ 1 ] );
+												}
+											});
+											$( "#amount" ).val( $( "#slider-range" ).slider( "values", 0 ) + " - " + $( "#slider-range" ).slider( "values", 1 ) );
+										});
+									</script>
+									<?php 
+										$selected_filterbyage_on = '';
+										$selected_filterbyage_off = 'checked';
+
+										$agefilter_style = "display: none;";
+										if (!empty($_GET['filterbyage'])) {
+											if ($_GET['filterbyage'] == 'yes') {
+												$selected_filterbyage_on = 'checked';
+												$selected_filterbyage_off = '';
+												$agefilter_style = "display: block;";
+											} else if ($_GET['filterbyage'] == 'no') {
+												$selected_filterbyage_on = '';
+												$selected_filterbyage_off = 'checked';
+											} 
+										}
+									?>
+									<div class="wow_srch_innr_filtr">
+										<p><?php echo $wo['lang']['age']; ?></p>
+										<div class="pp_mat_input">
+											<div class="round_check">
+												<input type="radio" name="filterbyage" id="filterbyage-0" value="yes" onclick="$('.agefilter_hide').css({'display':'block'});" <?php echo $selected_filterbyage_on;?>>
+												<label class="radio-inline" for="filterbyage-0"><?php echo $wo['lang']['yes']; ?></label> 
+											</div>
+											<div class="round_check">
+												<input type="radio" name="filterbyage" id="filterbyage-1" value="no" onclick="$('.agefilter_hide').css({'display':'none'});" <?php echo $selected_filterbyage_off;?>>
+												<label class="radio-inline" for="filterbyage-1"><?php echo $wo['lang']['no']; ?></label>
+											</div>
+											<input type="text" id="amount" class="agefilter_hide age_number" readonly style="display:none;">
+										</div>
+										<div class="agefilter_hide" id="agefilter" style="<?php echo $agefilter_style;?>">
+											<div id="slider-range"></div>
+											<input type="hidden" name="age_from" id="age_from" value="<?php echo $age_from;?>">
+											<input type="hidden" name="age_to" id="age_to" value="<?php echo $age_to;?>">
+										</div>
+									</div>
+								</li>
+								<li>
+									<?php 
+										$selected_verified_all = 'checked';
+										$selected_verified_on = '';
+										$selected_verified_off = '';
+										if (!empty($_GET['verified'])) {
+											if ($_GET['verified'] == 'on') {
+												$selected_verified_on = 'checked';
+												$selected_verified_all = '';
+											} else if ($_GET['verified'] == 'off') {
+												$selected_verified_off = 'checked';
+												$selected_verified_all = '';
+											} 
+										}
+									?>
+									<div class="wow_srch_innr_filtr">
+										<p><?php echo $wo['lang']['verified']; ?></p>
+										<div class="pp_mat_input">
+											<div class="round_check">
+												<input type="radio" name="verified" id="verified-0" value="all" <?php echo $selected_verified_all;?>>
+												<label class="radio-inline" for="verified-0"><?php echo $wo['lang']['all']; ?></label> 
+											</div>
+											<div class="round_check">
+												<input type="radio" name="verified" id="verified-1" value="on" <?php echo $selected_verified_on;?>>
+												<label class="radio-inline" for="verified-1"><?php echo $wo['lang']['verified']; ?></label>
+											</div>
+											<div class="round_check">
+												<input type="radio" name="verified" id="verified-2" value="off"<?php echo $selected_verified_off;?>>
+												<label class="radio-inline" for="verified-2"><?php echo $wo['lang']['unverified']; ?></label>
+											</div>
+										</div>
+									</div>
+								</li>
+								<li>
+									<?php 
+										$selected_status_all = 'checked';
+										$selected_status_on = '';
+										$selected_status_off = '';
+										if (!empty($_GET['status'])) {
+											if ($_GET['status'] == 'on') {
+												$selected_status_on = 'checked';
+												$selected_status_all = '';
+											} else if ($_GET['status'] == 'off') {
+												$selected_status_off = 'checked';
+												$selected_status_all = '';
+											} 
+										}
+									?>
+									<div class="wow_srch_innr_filtr">
+										<p><?php echo $wo['lang']['status']; ?></p>
+										<div class="pp_mat_input">
+											<div class="round_check">
+												<input type="radio" name="status" id="status-0" value="all" <?php echo $selected_status_all;?>>
+												<label class="radio-inline" for="status-0"><?php echo $wo['lang']['all']; ?></label> 
+											</div>
+											<div class="round_check">
+												<input type="radio" name="status" id="status-1" value="on" <?php echo $selected_status_on;?>>
+												<label class="radio-inline" for="status-1"><?php echo $wo['lang']['online']; ?></label>
+											</div>
+											<div class="round_check">
+												<input type="radio" name="status" id="status-2" value="off"<?php echo $selected_status_off;?>>
+												<label class="radio-inline" for="status-2"><?php echo $wo['lang']['offline']; ?></label>
+											</div>
+										</div>
+									</div>
+								</li>
+								<li>
+									<?php 
+										$selected_status_all_sex = 'checked';
+										$selected_status_male = '';
+										$selected_status_female = '';
+										if (!empty($_GET['gender'])) {
+											if ($_GET['gender'] == 'male') {
+												$selected_status_male = 'checked';
+												$selected_status_all = '';
+											} else if ($_GET['gender'] == 'female') {
+												$selected_status_female = 'checked';
+												$selected_status_all = '';
+											} 
+										}
+									?>
+									<div class="wow_srch_innr_filtr">
+										<p><?php echo $wo['lang']['gender']; ?></p>
+										<div class="pp_mat_input">
+											<div class="round_check">
+												<input type="radio" name="gender" id="gender-0" value="all" <?php echo $selected_status_all_sex;?>>
+												<label class="radio-inline" for="gender-0"><?php echo $wo['lang']['all']; ?></label> 
+											</div>
+											<?php 
+												$gender_images = Wo_GetGendersImages();
+												foreach ($wo['genders'] as $key => $gender) { 
+													if (!empty($_GET['gender'])) {
+														if ($_GET['gender'] == 'male') {
+															$selected_status_male = 'checked';
+															$selected_status_all = '';
+														} else if ($_GET['gender'] == 'female') {
+															$selected_status_female = 'checked';
+															$selected_status_all = '';
+														} 
+													}
+											?>
+												<?php
+													$selected_status = '';
+													$selected_status_all = '';
+													if (!empty($_GET['gender']) && $key == $_GET['gender']) {
+														$selected_status = 'checked';
+													}
+												?>
+												<div class="round_check">
+													<input type="radio" name="gender" id="gender-<?php echo($key) ?>" value="<?php echo($key) ?>" <?php echo $selected_status;?>>
+													<label class="radio-inline" for="gender-<?php echo($key) ?>"><?php echo $gender; ?></label> 
+												</div>
+											<?php } ?>
+										</div>
+									</div>
+								</li>
+								<li>
+									<?php 
+										$selected_status_image_all = 'checked';
+										$selected_status_image_y = '';
+										$selected_status_image_n = '';
+										if (!empty($_GET['image'])) {
+											if ($_GET['image'] == 'yes') {
+												$selected_status_image_y = 'checked';
+												$selected_status_image_all = '';
+											} else if ($_GET['image'] == 'no') {
+												$selected_status_image_n = 'checked';
+												$selected_status_image_all = '';
+											} 
+										}
+									?>
+									<div class="wow_srch_innr_filtr">
+										<p><?php echo $wo['lang']['profile_picture']; ?></p>
+										<div class="pp_mat_input">
+											<div class="round_check">
+												<input type="radio" name="image" id="image-0" value="all" <?php echo $selected_status_image_all;?>>
+												<label class="radio-inline" for="image-0"><?php echo $wo['lang']['all']; ?></label> 
+											</div>
+											<div class="round_check">
+												<input type="radio" name="image" id="image-1" value="yes" <?php echo $selected_status_image_y;?>>
+												<label class="radio-inline" for="image-1"><?php echo $wo['lang']['yes']; ?></label>
+											</div>
+											<div class="round_check">
+												<input type="radio" name="image" id="image-2" value="no" <?php echo $selected_status_image_n;?>>
+												<label class="radio-inline" for="image-2"><?php echo $wo['lang']['no']; ?></label>
+											</div>
+										</div>
+									</div>
+								</li>
+							</ul>
+						</div>
+					</div>
+					<div class="wow_srch_fields">
+						<button type="submit" class="btn btn-main btn-mat"><?php echo $wo['lang']['search'];?></button>
+					</div>
+				</div>
+			</form>
+			<ul class="nav nav-tabs wow_srch_tabs">
+				<li class="active">
+					<a data-toggle="tab" data-target="#users" href="#" class="btn btn-mat">
+						<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M16 17V19H2V17S2 13 9 13 16 17 16 17M12.5 7.5A3.5 3.5 0 1 0 9 11A3.5 3.5 0 0 0 12.5 7.5M15.94 13A5.32 5.32 0 0 1 18 17V19H22V17S22 13.37 15.94 13M15 4A3.39 3.39 0 0 0 13.07 4.59A5 5 0 0 1 13.07 10.41A3.39 3.39 0 0 0 15 11A3.5 3.5 0 0 0 15 4Z" /></svg> <?php echo $wo['lang']['users'];?>
+					</a>
+				</li>
+				<?php if ($wo['config']['pages'] == 1) { ?>
+					<li>
+						<a data-toggle="tab" data-target="#pages" href="#" class="btn btn-mat">
+							<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M14.4,6L14,4H5V21H7V14H12.6L13,16H20V6H14.4Z" /></svg> <?php echo $wo['lang']['pages'];?>
+						</a>
+					</li>
+				<?php } ?>
+				<?php if ($wo['config']['groups'] == 1) { ?>
+					<li>
+						<a data-toggle="tab" data-target="#groups" href="#" class="btn btn-mat">
+							<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M5 3A2 2 0 0 0 3 5H5M7 3V5H9V3M11 3V5H13V3M15 3V5H17V3M19 3V5H21A2 2 0 0 0 19 3M3 7V9H5V7M7 7V11H11V7M13 7V11H17V7M19 7V9H21V7M3 11V13H5V11M19 11V13H21V11M7 13V17H11V13M13 13V17H17V13M3 15V17H5V15M19 15V17H21V15M3 19A2 2 0 0 0 5 21V19M7 19V21H9V19M11 19V21H13V19M15 19V21H17V19M19 19V21A2 2 0 0 0 21 19Z" /></svg> <?php echo $wo['lang']['groups'];?>
+						</a>
+					</li>
+				<?php } ?>
+				<?php if ($wo['config']['games'] == 1) { ?>
+					<li>
+						<a data-toggle="tab" data-target="#games" href="#" class="btn btn-mat">
+							<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M16.5,9L13.5,12L16.5,15H22V9M9,16.5V22H15V16.5L12,13.5M7.5,9H2V15H7.5L10.5,12M15,7.5V2H9V7.5L12,10.5L15,7.5Z" /></svg> <?php echo $wo['lang']['games'];?>
+						</a>
+					</li>
+				<?php } ?>
+			</ul>
+		</div>
+	</div>
+	
+	<div class="wow_main_blogs_bg"></div>
+	
+	<div class="wo_search_page">
+		<div class="tab-content">
+			<div id="users" class="tab-pane fade in active">
+				<div id="users-cont" class="row wow_frnd_usr">
+					<?php
+						if (!isset($_GET['query'])) {
+							echo $type_to_find;
+						}
+						if (isset($_GET['query'])) {
+							$search_query = Wo_GetSearchFilter($_GET, 30);
+							if (count($search_query) != 0) {
+								foreach ($search_query as $wo['result']) {
+									if (!empty($wo['result']['avatar_full'])) {
+										$wo['result']['avatar'] = Wo_GetMedia($wo['result']['avatar_full']);
+									}
+									echo Wo_LoadPage('search/user-result');
+								}
+							} else {
+								echo $not_found;
+							}
+						}
+					?>
+				</div>
+				<div class="clear"></div>
+				<div class="load-more">
+					<button class="btn btn-default text-center pointer load-more-users"><?php echo $wo['lang']['load_more_users'] ?></button>
+				</div>
+			</div>
+						
+			<?php if ($wo['config']['pages'] == 1) { ?>
+				<div id="pages" class="tab-pane fade">
+					<div id="pages-cont" class="row wo_my_pages">
+						<?php
+							if (!isset($_GET['query'])) {
+								echo $type_to_find;
+							}
+							if (isset($_GET['query'])) {
+								$search_query = Wo_GetSearchAdv($_GET['query'], 'pages');
+								if (count($search_query) != 0) {
+									foreach ($search_query as $wo['result']) {
+										echo Wo_LoadPage('search/page-result');
+									}
+								} else {
+									echo $not_found;
+								}
+							}
+						?>
+					</div>
+					<div class="clear"></div>
+					<div class="load-more">
+						<button class="btn btn-default text-center pointer load-more-pages"><?php echo $wo['lang']['load_more_pages'] ?></button>
+					</div>
+				</div>
+			<?php } ?>
+						
+			<?php if ($wo['config']['groups'] == 1) { ?>
+				<div id="groups" class="tab-pane fade">
+					<div id="groups-cont" class="row">
+						<?php
+							if (!isset($_GET['query'])) {
+								echo $type_to_find;
+							}
+							if (isset($_GET['query'])) {
+								$search_query = Wo_GetSearchAdv($_GET['query'], 'groups');
+								if (count($search_query) != 0) {
+									foreach ($search_query as $wo['result']) {
+										echo Wo_LoadPage('search/group-result');
+									}
+								} else {
+									echo $not_found;
+								}
+							}
+						?>
+					</div>
+					<div class="clear"></div>
+					<div class="load-more">
+						<button class="btn btn-default text-center pointer load-more-groups"><?php echo $wo['lang']['load_more_groups'] ?></button>
+					</div>
+				</div>
+			<?php } ?>
+						
+			<?php if ($wo['config']['games'] == 1) { ?>
+				<div id="games" class="tab-pane fade">
+					<div class="row wow_srch_game_tabss">
+						<?php
+							if (!isset($_GET['query'])) {
+								echo $type_to_find;
+							}
+							if (isset($_GET['query'])) {
+								$search_query = Wo_GetSearchAdv($_GET['query'], 'games');
+								if (count($search_query) != 0) {
+									foreach ($search_query as $wo['game']) {
+										echo Wo_LoadPage('games/game-style');
+									}
+								} else {
+									echo $not_found;
+								}
+							}
+						?>
+					</div>
+				</div>
+			<?php } ?>
+		</div>
+		<div class="clear"></div>
+	</div>
+</div>
+
+<script>
+$('.wow_main_blogs_bg').css('height', ($('.wow_main_float_head').height()) + 'px');
+
+$(document).on('click', '.wow_srch_drp_mnu', function (e) {
+  e.stopPropagation();
+});
+
+  jQuery(document).ready(function($) {
+    //Load more users
+    $(".load-more-users").click(function(event) {
+      var form = document.getElementById('search_form');
+	  var formdata = new FormData(form);
+      var u_offset = ($("[data-search-type=user]").length > 0) ? $("[data-search-type=user]").last().attr('data-id') : 0;
+      $.ajax({
+      	processData: false,
+        url: Wo_Ajax_Requests_File()+'?f=load-more-users&offset='+u_offset,
+        type: 'POST',
+        dataType: 'json',
+        data: formdata,
+        contentType: false,
+        success:function(data){
+          if (data['status'] == 200) {
+            $("#users-cont").append(data['html'])
+          }else{$(".load-more-users").remove()}
+        }
+      })    
+    });
+    //Load more groups
+    $(".load-more-groups").click(function(event) {
+      var g_offset = ($("[data-search-type=group]").length > 0) ? $("[data-search-type=group]").last().attr('data-id') : 0;
+      $.ajax({
+        url: Wo_Ajax_Requests_File(),
+        type: 'GET',
+        dataType: 'json',
+        data: {f: 'load-more-groups',offset:g_offset,query:$("#query").val()},
+        success:function(data){
+          if (data['status'] == 200) {
+            $("#groups-cont").append(data['html'])
+          }else{$(".load-more-groups").remove()}
+        }
+      })   
+    });
+    //Load more pages
+    $(".load-more-pages").click(function(event) {
+      var p_offset = ($("[data-search-type=page]").length > 0) ? $("[data-search-type=page]").last().attr('data-id') : 0;
+      $.ajax({
+        url: Wo_Ajax_Requests_File(),
+        type: 'GET',
+        dataType: 'json',
+        data: {f: 'load-more-pages',offset:p_offset,query:$("#query").val()},
+        success:function(data){
+          if (data['status'] == 200) {
+            $("#pages-cont").append(data['html'])
+          }else{$(".load-more-pages").remove()}
+        }
+      })   
+    });
+
+    
+    $("#input").hover(function(event) {
+      $("#input").focus()
+    });
+
+  });
+</script>

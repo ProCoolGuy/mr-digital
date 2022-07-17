@@ -1,0 +1,236 @@
+<div class="row">
+	<div class="col-md-3">
+		<?php echo Wo_LoadPage('ads/includes/header'); ?>
+	</div>
+	<div class="col-md-9">
+		<h4 class="out_page_title"><?php echo $wo['lang']['ads']; ?> > <?php echo $wo['lang']['my_campaigns']; ?> > <?php echo $wo['lang']['edit']; ?> #<?php echo $wo['ad-data']['id']; ?></h4>
+		<div class="wo_settings_page create-ads-cont page-margin" style="padding: 0 15px 15px;">
+	<form class="form form-horizontal" method="get" id="update-ads">
+		<div class="row">
+			<div class="col-md-7 col-lg-7 col-sm-7 col-xs-12 create-ads-inner-left">
+				<div id="update-ads-alert" class="w100"></div>
+				<div class="setting-panel row">
+					<div class="sun_input mb0">
+						<input name="name" id="company" type="text" max="50" placeholder="<?php echo $wo['lang']['company']?>" value="<?php echo $wo['ad-data']['name']; ?>" autofocus />
+						<label for="company"><?php echo $wo['lang']['company']?></label>
+					</div>
+
+					<div class="sun_input">
+						<small class="main"><?php echo $wo['lang']['select_a_page_or_link'] ?></small>
+					</div>
+					
+					<div class="sun_input">
+						<input type="url" id="website" name="website" placeholder="<?php echo $wo['lang']['url']?>" value="<?php echo $wo['ad-data']['url']; ?>">
+						<label for="website"><?php echo $wo['lang']['url']?></label>
+					</div>
+					
+					<?php if ($wo['config']['pages'] == 1) { ?>
+						<div class="sun_input">
+							<select name="page" id="select-page">			
+								<?php if ($wo['my-pages'] && count($wo['my-pages']) > 0): ?>
+									<option value=""><?php echo $wo['lang']['select']; ?></option>
+								<?php foreach ($wo['my-pages'] as $wo['pageItem']): ?>
+									<option value="<?php echo $wo['pageItem']['page_id']; ?>">
+										<?php echo $wo['pageItem']['page_name']; ?>
+									</option>
+								<?php endforeach; ?>
+								<?php else:?>
+									<option disabled="disabled" selected="selected">
+										<?php echo $wo['lang']['no_pages_found']; ?>
+									</option>
+								<?php endif;?>
+							</select>
+							<label for="select-page"><?php echo $wo['lang']['my_pages']?></label>
+						</div>
+					<?php } ?>
+					
+					<div class="sun_input">
+						<input type="text" id="title" name="headline" placeholder="<?php echo $wo['lang']['title']?>" value="<?php echo $wo['ad-data']['headline']; ?>">
+						<label for="title"><?php echo $wo['lang']['title']?></label>
+					</div>
+					
+					<div class="sun_input mb0">
+						<textarea id="description" name="description" rows="4" placeholder="<?php echo $wo['lang']['description']?>"><?php echo strip_tags($wo['ad-data']['description']); ?></textarea>
+						<label for="description"><?php echo $wo['lang']['description'] ?></label>
+					</div>
+				</div>
+			</div>
+			
+			<div class="col-md-5 col-sm-5 col-lg-5 col-xs-12 create-ads-inner-right">
+				<div class="setting-panel row">
+					<div class="sun_input mb0">
+						<input type="text" id="ads-location" name="location" placeholder="<?php echo $wo['lang']['location']?>" value="<?php echo $wo['ad-data']['location']; ?>">
+						<label for="ads-location"><?php echo $wo['lang']['location']?></label>
+					</div>
+					
+					<?php if ($wo['config']['google_map'] == 1 || $wo['config']['yandex_map'] == 1) { ?>
+						<div id="review-ads-location">
+							<div id="place" <?php echo($wo['config']['yandex_map'] == 1 ? 'style="width: 100%; height: 300px; padding: 0; margin: 0;"' : '') ?>>
+								<?php if ($wo['config']['google_map'] == 1) { ?>
+									<iframe width="100%" frameborder="0" style="border:0;margin-bottom: 30px;" src="https://www.google.com/maps/embed/v1/place?key=<?php echo $wo['config']['google_map_api']; ?>&q=<?php echo $wo['ad-data']['location']; ?>&language=en"></iframe>
+								<?php } ?>
+							</div>
+						</div>
+					<?php } ?>
+					
+					<div class="sun_input">
+						<select name="audience-list[]" class="selectpicker" id="ads-audience" data-size="7" multiple data-live-search="true" data-actions-box="true">
+							<?php foreach ($wo['audience'] as $key => $value): ?>
+								<option value="<?php echo $key; ?>" <?php if (in_array($key, $wo['ad-data']['country_ids']) && $key != 0){ echo 'selected';}?>>
+									<?php echo $value; ?>
+								</option>
+							<?php endforeach;?>
+						</select>
+						<label for="ads-audience"><?php echo $wo['lang']['audience']?></label>
+					</div>
+					
+					<div class="sun_input">
+						<select name="gender" id="gender">
+							<option value="all" <?php if ($wo['ad-data']['gender'] == 'all') {echo "checked";}?> ><?php echo $wo['lang']['all']; ?></option>
+							<?php foreach ($wo['genders'] as $key => $gender) { ?>
+								<option value="<?php echo($key) ?>" <?php echo ($wo['ad-data']['gender'] == $key)   ? 'selected' : '';?> ><?php echo $gender; ?></option>
+							<?php } ?>
+						</select>
+						<label for="gender"><?php echo $wo['lang']['gender']?></label>
+					</div>
+					
+					<div class="sun_input mb0">
+						<select name="bidding" id="bidding">
+							<option value="clicks" <?php echo ($wo['ad-data']['bidding'] == 'clicks') ? 'selected' : ''; ?>><?php echo str_replace('${{PRICE}}',  Wo_GetCurrency($wo['config']['currency']) . $wo['config']['ad_c_price'], $wo['lang']['pay_per_click']); ?></option>
+							<option value="views" <?php echo ($wo['ad-data']['bidding'] == 'views') ? 'selected' : ''; ?>><?php echo str_replace('${{PRICE}}', Wo_GetCurrency($wo['config']['currency']) . $wo['config']['ad_v_price'], $wo['lang']['pay_per_imprssion']); ?></option>
+						</select>
+						<label for="bidding"><?php echo $wo['lang']['bidding']?></label>
+					</div>
+					<div class="fake_ad_post">
+							<div class="fads_heading">
+								<div class="fads_cover">
+									<div class="fcov_image">
+										<div id="fake_post_img_holder">
+											<?php 
+											if (!empty($wo['ad-data']['ad_media'])) {
+												$new_string        = pathinfo($wo['ad-data']['ad_media'], PATHINFO_FILENAME) . '.' . strtolower(pathinfo($wo['ad-data']['ad_media'], PATHINFO_EXTENSION));
+											    $file_extension    = pathinfo($new_string, PATHINFO_EXTENSION);
+											    if ($file_extension == 'gif' || $file_extension == 'png' || $file_extension == 'jpg' || $file_extension == 'jpeg') { ?>
+											    	<img src="<?php echo($wo['ad-data']['ad_media']) ?>">
+											    <?php } } ?>
+										</div>
+										<div class="upload_ad_image" onclick="document.getElementById('ad-media-file').click(); return false">
+											<div class="upload_ad_image_content">
+												<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-camera"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
+												<?php echo $wo['lang']['choose_file']; ?>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+				</div>
+			</div>
+		</div>
+		<div class="form-group last-sett-btn modal-footer" style="margin-right: -15px;">
+			<div class="ball-pulse"><div></div><div></div><div></div></div>
+			<button class="btn btn-main setting-panel-mdbtn" type="submit" style="border: 0;margin: 2px 15px;"><?php echo $wo['lang']['save']; ?></button>
+		</div>
+		<input type="file" name="media" class="hidden" id="ad-media-file" accept="image/* video/*">
+	</form>
+	<div class="clear"></div>
+</div>
+</div>
+</div>
+
+<script>	
+	jQuery(document).ready(function($) {
+		$("#ad-media-file").on('change', function() {
+		//Get count of selected files
+		var product_countFiles = $(this)[0].files.length;
+		var product_imgPath = $(this)[0].value;
+		var extn = product_imgPath.substring(product_imgPath.lastIndexOf('.') + 1).toLowerCase();
+		var product_image_holder = $("#fake_post_img_holder");
+		product_image_holder.empty();
+		if (extn == "gif" || extn == "png" || extn == "jpg" || extn == "jpeg") {
+			if (typeof(FileReader) != "undefined") {
+			//loop for each file selected for uploaded.
+			for (var i = 0; i < product_countFiles; i++) 
+			{
+				var product_reader = new FileReader();
+				product_reader.onload = function(e) {
+					$("<img />", {
+	                    "src": e.target.result,
+	                    "class": "thumb-image"
+	                  }).appendTo(product_image_holder);
+	                }
+	                product_image_holder.show();
+	                product_reader.readAsDataURL($(this)[0].files[i]);
+	              }
+	            } else {
+	              product_image_holder.html("<p>This browser does not support FileReader.</p>");
+	            }
+	         }
+		});
+
+	    $('.selectpicker').selectpicker();
+        <?php if ($wo['config']['google_map']) { ?>
+	    $("#ads-location").change(function(event) {
+	        if ($(this).val().length >= 3) {
+	          Wo_Delay(function(){$("#review-ads-location #place").html('<iframe width="100%" frameborder="0" style="border:0;margin-top: 10px;" src="https://www.google.com/maps/embed/v1/place?key=<?php echo $wo['config']['google_map_api']; ?>&q=' + $("#ads-location").val() + '&language=en"></iframe>')},1000)
+	        }
+
+	        else{
+	          Wo_Delay(function(){$("#review-ads-location #place").html('<iframe width="100%" frameborder="0" style="border:0;margin-top: 10px;" src="https://www.google.com/maps/embed/v1/place?key=<?php echo $wo['config']['google_map_api']; ?>&q=us&language=en"></iframe>')},1000)
+	        }
+      	});
+      	<?php }else if($wo['config']['yandex_map'] == 1){ ?>
+      		<?php if (!empty($wo['ad-data']['location'])) { ?>
+      			Wo_Delay(function(){
+		      		var myMap;
+			        ymaps.geocode("<?php echo($wo['ad-data']['location']); ?>").then(function (res) {
+			            myMap = new ymaps.Map('place', {
+			                center: res.geoObjects.get(0).geometry.getCoordinates(),
+			                zoom : 10
+			            });
+			            myMap.geoObjects.add(new ymaps.Placemark(res.geoObjects.get(0).geometry.getCoordinates(), {
+					            balloonContent: ''
+					        }));
+			        });
+			    },1000);
+	        <?php } ?>
+
+	   	$("#ads-location").change(function(event) {
+	   		  $("#review-ads-location #place").html('');
+		     	var myMap;
+	        ymaps.geocode($("#ads-location").val()).then(function (res) {
+	            myMap = new ymaps.Map('place', {
+	                center: res.geoObjects.get(0).geometry.getCoordinates(),
+	                zoom : 10
+	            });
+	            myMap.geoObjects.add(new ymaps.Placemark(res.geoObjects.get(0).geometry.getCoordinates(), {
+			            balloonContent: ''
+			        }));
+	        });
+        });
+	   <?php } ?>
+
+
+      	$('#update-ads').ajaxForm({
+	       	url: Wo_Ajax_Requests_File() + '?f=ads&s=update&ad-id=<?php echo $_GET['id']; ?>&a=0',
+	       	type:"POST",
+	       	beforeSend: function() {
+	        	$('.wo_settings_page').find('.last-sett-btn .ball-pulse').fadeIn(100);
+	       	},
+	       	success: function(data) {
+	        	scrollToTop();
+	        	if (data['status'] == 200) {
+	          		$("#update-ads-alert").html('<div class="alert alert-success">'+ data['message'] +'</div>');
+	          		window.location = data.url;
+	        	} 
+
+	        	else if (data['message']) {
+	          		$("#update-ads-alert").html('<div class="alert alert-danger">' + data['message'] + '</div>');
+	        	} 
+
+	       		$('.wo_settings_page').find('.last-sett-btn .ball-pulse').fadeOut(100);
+      		}
+  		});
+
+	});
+</script>

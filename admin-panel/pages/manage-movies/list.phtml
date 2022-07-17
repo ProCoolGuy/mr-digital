@@ -1,0 +1,18 @@
+<tr class="setting-blog"  data-film-id="<?php echo $wo['film']['id']; ?>" data_selected="<?php echo $wo['film']['id'] ?>">
+  <td><input type="checkbox" id="check-data-<?php echo $wo['film']['id']?>" class="delete-checkbox filled-in"><label for="check-data-<?php echo $wo['film']['id']?>"></label></td>
+   <td><?php echo $wo['film']['id']?></td>
+   <td>
+      <a href="<?php echo $wo['film']['url']; ?>">
+         <?php echo $wo['film']['name']; ?>
+      </a>
+   </td>
+   <td>
+     <div class="ajax-time">
+         <?php echo $wo['film']['release'];?>
+     </div>
+   </td>
+   <td>
+      <a class="btn bg-success admn_table_btn" href="<?php echo Wo_LoadAdminLinkSettings('edit-movie?id=' .  $wo['film']['id']); ?>" id="<?php echo $wo['film']['id']; ?>">Edit</a>
+      <button class="btn bg-danger admn_table_btn delete-film" id="<?php echo $wo['film']['id']; ?>" onclick="Wo_DeleteFilm(<?php echo $wo['film']['id'];?>,'hide')">Delete</button>
+   </td>
+</tr>

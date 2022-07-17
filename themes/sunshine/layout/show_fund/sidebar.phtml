@@ -1,0 +1,44 @@
+<div class="fund_raise">
+	<h4 class="fund_widget_title"><?php echo $wo['lang']['started_by'];?></h4>
+	<div class="fund-meta-desc">
+		<div class="fundMeta--author-avatar">
+			<a href="<?php echo $wo['fund']['user_data']['url']?>">
+				<img src="<?php echo $wo['fund']['user_data']['avatar']?>" alt="User Image">
+			</a>
+		</div>
+		<div class="fundMeta--author-text">
+			<div><a href="<?php echo $wo['fund']['user_data']['url']?>"><?php echo $wo['fund']['user_data']['name']; ?></a></div>
+			<time class="time-ago"><?php echo date("d M Y",$wo['fund']['time']); ?></time>
+		</div>
+	</div>
+</div>
+<div class="fund_raise">
+	<h4 class="fund_widget_title"><?php echo $wo['lang']['total_donations'];?></h4>
+	<h1 class="fund_ttl_dnt"><?php echo $wo['fund']['all_donation']; ?></h1>
+</div>
+<?php 
+	$wo['recent'] = GetRecentRaise($wo['fund']['id'],20);
+	if (!empty($wo['recent'])) { ?>
+	<div class="fund_raise">
+		<h4 class="fund_widget_title"><?php echo $wo['lang']['recent_donations'];?></h4>
+		<div class="fund">
+			<div class="fluid list">
+				<?php if ($wo['recent']) {
+                        foreach ($wo['recent'] as $key => $user) { ?>
+					<div class="item fund_item" data-recent="<?php echo($user['id']) ?>">
+						<div class="wrapper">
+							<img class="img-circle" src="<?php echo($user['user_data']['avatar']) ?>" alt="Picture" />
+						</div>
+						<div class="caption">
+							<a href="<?php echo($user['user_data']['url']) ?>" data-ajax="?link1=timeline&u=<?php echo($user['user_data']['username']) ?>"><?php echo $user['user_data']['name']; ?></a>
+							<p>
+								<?php echo $wo['config']['currency_symbol_array'][$wo['config']['currency']].$user['amount']; ?><span class="middot">·</span>
+								<time class="time-ago"><?php echo(Wo_Time_Elapsed_String($user['time'])); ?></time>
+							</p>
+                        </div>
+					</div>
+				<?php } } ?>
+			</div>
+		</div>
+	</div>
+<?php } ?>

@@ -1,0 +1,24 @@
+<div class="profile-style" id="member-<?php echo $wo['member']['user_id'] ?>" >
+   <a href="<?php echo $wo['member']['url'];?>" data-ajax="?link1=timeline&u=<?php echo $wo['member']['username']?>">
+      <div class="avatar <?php echo Wo_RightToLeft('pull-left');?>">
+         <img src="<?php echo $wo['member']['avatar'];?>" alt="<?php echo $wo['member']['name']; ?> Profile Picture" />
+      </div>
+      <?php echo $wo['member']['name']; ?>
+   </a>
+   <div class="page-website">
+      <?php echo Wo_UserStatus($wo['member']['user_id'],$wo['member']['lastseen']); ?>
+   </div>
+   <div>
+
+   <button type="button" onclick="Wo_AddPageAdmin(<?php echo $wo['member']['user_id'];?>, <?php echo $wo['member']['page_id'];?>,this)" class="btn btn-default btn-sm">
+   <?php if (Wo_IsPageAdminExists($wo['member']['user_id'],$wo['member']['page_id'])): ?>
+      <i class="fa fa-times-circle-o"></i>
+   <?php else: ?>
+      <i class="fa fa-plus-square-o"></i>
+   <?php endif; ?>
+   
+   <span class="button-text"> <?php echo $wo['lang']['admin'];?></span>
+   </button>
+   <button type="button" class="btn btn-default btn-sm" id="privileges_admin_page_<?php echo($wo['member']['user_id']) ?>" style="<?php echo Wo_IsPageAdminExists($wo['member']['user_id'],$wo['member']['page_id']) ? '' : 'display: none;'; ?>"><a href="<?php echo Wo_SeoLink('index.php?link1=page-setting&page=' . $wo['member']['page_name'] . '&link3=admins');?>?name=<?php echo $wo['member']['username']?>"  data-ajax="?link1=page-setting&page=<?php echo $wo['member']['page_name'];?>&link3=admins&name=<?php echo $wo['member']['username']?>"><?php echo $wo['lang']['privileges'];?></a></button>
+   </div>
+</div>

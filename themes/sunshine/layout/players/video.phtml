@@ -1,0 +1,41 @@
+<div class="user-ad-container" id="<?php echo($wo['wo_ad_id']); ?>">
+	<?php if ($wo['story']['processing'] > 0 && (Wo_IsModerator() || Wo_IsAdmin() || $wo['story']['user_id'] == $wo['user']['id'])) { ?>
+	<div class="alert alert-warning vid_procss_alrt processing_alert_<?php echo $wo['media']['storyId'];?>"><span class="pointer" onclick="ProcessingVideo('<?php echo $wo['media']['storyId'];?>')"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></span><?php echo $wo['lang']['processing_video']; ?></div>
+	<?php } ?>
+	<video id="video--<?php echo $wo['media']['storyId'];?>" onplay="Wo_AddVideoViews($(this).attr('data-post-video'))" class="video-js vjs-big-play-centered <?php echo($wo['rvad_con']); ?>" controls preload="auto" poster="<?php  echo $wo['media']['video_thumb'];?>" data-setup="{}" data-post-video="<?php echo $wo['media']['storyId'];?>" style="width:100%;height:500px;">
+	    <?php if (empty($wo['story']['240p_video']) && empty($wo['story']['360p_video'])  && empty($wo['story']['480p_video'])  && empty($wo['story']['720p_video'])  && empty($wo['story']['1080p_video'])  && empty($wo['story']['2048p_video'])  && empty($wo['story']['4096p_video'])) { ?>
+	    		<source src="<?php echo $wo['media']['filename'];?>" type='video/mp4'>
+			    <source src="<?php echo $wo['media']['filename'];?>" type='video/webm'>
+	    	<?php }else{ ?>
+		    	<?php if (!empty($wo['story']['4096p_video'])) { ?>
+		    		<source src="<?php echo($wo['story']['4096p_video']) ?>" type="video/mp4" data-quality="4096p" title='4096p' label='4096p' res='4096'>
+		    	<?php } ?>
+		    	<?php if (!empty($wo['story']['2048p_video'])) { ?>
+		    		<source src="<?php echo($wo['story']['2048p_video']) ?>" type="video/mp4" data-quality="2048p" title='2048p' label='2048p' res='2048'>
+		    	<?php } ?>
+		    	<?php if (!empty($wo['story']['1080p_video'])) { ?>
+		    		<source src="<?php echo($wo['story']['1080p_video']) ?>" type="video/mp4" data-quality="1080p" title='1080p' label='1080p' res='1080'>
+		    	<?php } ?>
+		    	<?php if (!empty($wo['story']['720p_video'])) { ?>
+		    		<source src="<?php echo($wo['story']['720p_video']) ?>" type="video/mp4" data-quality="720p" title='720p' label='720p' res='720'>
+		    	<?php } ?>
+		    	<?php if (!empty($wo['story']['480p_video'])) { ?>
+		    		<source src="<?php echo($wo['story']['480p_video']) ?>" type="video/mp4" data-quality="480p" title='480p' label='480p' res='480'>
+		    	<?php } ?>
+		    	<?php if (!empty($wo['story']['360p_video'])) { ?>
+		    		<source src="<?php echo($wo['story']['360p_video']) ?>" type="video/mp4" data-quality="360p" title='360p' label='360p' res='360'>
+		    	<?php } ?>
+		    	<?php if (!empty($wo['story']['240p_video'])) { ?>
+		    		<source src="<?php echo($wo['story']['240p_video']) ?>" type="video/mp4" data-quality="240p" title='240p' label='240p' res='240'>
+		    	<?php } ?>
+		    <?php } ?>
+	</video>
+</div>  
+<script>
+fluidPlayer('video--<?php echo $wo['media']['storyId'];?>', {
+    layoutControls: {
+        primaryColor:           "<?php echo $wo['config']['btn_background_color'];?>",
+        fillToContainer: true,
+    }
+});
+</script>

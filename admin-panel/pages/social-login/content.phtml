@@ -1,0 +1,378 @@
+<div class="container-fluid">
+    <div>
+        <h3>Social Login Settings</h3>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="#">Home</a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a href="#">Settings</a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">Social Login Configuration</li>
+            </ol>
+        </nav>
+    </div>
+    <!-- Vertical Layout -->
+    <div class="row">
+        <div class="col-lg-6 col-md-6 ">
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="card-title">Social Login Settings</h6>
+                    <div class="social-settings-alert"></div>
+                    <form class="social-settings" method="POST">
+                        <div class="float-left">
+                            <label for="facebookLogin" class="main-label">Facebook Login</label>
+                            <br><small class="admin-info">Enable the ability for users to login to your site using their Facebook account.</small>
+                        </div>
+                        <div class="form-group float-right switcher">
+                            <input type="hidden" name="facebookLogin" value="0" />
+                            <input type="checkbox" name="facebookLogin" id="chck-facebookLogin" value="1" <?php echo ($wo['config']['facebookLogin'] == 1) ? 'checked': '';?>>
+                            <label for="chck-facebookLogin" class="check-trail"><span class="check-handler"></span></label>
+                        </div>
+                        <div class="clearfix"></div>
+                        <hr>
+                        <div class="float-left">
+                            <label for="VkontakteLogin" class="main-label">Vkontakte Login</label>
+                            <br><small class="admin-info">Enable the ability for users to login to your site using their Vkontakte account.</small>
+                        </div>
+                        <div class="form-group float-right switcher">
+                            <input type="hidden" name="VkontakteLogin" value="0" />
+                            <input type="checkbox" name="VkontakteLogin" id="chck-VkontakteLogin" value="1" <?php echo ($wo['config']['VkontakteLogin'] == 1) ? 'checked': '';?>>
+                            <label for="chck-VkontakteLogin" class="check-trail"><span class="check-handler"></span></label>
+                        </div>
+                        <div class="clearfix"></div>
+                        <hr>
+                        <div class="float-left">
+                            <label for="googleLogin" class="main-label">Google+ Login</label>
+                            <br><small class="admin-info">Enable the ability for users to login to your site using their Google+ account, (App requires reviewing)</small>
+                        </div>
+                        <div class="form-group float-right switcher">
+                            <input type="hidden" name="googleLogin" value="0" />
+                            <input type="checkbox" name="googleLogin" id="chck-googleLogin" value="1" <?php echo ($wo['config']['googleLogin'] == 1) ? 'checked': '';?>>
+                            <label for="chck-googleLogin" class="check-trail"><span class="check-handler"></span></label>
+                        </div>
+                        <div class="clearfix"></div>
+                        <hr>
+                        <div class="float-left">
+                            <label for="twitterLogin" class="main-label">Twitter Login</label>
+                            <br><small class="admin-info">Enable the ability for users to login to your site using their Twitter account.</small>
+                        </div>
+                        <div class="form-group float-right switcher">
+                            <input type="hidden" name="twitterLogin" value="0" />
+                            <input type="checkbox" name="twitterLogin" id="chck-twitterLogin" value="1" <?php echo ($wo['config']['twitterLogin'] == 1) ? 'checked': '';?>>
+                            <label for="chck-twitterLogin" class="check-trail"><span class="check-handler"></span></label>
+                        </div>
+                        <div class="clearfix"></div>
+                        <hr>
+                        <div class="float-left">
+                            <label for="linkedinLogin" class="main-label">Linkedin Login</label>
+                            <br><small class="admin-info">Enable the ability for users to login to your site using their Linkedin account.</small>
+                        </div>
+                        <div class="form-group float-right switcher">
+                            <input type="hidden" name="linkedinLogin" value="0" />
+                            <input type="checkbox" name="linkedinLogin" id="chck-linkedinLogin" value="1" <?php echo ($wo['config']['linkedinLogin'] == 1) ? 'checked': '';?>>
+                            <label for="chck-linkedinLogin" class="check-trail"><span class="check-handler"></span></label>
+                        </div>
+                        <div class="clearfix"></div>
+                        <hr>
+                        <div class="float-left">
+                            <label for="instagramLogin" class="main-label">Instagram Login</label>
+                            <br><small class="admin-info">Enable the ability for users to login to your site using their Instagram account.</small>
+                        </div>
+                        <div class="form-group float-right switcher">
+                            <input type="hidden" name="instagramLogin" value="0" />
+                            <input type="checkbox" name="instagramLogin" id="chck-instagramLogin" value="1" <?php echo ($wo['config']['instagramLogin'] == 1) ? 'checked': '';?>>
+                            <label for="chck-instagramLogin" class="check-trail"><span class="check-handler"></span></label>
+                        </div>
+                        <div class="clearfix"></div>
+                        <hr>
+                        <div class="float-left">
+                            <label for="qqLogin" class="main-label">QQ Login</label>
+                            <br><small class="admin-info">Enable the ability for users to login to your site using their QQ account.</small>
+                        </div>
+                        <div class="form-group float-right switcher">
+                            <input type="hidden" name="qqLogin" value="0" />
+                            <input type="checkbox" name="qqLogin" id="chck-qqLogin" value="1" <?php echo ($wo['config']['qqLogin'] == 1) ? 'checked': '';?>>
+                            <label for="chck-qqLogin" class="check-trail"><span class="check-handler"></span></label>
+                        </div>
+                        <div class="clearfix"></div>
+                        <hr>
+
+                        <div class="float-left">
+                            <label for="WeChatLogin" class="main-label">WeChat Login</label>
+                            <br><small class="admin-info">Enable the ability for users to login to your site using their WeChat account.</small>
+                        </div>
+                        <div class="form-group float-right switcher">
+                            <input type="hidden" name="WeChatLogin" value="0" />
+                            <input type="checkbox" name="WeChatLogin" id="chck-WeChatLogin" value="1" <?php echo ($wo['config']['WeChatLogin'] == 1) ? 'checked': '';?>>
+                            <label for="chck-WeChatLogin" class="check-trail"><span class="check-handler"></span></label>
+                        </div>
+                        <div class="clearfix"></div>
+                        <hr>
+
+                        <div class="float-left">
+                            <label for="DiscordLogin" class="main-label">Discord Login</label>
+                            <br><small class="admin-info">Enable the ability for users to login to your site using their Discord account.</small>
+                        </div>
+                        <div class="form-group float-right switcher">
+                            <input type="hidden" name="DiscordLogin" value="0" />
+                            <input type="checkbox" name="DiscordLogin" id="chck-DiscordLogin" value="1" <?php echo ($wo['config']['DiscordLogin'] == 1) ? 'checked': '';?>>
+                            <label for="chck-DiscordLogin" class="check-trail"><span class="check-handler"></span></label>
+                        </div>
+                        <div class="clearfix"></div>
+                        <hr>
+
+                        <div class="float-left">
+                            <label for="MailruLogin" class="main-label">Mailru Login</label>
+                            <br><small class="admin-info">Enable the ability for users to login to your site using their Mailru account.</small>
+                        </div>
+                        <div class="form-group float-right switcher">
+                            <input type="hidden" name="MailruLogin" value="0" />
+                            <input type="checkbox" name="MailruLogin" id="chck-MailruLogin" value="1" <?php echo ($wo['config']['MailruLogin'] == 1) ? 'checked': '';?>>
+                            <label for="chck-MailruLogin" class="check-trail"><span class="check-handler"></span></label>
+                        </div>
+                        <div class="clearfix"></div>
+                        <hr>
+
+                        <div class="float-left">
+                            <label for="OkLogin" class="main-label">ok.ru Login</label>
+                            <br><small class="admin-info">Enable the ability for users to login to your site using their ok.ru account.</small>
+                        </div>
+                        <div class="form-group float-right switcher">
+                            <input type="hidden" name="OkLogin" value="0" />
+                            <input type="checkbox" name="OkLogin" id="chck-OkLogin" value="1" <?php echo ($wo['config']['OkLogin'] == 1) ? 'checked': '';?>>
+                            <label for="chck-OkLogin" class="check-trail"><span class="check-handler"></span></label>
+                        </div>
+                        <div class="clearfix"></div>
+                        <input type="hidden" name="hash_id" value="<?php echo Wo_CreateSession();?>">
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6 col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="card-title">Setup Social Login API Keys</h6>
+                    <form class="api-settings" method="POST">
+                        <div class="alert alert-info">Please note that some websites may require app verification.</div>
+                        <label class="form-label main-label" style="background: #1877F2; color: #fff; margin-bottom: 12px;">Facebook Configuration</label>
+                        <div class="form-group form-float">
+                            <div class="form-line">
+                                <input type="text" id="facebookAppId" name="facebookAppId" class="form-control" value="<?php echo $wo['config']['facebookAppId']?>" placeholder="Application ID">
+                            </div>
+                        </div>
+                        <div class="form-group form-float">
+                            <div class="form-line">
+                                <input type="text" id="facebookAppKey" name="facebookAppKey" class="form-control" value="<?php echo $wo['config']['facebookAppKey']?>" placeholder="Application Secret Key">
+                            </div>
+                        </div>
+                        <hr>
+
+                        <label class="form-label main-label" style="background: #DD5144; color: #fff; margin-bottom: 12px;">Google+ Configuration</label>
+                        <div class="form-group form-float">
+                            <div class="form-line">
+                                <input type="text" id="googleAppId" name="googleAppId" class="form-control" value="<?php echo $wo['config']['googleAppId']?>" placeholder="Client ID">
+                            </div>
+                        </div>
+                        <div class="form-group form-float">
+                            <div class="form-line">
+                                <input type="text" id="googleAppKey" name="googleAppKey" class="form-control" value="<?php echo $wo['config']['googleAppKey']?>" placeholder="Client Secret Key">
+                            </div>
+                        </div>
+                        <hr>
+
+                        <label class="form-label main-label" style="background: #1DA1F2; color: #fff; margin-bottom: 12px;">Twitter Configuration</label>
+                        <div class="form-group form-float">
+                            <div class="form-line">
+                                <input type="text" id="twitterAppId" name="twitterAppId" class="form-control" value="<?php echo $wo['config']['twitterAppId']?>" placeholder="Consumer Key">
+                            </div>
+                        </div>
+                        <div class="form-group form-float">
+                            <div class="form-line">
+                                <input type="text" id="twitterAppKey" name="twitterAppKey" class="form-control" value="<?php echo $wo['config']['twitterAppKey']?>" placeholder="Consumer Secret">
+                            </div>
+                        </div>
+                        <hr>
+
+                        <label class="form-label main-label" style="background: #0077B5; color: #fff; margin-bottom: 12px;">LinkedIn Configuration</label>
+                        <div class="form-group form-float">
+                            <div class="form-line">
+                                <input type="text" id="linkedinAppId" name="linkedinAppId" class="form-control" value="<?php echo $wo['config']['linkedinAppId']?>"  placeholder="Application ID">
+                            </div>
+                        </div>
+                        <div class="form-group form-float">
+                            <div class="form-line">
+                                <input type="text" id="linkedinAppKey" name="linkedinAppKey" class="form-control" value="<?php echo $wo['config']['linkedinAppKey']?>"  placeholder="Application Secret Key">
+                            </div>
+                        </div>
+                        <hr>
+
+                        <label class="form-label main-label" style="background: #2787F5; color: #fff; margin-bottom: 12px;">Vkontakte Configuration</label>
+                        <div class="form-group form-float">
+                            <div class="form-line">
+                                <input type="text" id="VkontakteAppId" name="VkontakteAppId" class="form-control" value="<?php echo $wo['config']['VkontakteAppId']?>" placeholder="Application ID">
+                            </div>
+                        </div>
+                        <div class="form-group form-float">
+                            <div class="form-line">
+                                <input type="text" id="VkontakteAppKey" name="VkontakteAppKey" class="form-control" value="<?php echo $wo['config']['VkontakteAppKey']?>" placeholder="Application Secret Key">
+                            </div>
+                        </div>
+                        <hr>
+
+                        <label class="form-label main-label" style="background: #AA2996; color: #fff; margin-bottom: 12px;">Instagram Configuration</label>
+                        <div class="form-group form-float">
+                            <div class="form-line">
+                                <input type="text" id="instagramAppId" name="instagramAppId" class="form-control" value="<?php echo $wo['config']['instagramAppId']?>" placeholder="Application ID">
+                            </div>
+                        </div>
+                        <div class="form-group form-float">
+                            <div class="form-line">
+                                <input type="text" id="instagramAppkey" name="instagramAppkey" class="form-control" value="<?php echo $wo['config']['instagramAppkey']?>" placeholder="Application Secret Key">
+                            </div>
+                        </div>
+                        <hr>
+
+                        <label class="form-label main-label" style="background: #009BC0; color: #fff; margin-bottom: 12px;">QQ Configuration</label>
+                        <div class="form-group form-float">
+                            <div class="form-line">
+                                <input type="text" id="qqAppId" name="qqAppId" class="form-control" value="<?php echo $wo['config']['qqAppId']?>" placeholder="Application ID">
+                            </div>
+                        </div>
+                        <div class="form-group form-float">
+                            <div class="form-line">
+                                <input type="text" id="qqAppkey" name="qqAppkey" class="form-control" value="<?php echo $wo['config']['qqAppkey']?>" placeholder="Application Secret Key">
+                            </div>
+                        </div>
+                        <hr>
+
+                        <label class="form-label main-label" style="background: #90D573; color: #fff; margin-bottom: 12px;">WeChat Configuration</label>
+                        <div class="form-group form-float">
+                            <div class="form-line">
+                                <input type="text" id="WeChatAppId" name="WeChatAppId" class="form-control" value="<?php echo $wo['config']['WeChatAppId']?>" placeholder="Application ID">
+                            </div>
+                        </div>
+                        <div class="form-group form-float">
+                            <div class="form-line">
+                                <input type="text" id="WeChatAppkey" name="WeChatAppkey" class="form-control" value="<?php echo $wo['config']['WeChatAppkey']?>" placeholder="Application Secret Key">
+                            </div>
+                        </div>
+                        <hr>
+
+                        <label class="form-label main-label" style="background: #6E85D2; color: #fff; margin-bottom: 12px;">Discord Configuration</label>
+                        <div class="form-group form-float">
+                            <div class="form-line">
+                                <input type="text" id="DiscordAppId" name="DiscordAppId" class="form-control" value="<?php echo $wo['config']['DiscordAppId']?>" placeholder="Application ID">
+                            </div>
+                        </div>
+                        <div class="form-group form-float">
+                            <div class="form-line">
+                                <input type="text" id="DiscordAppkey" name="DiscordAppkey" class="form-control" value="<?php echo $wo['config']['DiscordAppkey']?>" placeholder="Application Secret Key">
+                            </div>
+                        </div>
+                        <hr>
+
+                        <label class="form-label main-label" style="background: #005CF1; color: #fff; margin-bottom: 12px;">Mailru Configuration</label>
+                        <div class="form-group form-float">
+                            <div class="form-line">
+                                <input type="text" id="MailruAppId" name="MailruAppId" class="form-control" value="<?php echo $wo['config']['MailruAppId']?>" placeholder="Application ID">
+                            </div>
+                        </div>
+                        <div class="form-group form-float">
+                            <div class="form-line">
+                                <input type="text" id="MailruAppkey" name="MailruAppkey" class="form-control" value="<?php echo $wo['config']['MailruAppkey']?>" placeholder="Application Secret Key">
+                            </div>
+                        </div>
+                        <hr>
+
+                        <label class="form-label main-label" style="background: #005CF1; color: #fff; margin-bottom: 12px;">ok.ru Configuration</label>
+                        <div class="form-group form-float">
+                            <div class="form-line">
+                                <input type="text" id="OkAppId" name="OkAppId" class="form-control" value="<?php echo $wo['config']['OkAppId']?>" placeholder="Application ID">
+                            </div>
+                        </div>
+                        <div class="form-group form-float">
+                            <div class="form-line">
+                                <input type="text" id="OkAppPublickey" name="OkAppPublickey" class="form-control" value="<?php echo $wo['config']['OkAppPublickey']?>" placeholder="Application Public Key">
+                            </div>
+                        </div>
+                        <div class="form-group form-float">
+                            <div class="form-line">
+                                <input type="text" id="OkAppSecretkey" name="OkAppSecretkey" class="form-control" value="<?php echo $wo['config']['OkAppSecretkey']?>" placeholder="Application Secret Key">
+                            </div>
+                        </div>
+                        <input type="hidden" name="hash_id" value="<?php echo Wo_CreateSession();?>">
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+    <!-- #END# Vertical Layout -->
+<script>
+$(function() {
+
+    $('.switcher input[type=checkbox]').click(function () {
+        setToTrue = 0;
+        if ($(this).is(":checked") === true) {
+            setToTrue = 1;
+        }
+        var configName = $(this).attr('name');
+        var hash_id = $('input[name=hash_id]').val();
+        var objData = {};
+        objData[configName] = setToTrue;
+        objData['hash_id'] = hash_id;
+        $.post( Wo_Ajax_Requests_File() + '?f=admin_setting&s=update_general_setting', objData);
+    });
+
+    var setTimeOutColor = setTimeout(function (){});
+    $('select').on('change', function() {
+         clearTimeout(setTimeOutColor);
+        var thisElement = $(this);
+        var configName = thisElement.attr('name');
+        var hash_id = $('input[name=hash_id]').val();
+        var objData = {};
+        objData[configName] = this.value;
+        objData['hash_id'] = hash_id;
+        thisElement.addClass('warning');
+        $.post( Wo_Ajax_Requests_File() + '?f=admin_setting&s=update_general_setting', objData, function (data) {
+            if (data.status == 200) {
+                thisElement.removeClass('warning');
+                thisElement.addClass('success');
+            } else {
+                thisElement.addClass('error');
+            }
+            var setTimeOutColor = setTimeout(function () {
+                thisElement.removeClass('success');
+                thisElement.removeClass('warning');
+                thisElement.removeClass('error');
+            }, 2000);
+        });
+    });
+    $('input[type=text], input[type=number]').on('keyup', delay(function() {
+            clearTimeout(setTimeOutColor);
+            var thisElement = $(this);
+            var configName = thisElement.attr('name');
+            var hash_id = $('input[name=hash_id]').val();
+            var objData = {};
+            objData[configName] = this.value;
+            objData['hash_id'] = hash_id;
+            thisElement.addClass('warning');
+            $.post( Wo_Ajax_Requests_File() + '?f=admin_setting&s=update_general_setting', objData, function (data) {
+                if (data.status == 200) {
+                    thisElement.removeClass('warning');
+                    thisElement.addClass('success');
+                } else {
+                    thisElement.addClass('error');
+                }
+                var setTimeOutColor = setTimeout(function () {
+                    thisElement.removeClass('success');
+                    thisElement.removeClass('warning');
+                    thisElement.removeClass('error');
+                }, 2000);
+                //thisElement.focus();
+            });
+    }, 500));
+});
+</script>

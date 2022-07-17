@@ -1,0 +1,306 @@
+<div class="container-fluid">
+    <div>
+        <h3>Setup Live Streaming</h3>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="#">Home</a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a href="#">Settings</a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">Setup Live Streaming</li>
+            </ol>
+        </nav>
+    </div>
+    <div class="alert alert-info">
+       <i class="fa fa-fw fa-exclamation-triangle"></i> <strong>Info: </strong> For more information on how to setup live streaming, please visit our <a href="https://docs.wowonder.com/#video_streaming" target="_blank">Documentation</a> page.
+   </div>
+    <!-- Vertical Layout -->
+    <div class="row">
+        <div class="col-lg-6 col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="card-title">Live Streaming Settings</h6>
+                    <form class="email-settings" method="POST">
+                        <div class="float-left">
+                            <label for="live_video" class="main-label">Live Streaming</label>
+                            <br><small class="admin-info">Users can go live instantly.</small>
+                        </div>
+                        <div class="form-group float-right switcher">
+                            <input type="hidden" name="live_video" value="0" />
+                            <input type="checkbox" name="live_video" id="chck-live_video" value="1" <?php echo ($wo['config']['live_video'] == 1) ? 'checked': '';?> <?php echo(EnableForMode('live_video')) ?>>
+                            <label for="chck-live_video" class="check-trail <?php echo(EnableForMode('live_video',true)) ?>" <?php echo(EnableForMode('live_video',false,true)) ?>><span class="check-handler"></span></label>
+                        </div>
+                        <div class="clearfix"></div>
+                        <hr>
+
+                        <div class="float-left">
+                            <label for="live_video_save" class="main-label">Live Streaming Strorage</label>
+                            <br><small class="admin-info">Let the live stream save streams to watch again later.</small>
+                        </div>
+                        <div class="form-group float-right switcher">
+                            <input type="hidden" name="live_video_save" value="0" />
+                            <input type="checkbox" name="live_video_save" id="chck-live_video_save" value="1" <?php echo ($wo['config']['live_video_save'] == 1) ? 'checked': '';?>>
+                            <label for="chck-live_video_save" class="check-trail"><span class="check-handler"></span></label>
+                        </div>
+                        <div class="clearfix"></div>
+                        <input type="hidden" name="hash_id" value="<?php echo Wo_CreateSession();?>">
+                    </form>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="card-title">Millicast API Configuration</h6>
+                    <form class="millicast-settings" method="POST">
+                        <div class="alert alert-info">
+                            To start using this feature, you'll need to create an account in <a href="https://www.millicast.com/">MilliCast</a>.
+                        </div>
+                        <div class="float-left">
+                            <label for="millicast_live_video" class="main-label">Millicast Live Streaming</label>
+                            <br><small class="admin-info">Users can go live instantly using Millicast. <br> Note you can only choose one provider at the same time.</small>
+                        </div>
+                        <div class="form-group float-right switcher">
+                            <input type="hidden" name="millicast_live_video" value="0" />
+                            <input type="checkbox" name="millicast_live_video" id="chck-millicast_live_video" value="1" <?php echo ($wo['config']['millicast_live_video'] == 1) ? 'checked': '';?>>
+                            <label for="chck-millicast_live_video" class="check-trail"><span class="check-handler"></span></label>
+                        </div>
+                        <div class="clearfix"></div>
+                        <hr>
+                        <div class="form-group form-float">
+                            <div class="form-line">
+                                <label class="form-label">Publishing Token</label>
+                                <input type="text" id="live_token" name="live_token" class="form-control" value="<?php echo $wo['config']['live_token'];?>">
+                                <small class="admin-info">Your Millicast Publishing Token.</small>
+                            </div>
+                        </div>
+                        <div class="form-group form-float">
+                            <div class="form-line">
+                                <label class="form-label">Account ID</label>
+                                <input type="text" id="live_account_id" name="live_account_id" class="form-control" value="<?php echo $wo['config']['live_account_id'];?>">
+                                <small class="admin-info">Your Millicast Account ID.</small>
+                            </div>
+                        </div>
+                        <input type="hidden" name="hash_id" value="<?php echo Wo_CreateSession();?>">
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6 col-md-6" style="float: right;">
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="card-title">Agora API Configuration</h6>
+                    <form class="agora-settings" method="POST">
+                        <div class="alert-info alert">To start using this feature, you'll need to create an account in <a href="https://www.agora.io/en/">Agora</a>.</div>
+                        <div class="float-left">
+                            <label for="agora_live_video" class="main-label">Agora Live Streaming</label>
+                            <br><small class="admin-info">Users can go live instantly using Agora. <br> Note you can only choose one provider at the same time.</small>
+                        </div>
+                        <div class="form-group float-right switcher">
+                            <input type="hidden" name="agora_live_video" value="0" />
+                            <input type="checkbox" name="agora_live_video" id="chck-agora_live_video" value="1" <?php echo ($wo['config']['agora_live_video'] == 1) ? 'checked': '';?>>
+                            <label for="chck-agora_live_video" class="check-trail"><span class="check-handler"></span></label>
+                        </div>
+                        <div class="clearfix"></div>
+                        <hr>
+
+                        <div class="form-group form-float">
+                            <div class="form-line">
+                                <label class="form-label">App ID</label>
+                                <input type="text" id="agora_app_id" name="agora_app_id" class="form-control" value="<?php echo $wo['config']['agora_app_id'];?>">
+                            </div>
+                        </div>
+                        <div class="form-group form-float">
+                            <div class="form-line">
+                                <label class="form-label">App Certificate</label>
+                                <input type="text" id="agora_app_certificate" name="agora_app_certificate" class="form-control" value="<?php echo $wo['config']['agora_app_certificate'];?>">
+                            </div>
+                        </div>
+                        <div class="form-group form-float">
+                            <div class="form-line">
+                                <label class="form-label">Customer ID</label>
+                                <input type="text" id="agora_customer_id" name="agora_customer_id" class="form-control" value="<?php echo $wo['config']['agora_customer_id'];?>">
+                            </div>
+                        </div>
+                        <div class="form-group form-float">
+                            <div class="form-line">
+                                <label class="form-label">Customer Secret</label>
+                                <input type="text" id="agora_customer_certificate" name="agora_customer_certificate" class="form-control" value="<?php echo $wo['config']['agora_customer_certificate'];?>">
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="float-left">
+                            <label for="amazone_s3_2" class="main-label">Amazon S3 Live Streaming Storage</label>
+                            <br><small class="admin-info">Used to store video streams if "Live Streaming Strorage" is enabled.</small>
+                        </div>
+                        <div class="form-group float-right switcher">
+                            <input type="hidden" name="amazone_s3_2" value="0" />
+                            <input type="checkbox" name="amazone_s3_2" id="chck-amazone_s3_2" value="1" <?php echo ($wo['config']['amazone_s3_2'] == 1) ? 'checked': '';?>>
+                            <label for="chck-amazone_s3_2" class="check-trail"><span class="check-handler"></span></label>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="form-group form-float">
+                            <div class="form-line">
+                                <label class="form-label">Amazon Bucket Name</label>
+                                <input type="text" id="bucket_name_2" name="bucket_name_2" class="form-control" value="<?php echo $wo['config']['bucket_name_2']?>">
+                                <small class="admin-info">Your Amazon S3 <a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/creating-bucket.html" target="_blank">Bucket Name</a></small>
+                            </div>
+                        </div>
+                        <div class="form-group form-float">
+                            <div class="form-line">
+                                <label class="form-label">Amazon S3 Key</label>
+                                <input type="text" id="amazone_s3_key_2" name="amazone_s3_key_2" class="form-control" value="<?php echo $wo['config']['amazone_s3_key_2']?>">
+                                <small class="admin-info">Your Amazon Key from <a href="https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html" target="_blank">AWS credentials</a></small>
+                            </div>
+                        </div>
+                        <div class="form-group form-float">
+                            <div class="form-line">
+                                <label class="form-label">Amazon S3 Secret Key</label>
+                                <input type="text" id="amazone_s3_s_key_2" name="amazone_s3_s_key_2" class="form-control" value="<?php echo $wo['config']['amazone_s3_s_key_2']?>">
+                                <small class="admin-info">Your Amazon Secret from <a href="https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html" target="_blank">AWS credentials</a></small>
+                            </div>
+                        </div>
+                        <label for="region_2">Amazon S3 bucket Region</label>
+                        <select class="form-control show-tick" id="region_2" name="region_2">
+                          <option value="us-east-1" <?php echo ($wo['config']['region_2'] == 'us-east-1')   ? ' selected' : '';?> >US East (N. Virginia)</option>
+                          <option value="us-east-2" <?php echo ($wo['config']['region_2'] == 'us-east-2')   ? ' selected' : '';?> >US East (Ohio)</option>
+                          <option value="us-west-1" <?php echo ($wo['config']['region_2'] == 'us-west-1')   ? ' selected' : '';?> >US West (N. California)</option>
+                          <option value="us-west-2" <?php echo ($wo['config']['region_2'] == 'us-west-2')   ? ' selected' : '';?> >US West (Oregon)</option>
+                          <option value="ap-northeast-2" <?php echo ($wo['config']['region_2'] == 'ap-northeast-2')   ? ' selected' : '';?> >Asia Pacific (Seoul)</option>
+                          <option value="ap-south-1" <?php echo ($wo['config']['region_2'] == 'ap-south-1')   ? ' selected' : '';?> >Asia Pacific (Mumbai)</option>
+                          <option value="ap-southeast-1" <?php echo ($wo['config']['region_2'] == 'ap-southeast-1')   ? ' selected' : '';?> >Asia Pacific (Singapore)</option>
+                          <option value="ap-southeast-2" <?php echo ($wo['config']['region_2'] == 'ap-southeast-2')   ? ' selected' : '';?> >Asia Pacific (Sydney)</option>
+                          <option value="ap-northeast-1" <?php echo ($wo['config']['region_2'] == 'ap-northeast-1')   ? ' selected' : '';?> >Asia Pacific (Tokyo)</option>
+                          <option value="ca-central-1" <?php echo ($wo['config']['region_2'] == 'ca-central-1')   ? ' selected' : '';?> >Canada (Central)</option>
+                          <option value="eu-central-1" <?php echo ($wo['config']['region_2'] == 'eu-central-1')   ? ' selected' : '';?> >EU (Frankfurt)</option>
+                          <option value="eu-west-1" <?php echo ($wo['config']['region_2'] == 'eu-west-1')   ? ' selected' : '';?> >EU (Ireland)</option>
+                          <option value="eu-west-2" <?php echo ($wo['config']['region_2'] == 'eu-west-2')   ? ' selected' : '';?> >EU (London)</option>
+                          <option value="sa-east-1" <?php echo ($wo['config']['region_2'] == 'sa-east-1')   ? ' selected' : '';?> >South America (São Paulo)</option>
+                        </select>
+                        <small class="admin-info">Your Amazon's S3 Region</small>
+                        <div class="clearfix"></div>
+                        <hr>
+                        <div class="alert alert-info">
+                           Before enabling Amazon S3, make sure you upload the whole "upload/" folder to your bucket. <br><br>
+                            Before disabling Amazon S3, make sure you download the whole "upload/" folder to your server.<br><br>
+                            We recommend to upload the folder and files via <a href="http://s3tools.org/s3cmd">S3cmd</a>.<br><br>
+                            If your site is still brand new, you can escape the upload step, but make sure to click on "Test Connection".<br>
+                        </div>
+                        <div class="agora-settings-alert"></div>
+                        <input type="hidden" name="hash_id" value="<?php echo Wo_CreateSession();?>">
+                        <button type="button" class="btn btn-warning m-t-15" onclick="Wo_TestS3()">Test Server Connection</button>
+                        <hr>
+                        <small class="admin-info">Looking for Video Call Configuration? <a href="<?php echo Wo_LoadAdminLinkSettings('video-settings'); ?>">Click here</a>.</small>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+    <!-- #END# Vertical Layout -->
+<script>
+
+function Wo_TestS3() {
+    $('form.agora-settings').find('.btn-warning').text('Please wait..');
+    $.get(Wo_Ajax_Requests_File(), {f:'admin_setting', s: 'test_s3_2'}, function (data) {
+        if (data.status == 200) {
+            $('.agora-settings-alert').html('<div class="alert alert-success"><i class="fa fa-check"></i> Connection established!</div>');
+            setTimeout(function () {
+                $('.agora-settings-alert').empty();
+            }, 2000);
+        } else if (data.status == 300) {
+            $('.agora-settings-alert').html('<div class="alert alert-danger">Bucket doesn\'t exists</div>');
+            setTimeout(function () {
+                $('.agora-settings-alert').empty();
+            }, 2000);
+        } else if (data.status == 500) {
+            $('.agora-settings-alert').html('<div class="alert alert-danger">Your s3 account doesn\'t have any buckets, please create one.</div>');
+            setTimeout(function () {
+                $('.agora-settings-alert').empty();
+            }, 2000);
+        } else if (data.status == 400) {
+            $('.agora-settings-alert').html('<div class="alert alert-danger">'+data.message+'</div>');
+            setTimeout(function () {
+                $('.agora-settings-alert').empty();
+            }, 2000);
+        } else  {
+            $('.agora-settings-alert').html('<div class="alert alert-danger">Error while connecting to amazone, please check your details</div>');
+            setTimeout(function () {
+                $('.agora-settings-alert').empty();
+            }, 2000);
+        }
+        $('form.agora-settings').find('.btn-warning').text('Test Connection');
+    });
+}
+
+$(function() {
+    $('.switcher input[type=checkbox]').click(function () {
+        setToTrue = 0;
+        if ($(this).is(":checked") === true) {
+            setToTrue = 1;
+        }
+        var configName = $(this).attr('name');
+        var hash_id = $('input[name=hash_id]').val();
+        var objData = {};
+        if (configName == 'redis') {
+            setToTrue = 'N';
+            if ($(this).is(":checked") === true) {
+              setToTrue = 'Y';
+            }
+        }
+        objData[configName] = setToTrue;
+        objData['hash_id'] = hash_id;
+        $.post( Wo_Ajax_Requests_File() + '?f=admin_setting&s=update_general_setting', objData);
+    });
+
+    var setTimeOutColor = setTimeout(function (){});
+    $('select').on('change', function() {
+         clearTimeout(setTimeOutColor);
+        var thisElement = $(this);
+        var configName = thisElement.attr('name');
+        var hash_id = $('input[name=hash_id]').val();
+        var objData = {};
+        objData[configName] = this.value;
+        objData['hash_id'] = hash_id;
+        thisElement.addClass('warning');
+        $.post( Wo_Ajax_Requests_File() + '?f=admin_setting&s=update_general_setting', objData, function (data) {
+            if (data.status == 200) {
+                thisElement.removeClass('warning');
+                thisElement.addClass('success');
+            } else {
+                thisElement.addClass('error');
+            }
+            var setTimeOutColor = setTimeout(function () {
+                thisElement.removeClass('success');
+                thisElement.removeClass('warning');
+                thisElement.removeClass('error');
+            }, 2000);
+        });
+    });
+    $('input[type=text], input[type=number]').on('keyup', delay(function() {
+            clearTimeout(setTimeOutColor);
+            var thisElement = $(this);
+            var configName = thisElement.attr('name');
+            var hash_id = $('input[name=hash_id]').val();
+            var objData = {};
+            objData[configName] = this.value;
+            objData['hash_id'] = hash_id;
+            thisElement.addClass('warning');
+            $.post( Wo_Ajax_Requests_File() + '?f=admin_setting&s=update_general_setting', objData, function (data) {
+                if (data.status == 200) {
+                    thisElement.removeClass('warning');
+                    thisElement.addClass('success');
+                } else {
+                    thisElement.addClass('error');
+                }
+                var setTimeOutColor = setTimeout(function () {
+                    thisElement.removeClass('success');
+                    thisElement.removeClass('warning');
+                    thisElement.removeClass('error');
+                }, 2000);
+                //thisElement.focus();
+            });
+    }, 500));
+});
+</script>

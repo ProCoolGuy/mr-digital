@@ -1,0 +1,18 @@
+<ul class="page-margin wow_content negg_padd list-unstyled event-options-list" id="sidebar-pages-list-container">
+	<div class="wo_page_hdng" style="margin-bottom: 5px;">
+		<div class="wo_page_hdng_innr">
+			<span><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="currentColor" d="M5 3A2 2 0 0 0 3 5H5M7 3V5H9V3M11 3V5H13V3M15 3V5H17V3M19 3V5H21A2 2 0 0 0 19 3M3 7V9H5V7M7 7V11H11V7M13 7V11H17V7M19 7V9H21V7M3 11V13H5V11M19 11V13H21V11M7 13V17H11V13M13 13V17H17V13M3 15V17H5V15M19 15V17H21V15M3 19A2 2 0 0 0 5 21V19M7 19V21H9V19M11 19V21H13V19M15 19V21H17V19M19 19V21A2 2 0 0 0 21 19Z"></path></svg></span> <a href="<?php echo Wo_SeoLink('index.php?link1=timeline&u=' . $wo['user_profile']['username'] . '&type=groups');?>" data-ajax="?link1=timeline&u=<?php echo $wo['user_profile']['username']?>&type=groups"><?php echo $wo['lang']['groups'];?></a>&nbsp;<div style="font-weight: normal">(<?php echo number_format($wo['user_profile']['details']['groups_count']);?>)</div>
+		</div>
+	</div>
+	<li>
+		<div class="sidebar-groups-container">
+			<?php 
+			foreach (Wo_GetUsersGroups($wo['user_profile']['user_id'], 9, array('in' => 'profile_sidebar', 'groups_data' => $wo['user_profile']['groups_data'])) as $wo['GroupList']) {
+				$wo['GroupList']['name'] = mb_substr($wo['GroupList']['name'], 0, 10, "utf-8");
+				echo Wo_LoadPage('sidebar/sidebar-groups-list');
+			}
+			?>
+		</div>
+	</li>
+	<li><div class="clear"></div></li>
+</ul>

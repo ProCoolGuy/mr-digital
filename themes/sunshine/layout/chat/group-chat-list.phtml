@@ -1,0 +1,58 @@
+<div class="group-messages-wrapper messages-wrapper <?php echo ($wo['chatMessage']['onwer']) ? 'pull-right' : 'pull-left';?>" id="messageId_<?php echo $wo['chatMessage']['id'] ?>" data-group-tmessage-id="<?php echo $wo['chatMessage']['id'] ?>" data-message-id="<?php echo $wo['chatMessage']['id'] ?>" style="color: #333;">
+
+   <div class="message <?php echo ($wo['chatMessage']['onwer']) ? 'outgoing pull-right' : 'incoming pull-left';?>">
+      <?php if (!$wo['chatMessage']['onwer']): ?>
+         <p style="padding: 3px 5px 0 8px; font-weight: 600;">
+            <a href="<?php echo Wo_SeoLink('index.php?link1=timeline&u='.$wo['chatMessage']['user_data']['username']);?>" data-ajax="?link1=timeline&u=<?php echo $wo['chatMessage']['user_data']['username']?>">
+            <?php echo $wo['chatMessage']['user_data']['username']?>
+            </a>
+         </p>
+      <?php endif; ?>
+
+      <?php if (!empty($wo['chatMessage']['text'])): ?>
+      <p class="" dir="auto">
+         <?php if($wo['chatMessage']['type_two'] == 'contact'): 
+         $json = json_decode(trim(htmlspecialchars_decode($wo['chatMessage']['text'])), true);
+         echo $json['Value'] . ' (' . $json['Key'] . ')';
+         ?>
+
+         <?php else: ?>
+            <?php echo $wo['chatMessage']['text']; ?>
+         <?php endif;?>
+      </p>
+      <?php endif; ?>
+      <div class="clear"></div>
+      <div class="message-media" style="max-width: 100%; overflow: hidden;">
+         <?php  
+         if(isset($wo['chatMessage']['media']) && !empty($wo['chatMessage']['media'])) {
+            $media = array('type' => 'chatMessage', 'storyId' => $wo['chatMessage']['id'], 'filename' => $wo['chatMessage']['media'], 'name' => $wo['chatMessage']['mediaFileName']); 
+            echo Wo_DisplaySharedFile($media, 'chat');   
+         } 
+         ?>
+         
+      </div>
+   </div>
+   <div class="like-stat stat-item post-like-status" style="<?php if ($wo['chatMessage']['onwer'] == 0) {?> margin: 13px -12px 2px 0; <?php }else{ ?> float:right;margin: 19px -9px 2px 0; <?php }?>">
+      <span class="like-emo post-reactions-icons-m-<?php echo $wo['chatMessage']['id']; ?>">
+      <?php echo Wo_GetPostReactions($wo['chatMessage']['id'],'message');?>
+      </span>
+    </div>
+   <ul class="reactions-box reactions-box-container-<?php echo $wo['chatMessage']['id']; ?>" data-id="<?php echo $wo['chatMessage']['id']; ?>">
+      <?php if (!empty($wo['reactions_types'])) {
+          foreach ($wo['reactions_types'] as $key => $value) {
+            if ($value['status'] == 1) {
+           ?>
+        <li  style="<?php if ($wo['chatMessage']['onwer'] == 0) {?> left: 10px; <?php }else{ ?> right: 10px; <?php }?>"class="reaction reaction-<?php echo $value['id'];?> animated_2" data-reaction="<?php echo $value['name'];?>" data-reaction-id="<?php echo $value['id'];?>" data-reaction-lang="<?php echo $value['name'];?>" data-post-id="<?php echo $wo['chatMessage']['id']; ?>" onclick="Wo_RegisterMessageReaction(this,'<?php echo($value['sunshine_small_icon']) ?>');">
+          <img class="" src="<?php echo $value['sunshine_icon'];?>" alt="<?php echo $value['name'];?>">
+        </li>
+      <?php } } } ?>
+    </ul>
+
+   <div class="clear"></div>
+   <?php if($wo['chatMessage']['user_data']['user_id'] == $wo['user']['user_id']) { ?>
+      <div class="message-seen text-right message-details"></div>
+      <div class="clear"></div>
+   <?php } ?>
+   <div class="message-typing message-details"></div>
+</div>
+<div class="clear"></div>

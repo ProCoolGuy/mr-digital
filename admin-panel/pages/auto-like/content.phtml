@@ -1,0 +1,50 @@
+<div class="container-fluid">
+    <div>
+        <h3>Auto Page Like</h3>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="#">Home</a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a href="#">Tools</a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">Auto Page Like</li>
+            </ol>
+        </nav>
+    </div>
+    <div class="row">
+        <div class="col-lg-6 col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="card-title">Auto Page Like</h6>
+                    <div class="alert alert-info">When a user creates a new account, choose which page you would like to get auto liked.</div>
+                        <div class="form-group form-float">
+                            <div class="form-line">
+                                <label class="form-label">Page name(s), sperated by a comma (,)</label>
+                                <input type="text" id="users" name="users" class="form-control" value="<?php echo $wo['config']['auto_page_like']; ?>">
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="clearfix"></div>
+                        <div class="alert alert-warning">This process might take some time, you can check for your site changes after few minutes.</div>
+                        <div class="clearfix"></div>
+                  <button type="submit" class="btn btn-danger waves-effect waves-light m-t-20" id="users-btn-like">Save</button>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+    </div>
+<script>
+$(document).on('click', '#users-btn-like', function(event) {
+	event.preventDefault();
+	$(this).text('Please wait..');
+	$.get(Wo_Ajax_Requests_File(), {f:'admin_setting', s: 'auto_page_like', users: $('#users').val()}, function(data, textStatus, xhr) {
+		$('#users-btn-like').text('Saved!');
+		setTimeout(function () {
+			$('#users-btn-like').text('Save');
+		}, 4000);
+	});
+});
+</script>

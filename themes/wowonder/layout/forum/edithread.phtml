@@ -1,0 +1,64 @@
+<?php echo Wo_LoadPage('forum/headers/header'); ?>
+<div class="row" id="forumsadd">
+	<label class="col-md-2"></label>
+	<div class="col-md-8">
+		<div class="wow_content mt-0">
+			<div class="wo_page_hdng pag_neg_padd pag_alone">
+				<div class="wo_page_hdng_innr">
+					<span><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="currentColor" d="M20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18,2.9 17.35,2.9 16.96,3.29L15.12,5.12L18.87,8.87M3,17.25V21H6.75L17.81,9.93L14.06,6.18L3,17.25Z"></path></svg></span> <?php echo $wo['lang']['edit_topic']; ?> (<?php echo $wo['thread']['headline']; ?>)
+				</div>
+			</div>
+		</div>
+
+		<div class="page-margin wow_content wow_sett_content">
+			<form class="form" id="editopic" method="post">
+				<div id="editopic-alert"></div>
+				<div class="wow_form_fields">
+					<label for="headline"><?php echo $wo['lang']['subject']; ?></label>
+					<input type="text" name="headline" id="headline" value="<?php echo $wo['thread']['orginal_headline']; ?>">
+				</div>
+				<div class="wow_form_fields">
+					<label for="topicpostcont"><?php echo $wo['lang']['edit']; ?></label>
+					<textarea rows="4" id="topicpostcont" name="topicpost"><?php echo br2nlf($wo['thread']['post']); ?></textarea>
+				</div>
+				<div class="text-center">
+					<button class="btn btn-main btn-mat btn-mat-raised add_wow_loader" id="forum-search-btn" type="submit"><?php echo $wo['lang']['save']; ?></button>
+				</div>
+			</form>
+		</div>
+		<div class="clear"></div>
+	</div>
+	<label class="col-md-2"></label>
+</div>
+
+
+<script>
+jQuery(document).ready(function($) {
+
+	$('#editopic').ajaxForm({
+
+	      url: Wo_Ajax_Requests_File()  +  '?f=editopic&tid=<?php echo $wo['thread']['id']; ?>&hash=' + $('.main_session').val(),
+	      beforeSend: function() {
+	        Wo_progressIconLoader($('#editopic').find('button'));
+	      },
+	      success: function(data) {
+	        scrollToTop();
+	        if (data['status'] == 200) {
+	        	
+	         	$("#editopic-alert").html('<div class="alert alert-success">'+ data['message'] +'</div>');
+	          	window.location = data['url'];
+	        } else {
+	        	
+	         	$("#editopic-alert").html('<div class="alert alert-danger">' + data['message'] + '</div>');
+	        } 
+	        Wo_progressIconLoader($('#editopic').find('button'));
+	      }
+	});
+
+	$("#topicpostcont").bbcode()
+	$("#topicpostcont").autogrow({vertical: true, horizontal: false});
+
+});
+</script>
+
+<?php echo Wo_LoadPage('forum/headers/footer'); ?>

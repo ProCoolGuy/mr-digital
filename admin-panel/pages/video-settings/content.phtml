@@ -1,0 +1,331 @@
+<div class="container-fluid">
+    <div>
+        <h3>Video & Audio Settings</h3>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="#">Home</a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a href="#">Settings</a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">Chat & Video Chat Configuration</li>
+            </ol>
+        </nav>
+    </div>
+    <div class="alert alert-info">
+       <i class="fa fa-fw fa-exclamation-triangle"></i> <strong>Info: </strong> For more information on how to setup video chat, please visit our <a href="https://docs.wowonder.com/#video_chat_stream" target="_blank">Documentation</a> page.
+   </div>
+    <!-- Vertical Layout -->
+    <div class="row">
+        <div class="col-lg-6 col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="card-title">Chat Settings</h6>
+                    <form class="chat-settings" method="POST">
+                        <div class="float-left">
+                            <label for="chatSystem" class="main-label">Chat System </label>
+                            <br><small class="admin-info">Enable chat system to chat with friends on the bottom right of the page.</small>
+                        </div>
+                        <div class="form-group float-right switcher">
+                            <input type="hidden" name="chatSystem" value="0" />
+                            <input type="checkbox" name="chatSystem" id="chck-chatSystem" value="1" <?php echo ($wo['config']['chatSystem'] == 1) ? 'checked': '';?>>
+                            <label for="chck-chatSystem" class="check-trail"><span class="check-handler"></span></label>
+                        </div>
+                        <div class="clearfix"></div>
+                        <hr>
+                        <div class="float-left">
+                            <label for="message_seen" class="main-label">Message Seen Alert</label>
+                            <br><small class="admin-info">Checks if the message was seen in chat system, Recommended for powerful servers. <br> Note this feature can be switched only for Ajax, on NodeJS it's always ON.</small>
+                        </div>
+                        <div class="form-group float-right switcher">
+                            <input type="hidden" name="message_seen" value="0" />
+                            <input type="checkbox" name="message_seen" id="chck-message_seen" value="1" <?php echo ($wo['config']['message_seen'] == 1) ? 'checked': '';?>>
+                            <label for="chck-message_seen" class="check-trail"><span class="check-handler"></span></label>
+                        </div>
+                        <div class="clearfix"></div>
+                        <hr>
+                        <div class="float-left">
+                            <label for="message_typing" class="main-label">User Typing System</label>
+                            <br><small class="admin-info">Checks if the user is typing in chat system, Recommended for powerful servers. <br> Note this feature can be switched only for Ajax, on NodeJS it's always ON.</small>
+                        </div>
+                        <div class="form-group float-right switcher">
+                            <input type="hidden" name="message_typing" value="0" />
+                            <input type="checkbox" name="message_typing" id="chck-message_typing" value="1" <?php echo ($wo['config']['message_typing'] == 1) ? 'checked': '';?>>
+                            <label for="chck-message_typing" class="check-trail"><span class="check-handler"></span></label>
+                        </div>
+                        <div class="clearfix"></div>
+                        <hr>
+                        <small class="admin-info">Looking for NodeJS Configuration? <a href="<?php echo Wo_LoadAdminLinkSettings('node'); ?>">Click here</a>.</small>
+                        <div class="clearfix"></div>
+                        <input type="hidden" name="hash_id" value="<?php echo Wo_CreateSession();?>">
+                    </form>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="card-title">Agora API Configuration</h6>
+                    <form class="agora-settings" method="POST">
+                        <div class="float-left">
+                            <label for="agora_chat_video" class="main-label">Agora Video Calls</label>
+                            <br><small class="admin-info">Enable Agora to start video chat service in your website. <br> Note that enabling Agora will disable Twilio. Agora supports video calls only.</small>
+                        </div>
+                        <div class="form-group float-right switcher">
+                            <input type="hidden" name="agora_chat_video" value="0" />
+                            <input type="checkbox" name="agora_chat_video" id="chck-agora_chat_video" value="1" <?php echo ($wo['config']['agora_chat_video'] == 1) ? 'checked': '';?>>
+                            <label for="chck-agora_chat_video" class="check-trail"><span class="check-handler"></span></label>
+                        </div>
+                        <div class="clearfix"></div>
+                        <hr>
+                        <div class="alert alert-info">
+                            To start using this feature, you'll need to create an account in <a href="https://www.agora.io/en/">Agora</a>.
+                        </div>
+                        <div class="form-group form-float">
+                            <div class="form-line">
+                                <label class="form-label">App ID</label>
+                                <input type="text" id="agora_chat_app_id" name="agora_chat_app_id" class="form-control" value="<?php echo $wo['config']['agora_chat_app_id'];?>">
+                            </div>
+                        </div>
+                        <div class="form-group form-float">
+                            <div class="form-line">
+                                <label class="form-label">App Certificate</label>
+                                <input type="text" id="agora_chat_app_certificate" name="agora_chat_app_certificate" class="form-control" value="<?php echo $wo['config']['agora_chat_app_certificate'];?>">
+                            </div>
+                        </div>
+                        <div class="form-group form-float">
+                            <div class="form-line">
+                                <label class="form-label">Customer ID</label>
+                                <input type="text" id="agora_chat_customer_id" name="agora_chat_customer_id" class="form-control" value="<?php echo $wo['config']['agora_chat_customer_id'];?>">
+                            </div>
+                        </div>
+                        <div class="form-group form-float">
+                            <div class="form-line">
+                                <label class="form-label">Customer Secret</label>
+                                <input type="text" id="agora_chat_customer_certificate" name="agora_chat_customer_certificate" class="form-control" value="<?php echo $wo['config']['agora_chat_customer_certificate'];?>">
+                            </div>
+                        </div>
+                        <hr>
+                        <small class="admin-info">Looking for Live Stream Configuration? <a href="<?php echo Wo_LoadAdminLinkSettings('live'); ?>">Click here</a>.</small>
+                        <input type="hidden" name="hash_id" value="<?php echo Wo_CreateSession();?>">
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6 col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="card-title">Video & Audio Chat Settings</h6>
+                    <form class="email-settings" method="POST">
+                        <div class="float-left">
+                            <label for="video_chat" class="main-label">Video Calls </label>
+                            <br><small class="admin-info">Enable video chat feature for users to make video calls on your site.</small>
+                        </div>
+                        <div class="form-group float-right switcher">
+                            <input type="hidden" name="video_chat" value="0" />
+                            <input type="checkbox" name="video_chat" id="chck-video_chat" value="1" <?php echo ($wo['config']['video_chat'] == 1) ? 'checked': '';?>>
+                            <label for="chck-video_chat" class="check-trail"><span class="check-handler"></span></label>
+                        </div>
+                        <div class="clearfix"></div>
+                        <hr>
+                        <div class="float-left">
+                            <label for="audio_chat" class="main-label">Audio Calls </label>
+                            <br><small class="admin-info">Enable audio chat feature for users to make audio calls on your site.</small>
+                        </div>
+                        <div class="form-group float-right switcher">
+                            <input type="hidden" name="audio_chat" value="0" />
+                            <input type="checkbox" name="audio_chat" id="chck-audio_chat" value="1" <?php echo ($wo['config']['audio_chat'] == 1) ? 'checked': '';?>>
+                            <label for="chck-audio_chat" class="check-trail"><span class="check-handler"></span></label>
+                        </div>
+                        <div class="clearfix"></div>
+                        <input type="hidden" name="hash_id" value="<?php echo Wo_CreateSession();?>">
+                    </form>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="card-title">Twilio API Configuration</h6>
+                    <form class="twilio-settings" method="POST">
+                        <div class="float-left">
+                            <label for="twilio_video_chat" class="main-label">Twilio Video / Audio Calls</label>
+                            <br><small class="admin-info">Enable Twilio to start video chat service in your website. <br> Note that enabling Twilio will disable Agora. Twilio supports video and audio calls.</small>
+                        </div>
+                        <div class="form-group float-right switcher">
+                            <input type="hidden" name="twilio_video_chat" value="0" />
+                            <input type="checkbox" name="twilio_video_chat" id="chck-twilio_video_chat" value="1" <?php echo ($wo['config']['twilio_video_chat'] == 1) ? 'checked': '';?>>
+                            <label for="chck-twilio_video_chat" class="check-trail"><span class="check-handler"></span></label>
+                        </div>
+                        <div class="clearfix"></div>
+                        <hr>
+                        <div class="alert alert-info">
+                            To start using this feature, you'll need to create an account in Twilio and buy "Programmable Video" product.
+                        </div>
+                        <div class="form-group form-float">
+                            <div class="form-line">
+                                <label class="form-label">Live accountSid</label>
+                                <input type="text" id="video_accountSid" name="video_accountSid" class="form-control" value="<?php echo $wo['config']['video_accountSid'];?>">
+                            </div>
+                        </div>
+                        <div class="form-group form-float">
+                            <div class="form-line">
+                                <label class="form-label">apiKeySid</label>
+                                <input type="text" id="video_apiKeySid" name="video_apiKeySid" class="form-control" value="<?php echo $wo['config']['video_apiKeySid'];?>">
+                            </div>
+                        </div>
+                        <div class="form-group form-float">
+                            <div class="form-line">
+                                <label class="form-label">apiKeySecret</label>
+                                <input type="password" id="video_apiKeySecret" name="video_apiKeySecret" class="form-control" value="<?php echo $wo['config']['video_apiKeySecret'];?>">
+                            </div>
+                        </div>
+                        <hr>
+                        <small class="admin-info">Looking for SMS Twilio Configuration? <a href="<?php echo Wo_LoadAdminLinkSettings('email-settings'); ?>">Click here</a>.</small>
+                        <input type="hidden" name="hash_id" value="<?php echo Wo_CreateSession();?>">
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+    <!-- #END# Vertical Layout -->
+<script>
+
+$(function() {
+    $('.switcher input[type=checkbox]').click(function () {
+        setToTrue = 0;
+        if ($(this).is(":checked") === true) {
+            setToTrue = 1;
+        }
+        var configName = $(this).attr('name');
+        var hash_id = $('input[name=hash_id]').val();
+        var objData = {};
+        objData[configName] = setToTrue;
+        objData['hash_id'] = hash_id;
+        if (configName == 'twilio_video_chat') {
+            if (setToTrue == 1) {
+                $('input[name=agora_chat_video]').prop('checked', false);
+            }
+        } else if (configName == 'agora_chat_video') {
+            if (setToTrue == 1) {
+                $('input[name=twilio_video_chat]').prop('checked', false);
+            }
+        }
+        $.post( Wo_Ajax_Requests_File() + '?f=admin_setting&s=update_general_setting', objData);
+    });
+
+    var setTimeOutColor = setTimeout(function (){});
+    $('select').on('change', function() {
+         clearTimeout(setTimeOutColor);
+        var thisElement = $(this);
+        var configName = thisElement.attr('name');
+        var hash_id = $('input[name=hash_id]').val();
+        var objData = {};
+        objData[configName] = this.value;
+        objData['hash_id'] = hash_id;
+        thisElement.addClass('warning');
+        $.post( Wo_Ajax_Requests_File() + '?f=admin_setting&s=update_general_setting', objData, function (data) {
+            if (data.status == 200) {
+                thisElement.removeClass('warning');
+                thisElement.addClass('success');
+            } else {
+                thisElement.addClass('error');
+            }
+            var setTimeOutColor = setTimeout(function () {
+                thisElement.removeClass('success');
+                thisElement.removeClass('warning');
+                thisElement.removeClass('error');
+            }, 2000);
+        });
+    });
+    $('input[type=text], input[type=number], input[type=password], textarea').on('keyup', delay(function() {
+            clearTimeout(setTimeOutColor);
+            var thisElement = $(this);
+            var configName = thisElement.attr('name');
+            var hash_id = $('input[name=hash_id]').val();
+            var objData = {};
+            objData[configName] = this.value;
+            objData['hash_id'] = hash_id;
+            thisElement.addClass('warning');
+            $.post( Wo_Ajax_Requests_File() + '?f=admin_setting&s=update_general_setting', objData, function (data) {
+                if (data.status == 200) {
+                    thisElement.removeClass('warning');
+                    thisElement.addClass('success');
+                } else {
+                    thisElement.addClass('error');
+                }
+                var setTimeOutColor = setTimeout(function () {
+                    thisElement.removeClass('success');
+                    thisElement.removeClass('warning');
+                    thisElement.removeClass('error');
+                }, 2000);
+                //thisElement.focus();
+            });
+    }, 500));
+    var form_twilio_settings = $('form.twilio-settings');
+    form_twilio_settings.ajaxForm({
+        url: Wo_Ajax_Requests_File() + '?f=admin_setting&s=update_general_setting',
+        beforeSend: function() {
+            form_twilio_settings.find('button').text('Please wait..');
+        },
+        success: function(data) {
+            if (data.status == 200) {
+                form_twilio_settings.find('button').text('Save');
+                $("html, body").animate({ scrollTop: 0 }, "slow");
+                $('.twilio-settings-alert').html('<div class="alert alert-success"><i class="fa fa-check"></i> Settings updated successfully</div>');
+                setTimeout(function () {
+                    $('.twilio-settings-alert').empty();
+                }, 2000);
+            }
+        }
+    });
+    var form_email_settings = $('form.email-settings');
+    form_email_settings.ajaxForm({
+        url: Wo_Ajax_Requests_File() + '?f=admin_setting&s=update_general_setting',
+        beforeSend: function() {
+            form_email_settings.find('button').text('Please wait..');
+        },
+        success: function(data) {
+            if (data.status == 200) {
+                form_email_settings.find('button').text('Save');
+                $("html, body").animate({ scrollTop: 0 }, "slow");
+                $('.email-settings-alert').html('<div class="alert alert-success"><i class="fa fa-check"></i> Settings updated successfully</div>');
+                setTimeout(function () {
+                    $('.email-settings-alert').empty();
+                }, 2000);
+            }
+        }
+    });
+    var form_agora_settings = $('form.agora-settings');
+    form_agora_settings.ajaxForm({
+        url: Wo_Ajax_Requests_File() + '?f=admin_setting&s=update_general_setting',
+        beforeSend: function() {
+            form_agora_settings.find('.waves-effect').text('Please wait..');
+        },
+        success: function(data) {
+            if (data.status == 200) {
+                form_agora_settings.find('.waves-effect').text('Save');
+                $("html, body").animate({ scrollTop: 0 }, "slow");
+                $('.agora-settings-alert').html('<div class="alert alert-success"><i class="fa fa-check"></i> Settings updated successfully</div>');
+                setTimeout(function () {
+                    $('.agora-settings-alert').empty();
+                }, 2000);
+            }
+        }
+    });
+    var form_chat_settings = $('form.chat-settings');
+    form_chat_settings.ajaxForm({
+        url: Wo_Ajax_Requests_File() + '?f=admin_setting&s=update_general_setting',
+        beforeSend: function() {
+            form_chat_settings.find('button').text('Please wait..');
+        },
+        success: function(data) {
+            if (data.status == 200) {
+                form_chat_settings.find('button').text('Save');
+                $('.chat-settings-alert').html('<div class="alert alert-success"><i class="fa fa-check"></i> Settings updated successfully</div>');
+                setTimeout(function () {
+                    $('.chat-settings-alert').empty();
+                }, 2000);
+            }
+        }
+    });
+});
+</script>

@@ -1,0 +1,133 @@
+<?php echo Wo_LoadPage('forum/headers/header'); 
+$section = Wo_GetForumSec(array('id' => $wo['forum_data']['forum']['sections']));
+?>
+<div role="tabpanel" class="tab-pane active" id="forumdisplay">
+	<div class="thraed-header-content wow_thread_head">
+		<div class="col-md-9 no-padding-right no-padding-left">
+			<h4 class="forum_title"><?php echo($wo['forum_data']['forum']['name']) ?></h4>
+			<div class="clear"></div>
+			<div>
+				<span><?php echo($wo['forum_data']['forum']['description']) ?></span>
+			</div>
+		</div>
+		<div class="col-md-3 no-padding-right no-padding-left text-right">
+			<span class="btn-glossy">
+				<a href="<?php echo Wo_SeoLink('index.php?link1=forumsadd&fid=' . $wo['forum_data']['forum']['id']) ?>" data-ajax="?link1=forumaddthred&fid=<?php echo $wo['forum_data']['forum']['id'];?>" class="btn btn-main btn-mat btn-mat-raised"><?php echo $wo['lang']['create_new_topic']; ?></a>
+			</span>
+			<span class="btn-glossy btn btn-main btn-mat btn-mat-raised" onclick="FroumShare(this)">
+				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"> <path fill="currentColor" d="M18,16.08C17.24,16.08 16.56,16.38 16.04,16.85L8.91,12.7C8.96,12.47 9,12.24 9,12C9,11.76 8.96,11.53 8.91,11.3L15.96,7.19C16.5,7.69 17.21,8 18,8A3,3 0 0,0 21,5A3,3 0 0,0 18,2A3,3 0 0,0 15,5C15,5.24 15.04,5.47 15.09,5.7L8.04,9.81C7.5,9.31 6.79,9 6,9A3,3 0 0,0 3,12A3,3 0 0,0 6,15C6.79,15 7.5,14.69 8.04,14.19L15.16,18.34C15.11,18.55 15.08,18.77 15.08,19C15.08,20.61 16.39,21.91 18,21.91C19.61,21.91 20.92,20.61 20.92,19A2.92,2.92 0 0,0 18,16.08Z"></path> </svg>
+	            <?php echo $wo['lang']['share_on_timeline']; ?>
+			</span>
+		</div>
+		<div class="clear"></div>
+	</div>
+	
+		<hr>
+		<div class="w-100">
+			<?php if (count($wo['forum_data']['threads']) > 0): ?>
+			<div class="table-responsive">
+				<table class="table threads-table">
+					<thead class="wow_forum_dis_thead">
+						<tr>
+							<th><?php echo $wo['lang']['topic']; ?></th>
+							<th><?php echo $wo['lang']['last_post']; ?></th>
+							<th class="text-center"><?php echo $wo['lang']['replies']; ?></th>
+							<th class="text-center"><?php echo $wo['lang']['views']; ?></th>
+						</tr>
+					</thead>
+					<tbody id="forum-threads">
+						<?php foreach ($wo['forum_data']['threads'] as $wo['thread']): ?>
+							<?php echo Wo_LoadPage("forum/includes/post-list"); ?>
+						<?php endforeach; ?>
+					</tbody>
+				</table>
+			</div>
+		    <?php else: ?>
+				<?php echo '<div class="empty_state"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M18,22A2,2 0 0,0 20,20V4C20,2.89 19.1,2 18,2H12V9L9.5,7.5L7,9V2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18Z" /></svg>' . $wo['lang']['no_threads_found'] .  '</div>'; ?>
+			<?php endif; ?>
+		</div>
+	    <div class="posts_load">
+	        <?php if (count($wo['forum_data']['threads']) >= 10): ?>
+	        <div class="load-more">
+	            <button class="btn btn-default text-center pointer forum-posts-load"  >
+	            <i class="fa fa-arrow-down progress-icon" data-icon="arrow-down"></i> <?php echo $wo['lang']['load_more_posts'] ?></button>
+	        </div>
+	        <?php endif ?>
+	    </div>  
+	</div>
+	<div class="clear"></div>
+<?php echo Wo_LoadPage('forum/headers/footer'); ?>
+<div class="modal fade in" id="forum-shared" role="dialog">
+    <div class="modal-dialog">
+    
+      <div class="modal-content">
+        <p style="text-align: center;padding: 30px 20px;font-family: Hind,Arial;font-size: 16px;">
+          <i class="fa fa-check" aria-hidden="true" style="color: green;"></i>      
+          <?php echo $wo['lang']['forum_shared']; ?>
+        </p>
+      </div>
+      
+    </div>
+</div>
+<script>
+	function FroumShare(self) {
+		$("#forum-shared").modal('show');
+		$(self).attr('disabled', 'true');
+		$.post(Wo_Ajax_Requests_File() + '?f=forum_share&hash_id=' + $('.main_session').val(), {id: <?php echo $_GET['fid']; ?>}, function(data, textStatus, xhr) {
+			setTimeout(function (argument) {
+				$(self).removeAttr('disabled');
+				$("#forum-shared").modal('hide');
+			},2000);
+		});
+	}
+	$(".forum-posts-load").click(function () {
+	      $.ajax({
+	         url: Wo_Ajax_Requests_File(),
+	         type: 'GET',
+	         dataType: 'json',
+	         data: {
+	         	f:"forum-posts-load",
+	         	forum:<?php echo $_GET['fid']; ?>,
+	         	offset:($(".topic-list").length > 0) ? $(".topic-list:last").attr('data-forum') : 0,
+	         },
+	         success:function(data){
+	            if (data['status'] == 200) {
+	                $(".threads-table tbody").append(data['html'])
+	             }else{
+	               $(".posts_load").remove()
+	             }
+	         }
+	      });
+	   	});
+
+	var delay = (function(){
+		var timer = 0;
+		return function(callback, ms){
+		  clearTimeout (timer);
+		  timer = setTimeout(callback, ms);
+		};
+	})();
+
+	$("#search-forum-threads").keyup(function(event) {
+      delay(function(){
+      if ($("#search-forum-threads").val().trim()) {
+	      $.ajax({
+	        url: Wo_Ajax_Requests_File(),
+	        type: 'GET',
+	        data: {	f:"forum-thread-search",
+	        		keyword:$("#search-forum-threads").val(),
+	        		fid:<?php echo($wo['forum_data']['forum']['id']) ?>
+	        	},
+	        dataType: "json",
+	        success: function(data){
+	          if (data['status'] == 200) {
+	          	$("#forum-threads").html(data['html']);
+	          }
+	          else if(data['status'] == 404){
+	         	 $("#forum-threads").html('<tr> <td colspan="5" class="text-center" style="padding:40px 40px;" >' + data['html'] + '</td></tr>');
+	          }
+	        }
+	      })}
+      }, 1000 );
+  	});
+</script>

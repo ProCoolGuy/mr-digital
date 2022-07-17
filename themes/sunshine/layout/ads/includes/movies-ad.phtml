@@ -1,0 +1,19 @@
+<div class="wo_ad_header_format list-group-movies sidebar-ad-wrapper-movies pointer rads-<?php echo $wo['sidebar-ad']['bidding']; ?>" id="<?php echo $wo['sidebar-ad']['id']; ?>">
+    <div class="sidebar-ad-header-movies sidebar-title-back-movies sponsored"><?php echo $wo['lang']['sponsored'] ?></div>
+    <div class="sidebar-ad-body-movies imgs">
+        <img src="<?php echo $wo['sidebar-ad']['ad_media']; ?>" alt="Picture">
+    </div>
+    <div class="sidebar-ad-footer-movies details">
+        <p class="ad-title-movies">
+            <?php echo $wo['sidebar-ad']['headline']; ?>
+        </p>
+        <p class="small ad-descrition-movies ">
+            <?php echo $wo['sidebar-ad']['description']; ?>
+        </p>
+        <time>
+            <a href="<?php  echo $wo['sidebar-ad']['url'];?>" class="main-movies" target="_blank">
+                <?php echo Wo_UrlDomain($wo['sidebar-ad']['url']); ?>
+            </a>
+        </time>
+    </div>
+</div>

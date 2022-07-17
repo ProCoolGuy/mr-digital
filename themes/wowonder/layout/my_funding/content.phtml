@@ -1,0 +1,93 @@
+<div class="page-margin">
+	<div class="row">
+		<div class="col-md-2 leftcol"><?php echo Wo_LoadPage("sidebar/left-sidebar"); ?></div>
+		<div class="col-md-7 profile-lists singlecol">
+			<?php if ($wo['config']['user_ads'] == 1): ?>
+				<div id="sidebar-sticky-funding">
+					<?php 
+					  $wo['sidebar-ad'] = Wo_GetAdsByType('funding');
+					  if (!empty($wo['sidebar-ad'])) {
+					  	echo Wo_LoadPage('ads/includes/funding-ad');
+					  }
+					?>
+					<div class="clear"></div>
+				</div>
+		    <?php endif; ?>
+			<div class="page-margin wow_content mt-0">
+				<div class="wo_page_hdng pag_neg_padd pag_alone">
+					<div class="wo_page_hdng_innr big_size">
+						<span><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="currentColor" d="M12.75,3.94C13.75,3.22 14.91,2.86 16.22,2.86C16.94,2.86 17.73,3.05 18.59,3.45C19.45,3.84 20.13,4.3 20.63,4.83C21.66,6.11 22.09,7.6 21.94,9.3C21.78,11 21.22,12.33 20.25,13.27L12.66,20.86C12.47,21.05 12.23,21.14 11.95,21.14C11.67,21.14 11.44,21.05 11.25,20.86C11.06,20.67 10.97,20.44 10.97,20.16C10.97,19.88 11.06,19.64 11.25,19.45L15.84,14.86C16.09,14.64 16.09,14.41 15.84,14.16C15.59,13.91 15.36,13.91 15.14,14.16L10.55,18.75C10.36,18.94 10.13,19.03 9.84,19.03C9.56,19.03 9.33,18.94 9.14,18.75C8.95,18.56 8.86,18.33 8.86,18.05C8.86,17.77 8.95,17.53 9.14,17.34L13.73,12.75C14,12.5 14,12.25 13.73,12C13.5,11.75 13.28,11.75 13.03,12L8.44,16.64C8.25,16.83 8,16.92 7.73,16.92C7.45,16.92 7.21,16.83 7,16.64C6.8,16.45 6.7,16.22 6.7,15.94C6.7,15.66 6.81,15.41 7.03,15.19L11.63,10.59C11.88,10.34 11.88,10.11 11.63,9.89C11.38,9.67 11.14,9.67 10.92,9.89L6.28,14.5C6.06,14.7 5.83,14.81 5.58,14.81C5.3,14.81 5.06,14.71 4.88,14.5C4.69,14.3 4.59,14.06 4.59,13.78C4.59,13.5 4.69,13.27 4.88,13.08C7.94,10 9.83,8.14 10.55,7.45L14.11,10.97C14.5,11.34 14.95,11.53 15.5,11.53C16.2,11.53 16.75,11.25 17.16,10.69C17.44,10.28 17.54,9.83 17.46,9.33C17.38,8.83 17.17,8.41 16.83,8.06L12.75,3.94M14.81,10.27L10.55,6L3.47,13.08C2.63,12.23 2.15,10.93 2.04,9.16C1.93,7.4 2.41,5.87 3.47,4.59C4.66,3.41 6.08,2.81 7.73,2.81C9.39,2.81 10.8,3.41 11.95,4.59L16.22,8.86C16.41,9.05 16.5,9.28 16.5,9.56C16.5,9.84 16.41,10.08 16.22,10.27C16.03,10.45 15.8,10.55 15.5,10.55C15.23,10.55 15,10.45 14.81,10.27V10.27Z"></path></svg></span> <?php echo $wo['lang']['funding']; ?>
+					</div>
+				</div>
+			</div>
+			<div class="page-margin wow_content">
+				<div class="wo_page_hdng pag_neg_padd pag_alone">
+					<div class="wo_page_hdng_menu">
+						<ul class="list-unstyled">
+							<li><a href="<?php echo Wo_SeoLink('index.php?link1=funding'); ?>" data-ajax="?link1=funding"><?php echo $wo['lang']['browse_funding'] ?></a></li>
+						<li class="active"><a href="<?php echo Wo_SeoLink('index.php?link1=my_funding'); ?>" data-ajax="?link1=my_funding"><?php echo $wo['lang']['my_funding'] ?></a></li>
+						</ul>
+						<?php if ($wo['config']['funding_request'] == 'all' || ($wo['config']['funding_request'] == 'verified' && $wo['user']['verified'])) { ?>
+							<a class="btn btn-main btn-mat btn-mat-raised" href="<?php echo Wo_SeoLink('index.php?link1=create_funding');?>" data-ajax="?link1=create_funding"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z"></path></svg> <?php echo $wo['lang']['create'] ?></a>
+						<?php } ?>
+					</div>
+				</div>
+			</div>
+	
+			<div class="row" id="blog-list">
+				<?php  
+					$funding = GetFundingByUserId($wo["user"]['id'],9); 
+				?>
+				<?php if ($funding && count($funding) > 0): ?>
+					<?php foreach ($funding as $wo['fund']): ?>
+						<?php echo Wo_LoadPage('my_funding/list'); ?>
+					<?php endforeach ?>
+				<?php else: ?> 
+					<?php echo '<div class="empty_state"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M12.75,3.94C13.75,3.22 14.91,2.86 16.22,2.86C16.94,2.86 17.73,3.05 18.59,3.45C19.45,3.84 20.13,4.3 20.63,4.83C21.66,6.11 22.09,7.6 21.94,9.3C21.78,11 21.22,12.33 20.25,13.27L12.66,20.86C12.47,21.05 12.23,21.14 11.95,21.14C11.67,21.14 11.44,21.05 11.25,20.86C11.06,20.67 10.97,20.44 10.97,20.16C10.97,19.88 11.06,19.64 11.25,19.45L15.84,14.86C16.09,14.64 16.09,14.41 15.84,14.16C15.59,13.91 15.36,13.91 15.14,14.16L10.55,18.75C10.36,18.94 10.13,19.03 9.84,19.03C9.56,19.03 9.33,18.94 9.14,18.75C8.95,18.56 8.86,18.33 8.86,18.05C8.86,17.77 8.95,17.53 9.14,17.34L13.73,12.75C14,12.5 14,12.25 13.73,12C13.5,11.75 13.28,11.75 13.03,12L8.44,16.64C8.25,16.83 8,16.92 7.73,16.92C7.45,16.92 7.21,16.83 7,16.64C6.8,16.45 6.7,16.22 6.7,15.94C6.7,15.66 6.81,15.41 7.03,15.19L11.63,10.59C11.88,10.34 11.88,10.11 11.63,9.89C11.38,9.67 11.14,9.67 10.92,9.89L6.28,14.5C6.06,14.7 5.83,14.81 5.58,14.81C5.3,14.81 5.06,14.71 4.88,14.5C4.69,14.3 4.59,14.06 4.59,13.78C4.59,13.5 4.69,13.27 4.88,13.08C7.94,10 9.83,8.14 10.55,7.45L14.11,10.97C14.5,11.34 14.95,11.53 15.5,11.53C16.2,11.53 16.75,11.25 17.16,10.69C17.44,10.28 17.54,9.83 17.46,9.33C17.38,8.83 17.17,8.41 16.83,8.06L12.75,3.94M14.81,10.27L10.55,6L3.47,13.08C2.63,12.23 2.15,10.93 2.04,9.16C1.93,7.4 2.41,5.87 3.47,4.59C4.66,3.41 6.08,2.81 7.73,2.81C9.39,2.81 10.8,3.41 11.95,4.59L16.22,8.86C16.41,9.05 16.5,9.28 16.5,9.56C16.5,9.84 16.41,10.08 16.22,10.27C16.03,10.45 15.8,10.55 15.5,10.55C15.23,10.55 15,10.45 14.81,10.27V10.27Z"></path></svg>' . $wo['lang']['no_funding_found'] . '</div>'; ?>
+				<?php endif; ?> 
+			</div>
+				
+			<div class="loading-alert"></div>
+            
+			<div class="posts_load">
+				<?php if (count($funding) >= 8): ?>
+					<div class="load-more">
+                        <button class="btn btn-default text-center pointer load-more-my-fund">
+                          <i class="fa fa-arrow-down progress-icon" data-icon="arrow-down"></i> 
+                          <?php echo $wo['lang']['load_more'] ?>
+                        </button>
+					</div>
+				<?php endif; ?>
+			</div>
+		</div>
+	</div>
+</div>
+<?php echo Wo_LoadPage('my_funding/delete_fund');?>
+
+<script>
+$(document).ready(function() {
+  $(".delete-fund").on("click", function() {
+    $("#delete-fund").attr('data-fund-id', $(this).attr("id")).modal();      
+  });
+
+  $(".load-more-my-fund").click(function () {
+      let offset = (($(".view-blog").length > 0) ? $(".view-blog:last").attr('id') : 0);
+
+      $.ajax({
+         url: Wo_Ajax_Requests_File(),
+         type: 'GET',
+         dataType: 'json',
+         data: {f:"funding",s:"load_user_fund",offset:offset},
+         success:function(data){
+            if (data['status'] == 200 && data['html'] != '') {
+              $("#blog-list").append(data['html']);
+            }
+
+            else{
+              $(".posts_load").remove();
+            }
+         }
+      });
+   });
+});
+</script>
